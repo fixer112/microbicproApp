@@ -8,7 +8,7 @@ class Widgets {
       onPressed: callback,
       color: color,
       child: Widgets.text(text, size: size, color: tcolor),
-      splashColor: primaryColor,
+      //splashColor: primaryColor,
     );
   }
 
