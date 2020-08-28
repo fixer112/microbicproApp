@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:microbicpro/pages/guidelines/guidelines.dart';
+import 'package:microbicpro/pages/medicines/medicines.dart';
 import 'package:microbicpro/pages/pathogens/pathogens.dart';
 import 'package:microbicpro/widgets/widgets.dart';
 
@@ -18,6 +20,8 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
+    double center = MediaQuery.of(context).size.height/2;
+    
     return Scaffold(
       body: SafeArea(
         child: Stack(children: [
@@ -35,7 +39,8 @@ class _HomeState extends State<Home> {
             left: 0,
             right: 0,
             child: Widgets.button('GUIDELINES', (){
-
+              Navigator.push(context, MaterialPageRoute(
+                builder: (BuildContext context) => Guidelines()));
             }, size: 20, tcolor: primaryColor ),
           ),
  
@@ -49,8 +54,7 @@ class _HomeState extends State<Home> {
           ),
  
           Positioned(
-            bottom: 80,
-            top: 0,
+            bottom: center+25,
             right: 10,
             child: Widgets.button('PATHOGENS', (){
               Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => Pathogens()));
@@ -58,11 +62,10 @@ class _HomeState extends State<Home> {
           ),
  
           Positioned(
-            bottom: 0,
-            top: 80,
+            top: center+25,
             left: 10,
             child: Widgets.button('MEDICINES', (){
-
+              Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => Medicines()));
             }, size: 20 ),
           ),
         ]),

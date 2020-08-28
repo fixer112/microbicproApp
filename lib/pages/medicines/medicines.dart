@@ -1,25 +1,23 @@
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:microbicpro/pages/pathogens/each.dart';
 import 'package:microbicpro/widgets/page.dart';
 import 'package:microbicpro/widgets/widgets.dart';
 
-class Pathogens extends StatefulWidget {
+class Medicines extends StatefulWidget {
   @override
-  _PathogensState createState() => _PathogensState();
+  _MedicinesState createState() => _MedicinesState();
 }
 
-class _PathogensState extends State<Pathogens> {
+class _MedicinesState extends State<Medicines> {
   @override
   Widget build(BuildContext context) {
-    return Pager( 'Pathogens', List.generate(20, (index){
+    return Pager( 'Medicines', List.generate(10, (index){
       return Card(
         child: ListTile(
           title: Widgets.text('Caliduos Brackuilium', weight: FontWeight.w400),
           trailing: Icon( Icons.arrow_forward_ios, size: 20, ),
           onTap: (){
             Navigator.push(context, MaterialPageRoute(
-              builder: (BuildContext context) => EachPathogen()));
+              builder: (BuildContext context) => Container()));
           },
         ),
       );

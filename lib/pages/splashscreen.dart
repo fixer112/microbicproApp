@@ -25,7 +25,7 @@ class _SplashState extends State<Splash> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: primaryColor,
+      backgroundColor: Colors.white,
       body: SafeArea( 
         child: Padding( padding: EdgeInsets.all(30), child: Row(
           children: [
@@ -43,9 +43,9 @@ class _SplashState extends State<Splash> {
                 ),
 
                 SizedBox(height: 20,),*/
-                Widgets.text('Microbic Pro', size: 40, color: secondaryColor, weight: FontWeight.bold, align: TextAlign.center, family: 'PicedownBl' ),
+                Widgets.text('Microbic Pro', size: 40, color: primaryColor, weight: FontWeight.bold, align: TextAlign.center, family: 'PicedownBl' ),
                 SizedBox(height: 10,),
-                Widgets.text('wordly clinical diagnostics', color: secondaryColor),
+                Widgets.text('wordly clinical diagnostics', color: primaryColor),
               ],
             )),
           ],

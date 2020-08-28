@@ -1,6 +1,5 @@
-import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
-import 'package:microbicpro/values.dart';
+import 'package:microbicpro/pages/pathogens/anti_biogram_data.dart';
 import 'package:microbicpro/widgets/page.dart';
 import 'package:microbicpro/widgets/widgets.dart';
 
@@ -13,59 +12,73 @@ class _EachPathogenState extends State<EachPathogen> {
   @override
   Widget build(BuildContext context) {
     return Pager( 'Pathogen Title', [
-        Header('General Information'),
-        Collapsible( 'Overview', [
+        Widgets.header('General Information'),
+        Widgets.collapsible( 'Overview', [
 
         ]),
-        Collapsible( 'Epidermology', [
+        Widgets.collapsible( 'Epidermology', [
 
         ]),
-        Collapsible( 'Diseases', [
-
-        ]),
-
-        Header('Anti-Microbial Spectrum'),
-        Collapsible( 'Ideal Spectrum', [
-
-        ]),
-        Collapsible( 'Anti-biogram Data', [
+        Widgets.collapsible( 'Diseases', [
 
         ]),
 
-        Header('Infection Control'),
-        Collapsible( 'Precautions', [
+        Widgets.header('Anti-Microbial Spectrum'),
+        Card(
+          child: ListTile(
+            title: Widgets.text('Ideal Spectrum', size: 17),
+            trailing: Icon( Icons.arrow_forward_ios, size: 20, ),
+            onTap: (){
+              
+            },
+          ),
+        ),
+
+        Card(
+          child: ListTile(
+            title: Widgets.text('Antibiogram Data', size: 17),
+            trailing: Icon( Icons.arrow_forward_ios, size: 20, ),
+            onTap: (){
+              Navigator.push(context, MaterialPageRoute(
+                builder: (BuildContext context) => AntiBiogramData( title: 'Pathogen Title', content: [{
+                  'title': 'MIXED ISOLATE',
+                  'content': [
+                    {
+                      'title': 'Something',
+                      'per': 29,
+                      'isno': 5,
+                    },
+                    {
+                      'title': 'Something',
+                      'per': 29,
+                      'isno': 5,
+                    }
+                  ],
+                }, {
+                  'title': 'URINE ONLY',
+                  'content': [
+                    {
+                      'title': 'Something',
+                      'per': 29,
+                      'isno': 5,
+                    },
+                    {
+                      'title': 'Something',
+                      'per': 29,
+                      'isno': 5,
+                    }
+                  ],
+                }])
+              ));
+            },
+          ),
+        ),
+
+        Widgets.header('Infection Control'),
+        Widgets.collapsible( 'Precautions', [
 
         ]),
       ],
-    );
-  }
-
-  Widget Collapsible( String title, List<Widget> widgets ){
-    return Card(
-      child: Container(
-        padding: EdgeInsets.all(10),
-        child: ExpandablePanel(
-          header: Container(
-            padding: EdgeInsets.only(top: 8),
-            child: Widgets.text(title, size: 17, weight: FontWeight.w600),
-          ),
-
-          expanded: Column(
-            children: widgets,
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget Header( String title ){
-    return Container(
-      child: Widgets.text(title, size: 20),
-      padding: EdgeInsets.only(bottom: 15),
-      margin: EdgeInsets.symmetric(vertical: 25),
-      decoration: BoxDecoration(
-        border: Border(bottom: BorderSide(color: primaryColor)),
-      ),
     );
   }
 }

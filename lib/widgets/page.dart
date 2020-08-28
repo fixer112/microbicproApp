@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:microbicpro/pages/search_page.dart';
 
 import '../values.dart';
 
 class Pager extends StatefulWidget {
   final String title;
   final List<Widget> widgets;
+  final bool search;
 
-  const Pager(this.title, this.widgets, {Key key}) : super(key: key);
+  const Pager(this.title, this.widgets, {Key key, this.search}) : super(key: key);
 
   @override
   _PagerState createState() => _PagerState();
@@ -20,11 +22,19 @@ class _PagerState extends State<Pager> {
         leading: IconButton(icon: Icon( Icons.arrow_back ), onPressed: (){
           Navigator.pop(context);
         }),
+        actions: [
+          widget.search!=false ? IconButton(
+            icon: Icon( Icons.search ),
+            onPressed: (){
+              Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => SearchPage()));
+            },
+          ): Container(),
+        ],
         title: Text( widget.title ),
         backgroundColor: primaryColor,
       ),
       body: ListView(
-        padding: EdgeInsets.all(15),
+        padding: EdgeInsets.all(10),
         children: widget.widgets,
       ),
     );
