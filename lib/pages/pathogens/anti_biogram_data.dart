@@ -15,28 +15,34 @@ class AntiBiogramData extends StatefulWidget {
 class _AntiBiogramDataState extends State<AntiBiogramData> {
   @override
   Widget build(BuildContext context) {
-    return Pager( widget.title, [
-      SizedBox(height: 10,),
-      Widgets.text('ANTIBIOGRAM DATA', size: 20, align: TextAlign.center, weight: FontWeight.bold),
-      SizedBox(height: 20,),
-
+    return Pager(widget.title, [
+      SizedBox(
+        height: 10,
+      ),
+      Widgets.text('ANTIBIOGRAM DATA',
+          size: 20, align: TextAlign.center, weight: FontWeight.bold),
+      SizedBox(
+        height: 20,
+      ),
       Column(
-        children: List.generate(widget.content.length, (inx){
+        children: List.generate(widget.content.length, (inx) {
           var children = <Widget>[];
-          children.add(
-            Widgets.header( widget.content[inx]['title'] ));
+          children.add(Widgets.header(widget.content[inx]['title']));
 
-          widget.content[inx]['content'].forEach((e){
+          widget.content[inx]['content'].forEach((e) {
             children.add(Container(
               child: Card(
-                  child: ListTile(
+                child: ListTile(
                     dense: true,
-                    title: Widgets.text(e['title']),
-                    subtitle: Widgets.text('isno: ${e['isno']}', size: 12),
-                    trailing: Widgets.text('${e['per']}%', size: 16),
-                  ),
-                ),
-              ));
+                    title: Widgets.text(e['title'], size: 18),
+                    subtitle: Widgets.text('isno: ${e['isno']}', size: 15),
+                    trailing: Widgets.text(
+                      '${e['per']}%',
+                      size: 16,
+                      color: getColor(double.parse(e['per'].toString())),
+                    )),
+              ),
+            ));
           });
 
           return Column(
@@ -46,5 +52,14 @@ class _AntiBiogramDataState extends State<AntiBiogramData> {
         }),
       ),
     ]);
+  }
+
+  Color getColor(double per) {
+    if (per < 50) {
+      return Colors.red;
+    } else if (per > 70) {
+      return Colors.green;
+    }
+    return Colors.yellow;
   }
 }

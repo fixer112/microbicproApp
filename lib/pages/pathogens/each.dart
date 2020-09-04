@@ -11,73 +11,73 @@ class EachPathogen extends StatefulWidget {
 class _EachPathogenState extends State<EachPathogen> {
   @override
   Widget build(BuildContext context) {
-    return Pager( 'Pathogen Title', [
+    return Pager(
+      'Pathogen Title',
+      [
         Widgets.header('General Information'),
-        Widgets.collapsible( 'Overview', [
-
-        ]),
-        Widgets.collapsible( 'Epidermology', [
-
-        ]),
-        Widgets.collapsible( 'Diseases', [
-
-        ]),
-
+        Widgets.collapsible('Overview', []),
+        Widgets.collapsible('Epidermology', []),
+        Widgets.collapsible('Diseases', []),
         Widgets.header('Anti-Microbial Spectrum'),
         Card(
           child: ListTile(
             title: Widgets.text('Ideal Spectrum', size: 17),
-            trailing: Icon( Icons.arrow_forward_ios, size: 20, ),
-            onTap: (){
-              
-            },
+            trailing: Icon(
+              Icons.arrow_forward_ios,
+              size: 20,
+            ),
+            onTap: () {},
           ),
         ),
-
         Card(
           child: ListTile(
             title: Widgets.text('Antibiogram Data', size: 17),
-            trailing: Icon( Icons.arrow_forward_ios, size: 20, ),
-            onTap: (){
-              Navigator.push(context, MaterialPageRoute(
-                builder: (BuildContext context) => AntiBiogramData( title: 'Pathogen Title', content: [{
-                  'title': 'MIXED ISOLATE',
-                  'content': [
-                    {
-                      'title': 'Something',
-                      'per': 29,
-                      'isno': 5,
-                    },
-                    {
-                      'title': 'Something',
-                      'per': 29,
-                      'isno': 5,
-                    }
-                  ],
-                }, {
-                  'title': 'URINE ONLY',
-                  'content': [
-                    {
-                      'title': 'Something',
-                      'per': 29,
-                      'isno': 5,
-                    },
-                    {
-                      'title': 'Something',
-                      'per': 29,
-                      'isno': 5,
-                    }
-                  ],
-                }])
-              ));
+            trailing: Icon(
+              Icons.arrow_forward_ios,
+              size: 20,
+            ),
+            onTap: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (BuildContext context) =>
+                          AntiBiogramData(title: 'Pathogen Title', content: [
+                            {
+                              'title': 'MIXED ISOLATE',
+                              'content': [
+                                {
+                                  'title': 'Something',
+                                  'per': 89,
+                                  'isno': 5,
+                                },
+                                {
+                                  'title': 'Something',
+                                  'per': 49,
+                                  'isno': 5,
+                                }
+                              ],
+                            },
+                            {
+                              'title': 'URINE ONLY',
+                              'content': [
+                                {
+                                  'title': 'Something',
+                                  'per': 50,
+                                  'isno': 5,
+                                },
+                                {
+                                  'title': 'Something',
+                                  'per': 69,
+                                  'isno': 5,
+                                }
+                              ],
+                            }
+                          ])));
             },
           ),
         ),
-
         Widgets.header('Infection Control'),
-        Widgets.collapsible( 'Precautions', [
-
-        ]),
+        Widgets.collapsible('Precautions', []),
       ],
     );
   }
