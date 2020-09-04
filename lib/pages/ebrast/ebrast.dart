@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:microbicpro/pages/ebrast/ebrast_for_location.dart';
 import 'package:microbicpro/widgets/page.dart';
 import 'package:microbicpro/widgets/widgets.dart';
 
@@ -44,6 +45,9 @@ class _EbrastState extends State<Ebrast> {
             underline: Container(),
             isExpanded: true,
             onChanged: (val){
+              Navigator.push(context, MaterialPageRoute(
+                builder: (BuildContext context) => EbrastLocation()));
+              return;
               setState(() {
                 _location = val;
               });
