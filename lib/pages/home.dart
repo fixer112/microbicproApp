@@ -100,7 +100,7 @@ class _HomeState extends State<Home> {
               InkWell(
                 child: Column(
                   children: [
-                    Widgets.gradienticon(FontAwesomeIcons.exclamationCircle, 50, LinearGradient(
+                    Widgets.gradienticon(FontAwesomeIcons.questionCircle, 50, LinearGradient(
                       colors: <Color>[
                         Colors.red,
                         Colors.brown,

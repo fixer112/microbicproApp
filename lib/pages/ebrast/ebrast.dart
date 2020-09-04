@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:microbicpro/widgets/page.dart';
 import 'package:microbicpro/widgets/widgets.dart';
 
@@ -8,6 +9,13 @@ class Ebrast extends StatefulWidget {
 }
 
 class _EbrastState extends State<Ebrast> {
+  List<DropdownMenuItem<int>> locations = [
+    DropdownMenuItem( child: Text('Ogun'), value: 0, ),
+    DropdownMenuItem( child: Text('Lagos'), value: 0, ),
+  ];
+
+  var _location;
+
   @override
   Widget build(BuildContext context) {
     return Pager( 'Ebrast', [
@@ -22,6 +30,26 @@ class _EbrastState extends State<Ebrast> {
         padding: EdgeInsets.all(20),
         margin: EdgeInsets.symmetric(vertical: 30),
         child: Widgets.text('THIS DECISION SUPPORT TOOL IS BASED ON ANTIBIOTIC SUSCEPTABILITY OF PATHOGENS AND THEIR PREVALENCE', size: 16, color: Color(0xff0c5460)),
+      ),
+
+      Card(
+        margin: EdgeInsets.symmetric(vertical: 30, horizontal: 20),
+        child: Container(
+          padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+          child: DropdownButton(
+            value: _location,
+            items: locations,
+            hint: Widgets.text('Select Location', weight: FontWeight.bold),
+            icon: Icon( FontAwesomeIcons.chevronDown, size: 20, ),
+            underline: Container(),
+            isExpanded: true,
+            onChanged: (val){
+              setState(() {
+                _location = val;
+              });
+            },
+          ),
+        ),
       ),
     ], search: false,);
   }
