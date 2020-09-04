@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:microbicpro/pages/ebrast/ebrast.dart';
 import 'package:microbicpro/pages/guidelines/guidelines.dart';
 import 'package:microbicpro/pages/medicines/medicines.dart';
 import 'package:microbicpro/pages/pathogens/pathogens.dart';
@@ -24,51 +26,100 @@ class _HomeState extends State<Home> {
     
     return Scaffold(
       body: SafeArea(
-        child: Stack(children: [
-          Container(
-            height: MediaQuery.of(context).size.height,
-            child: FittedBox(
-              child: Image.asset('assets/img/bg-home.png'),
-              fit: BoxFit.cover,
-            ),
-          ),
-          Positioned(left: 0,right: 0,top: 0,bottom: 0, child: Container(color: Colors.black.withOpacity(0),),),
+        child: Center(
+          child: ListView(
+            padding: EdgeInsets.symmetric(vertical: 50),
+            shrinkWrap: true,
+            children: [
+              InkWell(
+                child: Column(
+                  children: [
+                    Widgets.gradienticon(FontAwesomeIcons.checkSquare, 50, LinearGradient(
+                      colors: <Color>[
+                        Colors.orange,
+                        Colors.pink,
+                      ],
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                    )),
+                    SizedBox(height: 5,),
+                    Widgets.text('Guidelines', size: 23, color: Colors.pink, weight: FontWeight.w600)
+                  ],
+                ),
+                onTap: () {
+                  Navigator.push(context, MaterialPageRoute(
+                    builder: (BuildContext context) => Guidelines()));
+                },
+              ),
+              SizedBox(height: 60,),
+              
+              InkWell(
+                child: Column(
+                  children: [
+                    Widgets.gradienticon(FontAwesomeIcons.disease, 50, LinearGradient(
+                      colors: <Color>[
+                        Colors.green,
+                        Colors.blue,
+                      ],
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                    )),
+                    SizedBox(height: 5,),
+                    Widgets.text('Pathogens', size: 23, color: Colors.blue, weight: FontWeight.w600)
+                  ],
+                ),
+                onTap: () {
+                  Navigator.push(context, MaterialPageRoute(
+                    builder: (BuildContext context) => Pathogens()));
+                },
+              ),
+              SizedBox(height: 60,),
+              
+              InkWell(
+                child: Column(
+                  children: [
+                    Widgets.gradienticon(FontAwesomeIcons.bookMedical, 50, LinearGradient(
+                      colors: <Color>[
+                        Colors.indigo,
+                        Colors.purple,
+                      ],
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                    )),
+                    SizedBox(height: 5,),
+                    Widgets.text('Medicines', size: 23, color: Colors.purple, weight: FontWeight.w600)
+                  ],
+                ),
+                onTap: () {
+                  Navigator.push(context, MaterialPageRoute(
+                    builder: (BuildContext context) => Medicines()));
+                },
+              ),
+              SizedBox(height: 60,),
 
-          Positioned(
-            top: 50,
-            left: 0,
-            right: 0,
-            child: Widgets.button('GUIDELINES', (){
-              Navigator.push(context, MaterialPageRoute(
-                builder: (BuildContext context) => Guidelines()));
-            }, size: 20, tcolor: primaryColor ),
+              InkWell(
+                child: Column(
+                  children: [
+                    Widgets.gradienticon(FontAwesomeIcons.exclamationCircle, 50, LinearGradient(
+                      colors: <Color>[
+                        Colors.red,
+                        Colors.brown,
+                      ],
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                    )),
+                    SizedBox(height: 5,),
+                    Widgets.text('Ebrast', size: 23, color: Colors.brown, weight: FontWeight.w600)
+                  ],
+                ),
+                onTap: () {
+                  Navigator.push(context, MaterialPageRoute(
+                    builder: (BuildContext context) => Ebrast()));
+                },
+              ),
+            ],
           ),
- 
-          Positioned(
-            bottom: 50,
-            left: 0,
-            right: 0,
-            child: Widgets.button('EBRAST', (){
-
-            }, size: 20, tcolor: primaryColor ),
-          ),
- 
-          Positioned(
-            bottom: center+25,
-            right: 10,
-            child: Widgets.button('PATHOGENS', (){
-              Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => Pathogens()));
-            }, size: 20 ),
-          ),
- 
-          Positioned(
-            top: center+25,
-            left: 10,
-            child: Widgets.button('MEDICINES', (){
-              Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => Medicines()));
-            }, size: 20 ),
-          ),
-        ]),
+        ),
       ),
     );
   }
