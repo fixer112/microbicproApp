@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:microbicpro/pages/ebrast/antibiotics.dart';
 import 'package:microbicpro/widgets/page.dart';
 import 'package:microbicpro/widgets/widgets.dart';
 
@@ -20,7 +21,7 @@ class _EbrastLocationState extends State<EbrastLocation> {
         child: ListTile(
           title: Widgets.text('Blood', size: 17, weight: FontWeight.w400),
           onTap: (){
-
+            Navigator.push(context, MaterialPageRoute(builder: (context) => AntiBiotics(),));
           },
         ),
       ),
@@ -30,7 +31,7 @@ class _EbrastLocationState extends State<EbrastLocation> {
         child: ListTile(
           title: Widgets.text('Conjuctival Specimen', size: 17, weight: FontWeight.w400),
           onTap: (){
-
+            Navigator.push(context, MaterialPageRoute(builder: (context) => AntiBiotics(),));
           },
         ),
       ),
@@ -40,7 +41,7 @@ class _EbrastLocationState extends State<EbrastLocation> {
         child: ListTile(
           title: Widgets.text('Ear Swab', size: 17, weight: FontWeight.w400),
           onTap: (){
-
+            Navigator.push(context, MaterialPageRoute(builder: (context) => AntiBiotics(),));
           },
         ),
       ),
@@ -50,7 +51,7 @@ class _EbrastLocationState extends State<EbrastLocation> {
         child: ListTile(
           title: Widgets.text('Skin Swab', size: 17, weight: FontWeight.w400),
           onTap: (){
-
+            Navigator.push(context, MaterialPageRoute(builder: (context) => AntiBiotics(),));
           },
         ),
       ),
@@ -60,7 +61,7 @@ class _EbrastLocationState extends State<EbrastLocation> {
         child: ListTile(
           title: Widgets.text('Sputum', size: 17, weight: FontWeight.w400),
           onTap: (){
-
+            Navigator.push(context, MaterialPageRoute(builder: (context) => AntiBiotics(),));
           },
         ),
       ),
