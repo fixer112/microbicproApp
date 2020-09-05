@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:microbicpro/pages/ebrast/single_drug.dart';
 import 'package:microbicpro/values.dart';
 import 'package:microbicpro/widgets/page.dart';
 import 'package:microbicpro/widgets/widgets.dart';
@@ -28,6 +29,9 @@ class _AntiBioticsState extends State<AntiBiotics> {
 
       Card(
         child: ListTile(
+          onTap: (){
+            Navigator.push(context, MaterialPageRoute(builder: (context) => SingleDrug()));
+          },
           leading: Icon( FontAwesomeIcons.squareFull, color: primaryColor, size: 16, ),
           title: Widgets.text('Amoxycillin'),
           trailing: Widgets.text('83A', weight: FontWeight.w600),
@@ -36,6 +40,9 @@ class _AntiBioticsState extends State<AntiBiotics> {
 
       Card(
         child: ListTile(
+          onTap: (){
+            Navigator.push(context, MaterialPageRoute(builder: (context) => SingleDrug()));
+          },
           leading: Icon( FontAwesomeIcons.squareFull, color: primaryColor, size: 16, ),
           title: Widgets.text('Ceprofiaxscin'),
           trailing: Widgets.text('74A', weight: FontWeight.w600),
@@ -44,6 +51,9 @@ class _AntiBioticsState extends State<AntiBiotics> {
 
       Card(
         child: ListTile(
+          onTap: (){
+            Navigator.push(context, MaterialPageRoute(builder: (context) => SingleDrug()));
+          },
           leading: Icon( FontAwesomeIcons.squareFull, color: primaryColor, size: 16, ),
           title: Widgets.text('Gentamicin'),
           trailing: Widgets.text('70A', weight: FontWeight.w600),

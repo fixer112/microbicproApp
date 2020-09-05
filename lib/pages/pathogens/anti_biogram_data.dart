@@ -51,7 +51,7 @@ class _AntiBiogramDataState extends State<AntiBiogramData> {
           );
         }),
       ),
-    ]);
+    ], search: false,);
   }
 
   Color getColor(double per) {
