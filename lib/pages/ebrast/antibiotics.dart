@@ -13,52 +13,77 @@ class AntiBiotics extends StatefulWidget {
 class _AntiBioticsState extends State<AntiBiotics> {
   @override
   Widget build(BuildContext context) {
-    return Pager('Ebrast: Lagos (Urine)', [
-      Container(
-        decoration: BoxDecoration(
-          border: Border.all(color: Color(0xffbee5eb)),
-          color: Color(0xffd1ecf1),
-          borderRadius: BorderRadius.circular(10),
+    return Pager(
+      'Ebrast: Lagos (Urine)',
+      [
+        Container(
+          decoration: BoxDecoration(
+            border: Border.all(color: Color(0xffbee5eb)),
+            color: Color(0xffd1ecf1),
+            borderRadius: BorderRadius.circular(10),
+          ),
+          padding: EdgeInsets.all(20),
+          margin: EdgeInsets.symmetric(vertical: 30),
+          child: Widgets.text(
+              'ASSOCIATED DISEASES\nUrinary Tract Infections\nPyelonephritis',
+              size: 16,
+              color: Color(0xff0c5460)),
         ),
-        padding: EdgeInsets.all(20),
-        margin: EdgeInsets.symmetric(vertical: 30),
-        child: Widgets.text('ASSOCIATED DISEASES\nUrinary Tract Infections\nPyelonephritis', size: 16, color: Color(0xff0c5460)),
-      ),
-      Widgets.text('ANTIBIOTIC RANKINGS', size: 20, align: TextAlign.center, weight: FontWeight.bold),
-      SizedBox(height: 25,),
-
-      Card(
-        child: ListTile(
-          onTap: (){
-            Navigator.push(context, MaterialPageRoute(builder: (context) => SingleDrug()));
-          },
-          leading: Icon( FontAwesomeIcons.squareFull, color: primaryColor, size: 16, ),
-          title: Widgets.text('Amoxycillin'),
-          trailing: Widgets.text('83A', weight: FontWeight.w600),
+        Widgets.text('ANTIBIOTIC RANKINGS',
+            size: 20, align: TextAlign.center, weight: FontWeight.bold),
+        SizedBox(
+          height: 25,
         ),
-      ),
-
-      Card(
-        child: ListTile(
-          onTap: (){
-            Navigator.push(context, MaterialPageRoute(builder: (context) => SingleDrug()));
-          },
-          leading: Icon( FontAwesomeIcons.squareFull, color: primaryColor, size: 16, ),
-          title: Widgets.text('Ceprofiaxscin'),
-          trailing: Widgets.text('74A', weight: FontWeight.w600),
+        Card(
+          child: ListTile(
+            onTap: () {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => SingleDrug()));
+            },
+            leading: Icon(
+              FontAwesomeIcons.squareFull,
+              color: primaryColor,
+              size: 16,
+            ),
+            title: Widgets.text('Amoxycillin', color: Colors.green),
+            trailing: Widgets.text('83A',
+                weight: FontWeight.w600, color: Colors.green),
+          ),
         ),
-      ),
-
-      Card(
-        child: ListTile(
-          onTap: (){
-            Navigator.push(context, MaterialPageRoute(builder: (context) => SingleDrug()));
-          },
-          leading: Icon( FontAwesomeIcons.squareFull, color: primaryColor, size: 16, ),
-          title: Widgets.text('Gentamicin'),
-          trailing: Widgets.text('70A', weight: FontWeight.w600),
+        Card(
+          child: ListTile(
+            onTap: () {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => SingleDrug()));
+            },
+            leading: Icon(
+              FontAwesomeIcons.squareFull,
+              color: primaryColor,
+              size: 16,
+            ),
+            title: Widgets.text('Ceprofiaxscin', color: Colors.yellow[600]),
+            trailing: Widgets.text('74W',
+                weight: FontWeight.w600, color: Colors.yellow[600]),
+          ),
         ),
-      ),
-    ], search: false,);
+        Card(
+          child: ListTile(
+            onTap: () {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => SingleDrug()));
+            },
+            leading: Icon(
+              FontAwesomeIcons.squareFull,
+              color: primaryColor,
+              size: 16,
+            ),
+            title: Widgets.text('Gentamicin', color: Colors.red),
+            trailing:
+                Widgets.text('70R', weight: FontWeight.w600, color: Colors.red),
+          ),
+        ),
+      ],
+      search: false,
+    );
   }
 }

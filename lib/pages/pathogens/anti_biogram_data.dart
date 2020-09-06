@@ -15,43 +15,51 @@ class AntiBiogramData extends StatefulWidget {
 class _AntiBiogramDataState extends State<AntiBiogramData> {
   @override
   Widget build(BuildContext context) {
-    return Pager(widget.title, [
-      SizedBox(
-        height: 10,
-      ),
-      Widgets.text('ANTIBIOGRAM DATA',
-          size: 20, align: TextAlign.center, weight: FontWeight.bold),
-      SizedBox(
-        height: 20,
-      ),
-      Column(
-        children: List.generate(widget.content.length, (inx) {
-          var children = <Widget>[];
-          children.add(Widgets.header(widget.content[inx]['title']));
+    return Pager(
+      widget.title,
+      [
+        SizedBox(
+          height: 10,
+        ),
+        Widgets.text('ANTIBIOGRAM DATA',
+            size: 20, align: TextAlign.center, weight: FontWeight.bold),
+        SizedBox(
+          height: 20,
+        ),
+        Column(
+          children: List.generate(widget.content.length, (inx) {
+            var children = <Widget>[];
+            children.add(Widgets.header(widget.content[inx]['title']));
 
-          widget.content[inx]['content'].forEach((e) {
-            children.add(Container(
-              child: Card(
-                child: ListTile(
-                    dense: true,
-                    title: Widgets.text(e['title'], size: 18),
-                    subtitle: Widgets.text('isno: ${e['isno']}', size: 15),
-                    trailing: Widgets.text(
-                      '${e['per']}%',
-                      size: 16,
-                      color: getColor(double.parse(e['per'].toString())),
-                    )),
-              ),
-            ));
-          });
+            widget.content[inx]['content'].forEach((e) {
+              children.add(Container(
+                child: Card(
+                  child: ListTile(
+                      dense: true,
+                      title: Widgets.text(e['title'],
+                          size: 18,
+                          color: getColor(double.parse(e['per'].toString()))),
+                      subtitle: Widgets.text('isno: ${e['isno']}',
+                          size: 15,
+                          color: getColor(double.parse(e['per'].toString()))),
+                      trailing: Widgets.text(
+                        '${e['per']}%',
+                        size: 16,
+                        color: getColor(double.parse(e['per'].toString())),
+                      )),
+                ),
+              ));
+            });
 
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: children,
-          );
-        }),
-      ),
-    ], search: false,);
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: children,
+            );
+          }),
+        ),
+      ],
+      search: false,
+    );
   }
 
   Color getColor(double per) {
@@ -60,6 +68,6 @@ class _AntiBiogramDataState extends State<AntiBiogramData> {
     } else if (per > 70) {
       return Colors.green;
     }
-    return Colors.yellow;
+    return Colors.yellow[600];
   }
 }

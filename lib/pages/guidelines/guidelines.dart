@@ -10,30 +10,24 @@ class Guidelines extends StatefulWidget {
 }
 
 class _GuidelinesState extends State<Guidelines> {
-
   @override
   Widget build(BuildContext context) {
-
     return Pager('Guidelines', [
       InkWell(
-        onTap: (){
-          Navigator.push(context, MaterialPageRoute(
-            builder: (BuildContext context) => DiseaseTreatment()));
-        },
+        onTap: () {},
         child: Widgets.container('Antimicrobial Stewardship'),
       ),
-      
       InkWell(
-        onTap: (){
-          
+        onTap: () {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (BuildContext context) => DiseaseTreatment()));
         },
         child: Widgets.container('Disease Treatment Guidelines'),
       ),
-      
       InkWell(
-        onTap: (){
-          
-        },
+        onTap: () {},
         child: Widgets.container('AWARE Antimicrobials'),
       ),
     ]);
