@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:microbicpro/pages/ebrast/single_drug.dart';
 import 'package:microbicpro/widgets/page.dart';
 import 'package:microbicpro/widgets/widgets.dart';
 
@@ -26,7 +27,7 @@ class _MedicinesState extends State<Medicines> {
                     context,
                     MaterialPageRoute(
                         builder: (BuildContext context) =>
-                            Container(color: Colors.white)));
+                            SingleDrug()));
               },
             ),
           );

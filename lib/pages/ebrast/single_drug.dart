@@ -16,23 +16,14 @@ class _SingleDrugState extends State<SingleDrug> {
   Widget build(BuildContext context) {
     return Pager('Amoxycillin', [
 
-      Container(
-        decoration: BoxDecoration(
-          border: Border.all(color: Color(0xffbee5eb)),
-          color: Color(0xffd1ecf1),
-          borderRadius: BorderRadius.circular(10),
-        ),
-        padding: EdgeInsets.all(20),
-        margin: EdgeInsets.symmetric(vertical: 30),
-        child: Widgets.text('W.H.O recommended Access Antibiotic', size: 16, color: Color(0xff0c5460)),
-      ),
+      Widgets.header('ANTIMICROBIAL SPECTRUM'),
 
       Card(
         child: ListTile(
           onTap: (){
           },
           trailing: Icon( FontAwesomeIcons.chevronCircleRight, color: primaryColor, size: 16, ),
-          title: Widgets.text('Antimicrobial Spectrum', weight: FontWeight.w500),
+          title: Widgets.text('General Spectrum', weight: FontWeight.w500),
         ),
       ),
 
@@ -76,31 +67,41 @@ class _SingleDrugState extends State<SingleDrug> {
         ),
       ),
 
-      Card(
-        child: ListTile(
-          onTap: (){
-          },
-          trailing: Icon( FontAwesomeIcons.chevronCircleRight, color: primaryColor, size: 16, ),
-          title: Widgets.text('General Spectrum', weight: FontWeight.w500),
-        ),
-      ),
+      Widgets.header('PHARMACOLOGY'),
 
-      Card(
-        child: ListTile(
-          onTap: (){
-          },
-          trailing: Icon( FontAwesomeIcons.chevronCircleRight, color: primaryColor, size: 16, ),
-          title: Widgets.text('Pharmacology', weight: FontWeight.w500),
-        ),
-      ),
+      Widgets.collapsible('Drug class', [
 
-      Container(
-        margin: EdgeInsets.symmetric(vertical: 30, horizontal: 5),
-        color: Colors.orange,
-        padding: EdgeInsets.all(50),
-        alignment: Alignment.center,
-        child: Widgets.text('DOSAGE'),
-      ),
+      ]),
+      Widgets.collapsible('Mechanism of action', [
+
+      ]),
+      Widgets.collapsible('Pharmacokinetics', [
+
+      ]),
+      Widgets.collapsible('Significant interactions', [
+
+      ]),
+      Widgets.collapsible('Pregnancy category', [
+
+      ]),
+      Widgets.collapsible('Contraindications', [
+
+      ]),
+      Widgets.collapsible('Adverse effects', [
+
+      ]),
+
+      Widgets.header('DOSE SCHEDULE'),
+      
+      Widgets.collapsible('Renal', [
+
+      ]),
+      Widgets.collapsible('Adult', [
+
+      ]),
+      Widgets.collapsible('Child', [
+
+      ]),
     ], search: false,);
   }
 }
