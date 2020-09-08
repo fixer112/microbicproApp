@@ -14,7 +14,6 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-
   @override
   void initState() {
     super.initState();
@@ -22,99 +21,126 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
-    double center = MediaQuery.of(context).size.height/2;
-    
+    double center = MediaQuery.of(context).size.height / 2;
+
     return Scaffold(
       body: SafeArea(
         child: Center(
-          child: ListView(
+          child: GridView.count(
+            crossAxisCount: 2,
             padding: EdgeInsets.symmetric(vertical: 50),
             shrinkWrap: true,
             children: [
               InkWell(
                 child: Column(
                   children: [
-                    Widgets.gradienticon(FontAwesomeIcons.checkSquare, 50, LinearGradient(
-                      colors: <Color>[
-                        Colors.orange,
-                        Colors.pink,
-                      ],
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                    )),
-                    SizedBox(height: 5,),
-                    Widgets.text('Guidelines', size: 23, color: Colors.pink, weight: FontWeight.w600)
+                    Widgets.gradienticon(
+                        FontAwesomeIcons.checkSquare,
+                        50,
+                        LinearGradient(
+                          colors: <Color>[
+                            Colors.orange,
+                            Colors.pink,
+                          ],
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                        )),
+                    SizedBox(
+                      height: 5,
+                    ),
+                    Widgets.text('Guidelines',
+                        size: 23, color: Colors.pink, weight: FontWeight.w600)
                   ],
                 ),
                 onTap: () {
-                  Navigator.push(context, MaterialPageRoute(
-                    builder: (BuildContext context) => Guidelines()));
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (BuildContext context) => Guidelines()));
                 },
               ),
-              SizedBox(height: 60,),
-              
               InkWell(
                 child: Column(
                   children: [
-                    Widgets.gradienticon(FontAwesomeIcons.disease, 50, LinearGradient(
-                      colors: <Color>[
-                        Colors.green,
-                        Colors.blue,
-                      ],
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                    )),
-                    SizedBox(height: 5,),
-                    Widgets.text('Pathogens', size: 23, color: Colors.blue, weight: FontWeight.w600)
+                    Widgets.gradienticon(
+                        FontAwesomeIcons.disease,
+                        50,
+                        LinearGradient(
+                          colors: <Color>[
+                            Colors.green,
+                            Colors.blue,
+                          ],
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                        )),
+                    SizedBox(
+                      height: 5,
+                    ),
+                    Widgets.text('Pathogens',
+                        size: 23, color: Colors.blue, weight: FontWeight.w600)
                   ],
                 ),
                 onTap: () {
-                  Navigator.push(context, MaterialPageRoute(
-                    builder: (BuildContext context) => Pathogens()));
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (BuildContext context) => Pathogens()));
                 },
               ),
-              SizedBox(height: 60,),
-              
               InkWell(
                 child: Column(
                   children: [
-                    Widgets.gradienticon(FontAwesomeIcons.bookMedical, 50, LinearGradient(
-                      colors: <Color>[
-                        Colors.indigo,
-                        Colors.purple,
-                      ],
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                    )),
-                    SizedBox(height: 5,),
-                    Widgets.text('Medicines', size: 23, color: Colors.purple, weight: FontWeight.w600)
+                    Widgets.gradienticon(
+                        FontAwesomeIcons.bookMedical,
+                        50,
+                        LinearGradient(
+                          colors: <Color>[
+                            Colors.indigo,
+                            Colors.purple,
+                          ],
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                        )),
+                    SizedBox(
+                      height: 5,
+                    ),
+                    Widgets.text('Medicines',
+                        size: 23, color: Colors.purple, weight: FontWeight.w600)
                   ],
                 ),
                 onTap: () {
-                  Navigator.push(context, MaterialPageRoute(
-                    builder: (BuildContext context) => Medicines()));
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (BuildContext context) => Medicines()));
                 },
               ),
-              SizedBox(height: 60,),
-
               InkWell(
                 child: Column(
                   children: [
-                    Widgets.gradienticon(FontAwesomeIcons.questionCircle, 50, LinearGradient(
-                      colors: <Color>[
-                        Colors.red,
-                        Colors.brown,
-                      ],
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                    )),
-                    SizedBox(height: 5,),
-                    Widgets.text('Ebrast', size: 23, color: Colors.brown, weight: FontWeight.w600)
+                    Widgets.gradienticon(
+                        FontAwesomeIcons.questionCircle,
+                        50,
+                        LinearGradient(
+                          colors: <Color>[
+                            Colors.red,
+                            Colors.brown,
+                          ],
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                        )),
+                    SizedBox(
+                      height: 5,
+                    ),
+                    Widgets.text('Ebrast',
+                        size: 23, color: Colors.brown, weight: FontWeight.w600)
                   ],
                 ),
                 onTap: () {
-                  Navigator.push(context, MaterialPageRoute(
-                    builder: (BuildContext context) => Ebrast()));
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (BuildContext context) => Ebrast()));
                 },
               ),
             ],

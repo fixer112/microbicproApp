@@ -10,15 +10,16 @@ class Splash extends StatefulWidget {
 }
 
 class _SplashState extends State<Splash> {
-
   @override
   void initState() {
     super.initState();
 
     Future.delayed(Duration(seconds: 3), () {
-      Navigator.pushReplacement(context, MaterialPageRoute(
-        builder: (BuildContext context) => Home(),
-      ));
+      Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (BuildContext context) => Home(),
+          ));
     });
   }
 
@@ -26,26 +27,37 @@ class _SplashState extends State<Splash> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      body: SafeArea( 
-        child: Padding( padding: EdgeInsets.all(30), child: Row(
+      body: SafeArea(
+          child: Padding(
+        padding: EdgeInsets.all(30),
+        child: Row(
           children: [
-            Expanded(child: Column(
+            Expanded(
+                child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               mainAxisSize: MainAxisSize.max,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                /*Container(
-                  width: 80,
-                  child: FittedBox(
-                    child: Image.asset('assets/img/fakelogo.png'),
-                    fit: BoxFit.contain,
-                  ),
+                Container(
+                  width: 250,
+                  child: Image.asset('assets/img/logo.jpeg'),
                 ),
+                /*
 
                 SizedBox(height: 20,),*/
-                Widgets.text('Microbic Pro', size: 40, color: primaryColor, weight: FontWeight.bold, align: TextAlign.center, family: 'PicedownBl' ),
-                SizedBox(height: 10,),
-                Widgets.text('wordly clinical diagnostics', color: primaryColor),
+                /* Widgets.text('MicrobicPro',
+                    size: 40,
+                    color: primaryColor,
+                    weight: FontWeight.bold,
+                    align: TextAlign.center,
+                    family: 'PicedownBl'), */
+
+                //Image.asset('assets/img/logo.jpeg'),
+                SizedBox(
+                  height: 10,
+                ),
+                Widgets.text('Promoting Rational Use of Antimicrobials',
+                    color: primaryColor, style: FontStyle.italic),
               ],
             )),
           ],

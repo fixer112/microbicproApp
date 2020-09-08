@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:microbicpro/pages/splashscreen.dart';
 
 void main() {
@@ -10,8 +11,9 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'MicrobicPro',
       theme: ThemeData(
+        textTheme: GoogleFonts.rubikTextTheme(Theme.of(context).textTheme),
         // This is the theme of your application.
         //
         // Try running your application with "flutter run". You'll see the
