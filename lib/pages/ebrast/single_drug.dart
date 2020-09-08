@@ -20,58 +20,50 @@ class _SingleDrugState extends State<SingleDrug> {
 
       Card(
         child: ListTile(
-          onTap: (){
+          onTap: () {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (BuildContext context) =>
+                        AntiBiogramData(title: 'Pathogen Title', content: [
+                          {
+                            'title': 'MIXED ISOLATE',
+                            'content': [
+                              {
+                                'title': 'Something',
+                                'per': 79,
+                                'isno': 3,
+                              },
+                              {
+                                'title': 'Something',
+                                'per': 29,
+                                'isno': 5,
+                              }
+                            ],
+                          },
+                          {
+                            'title': 'URINE ONLY',
+                            'content': [
+                              {
+                                'title': 'Something',
+                                'per': 59,
+                                'isno': 5,
+                              },
+                              {
+                                'title': 'Something',
+                                'per': 89,
+                                'isno': 5,
+                              }
+                            ],
+                          }
+                        ])));
           },
-          trailing: Icon( FontAwesomeIcons.chevronCircleRight, color: primaryColor, size: 16, ),
-          title: Widgets.text('General Spectrum', weight: FontWeight.w500),
-        ),
-        Card(
-          child: ListTile(
-            onTap: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (BuildContext context) =>
-                          AntiBiogramData(title: 'Pathogen Title', content: [
-                            {
-                              'title': 'MIXED ISOLATE',
-                              'content': [
-                                {
-                                  'title': 'Something',
-                                  'per': 79,
-                                  'isno': 3,
-                                },
-                                {
-                                  'title': 'Something',
-                                  'per': 29,
-                                  'isno': 5,
-                                }
-                              ],
-                            },
-                            {
-                              'title': 'URINE ONLY',
-                              'content': [
-                                {
-                                  'title': 'Something',
-                                  'per': 59,
-                                  'isno': 5,
-                                },
-                                {
-                                  'title': 'Something',
-                                  'per': 89,
-                                  'isno': 5,
-                                }
-                              ],
-                            }
-                          ])));
-            },
-            trailing: Icon(
-              FontAwesomeIcons.chevronCircleRight,
-              color: primaryColor,
-              size: 16,
-            ),
-            title: Widgets.text('Antibiogram data', weight: FontWeight.w500),
+          trailing: Icon(
+            FontAwesomeIcons.chevronCircleRight,
+            color: primaryColor,
+            size: 16,
           ),
+          title: Widgets.text('Antibiogram data', weight: FontWeight.w500),
         ),
       ),
 
