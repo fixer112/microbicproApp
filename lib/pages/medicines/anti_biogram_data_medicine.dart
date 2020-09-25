@@ -2,17 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:microbicpro/widgets/page.dart';
 import 'package:microbicpro/widgets/widgets.dart';
 
-class AntiBiogramData extends StatefulWidget {
+class AntiBiogramDataMEdicine extends StatefulWidget {
   final String title;
   final dynamic content;
 
-  const AntiBiogramData({Key key, this.title, this.content}) : super(key: key);
+  const AntiBiogramDataMEdicine({Key key, this.title, this.content})
+      : super(key: key);
 
   @override
-  _AntiBiogramDataState createState() => _AntiBiogramDataState();
+  _AntiBiogramDataMEdicineState createState() =>
+      _AntiBiogramDataMEdicineState();
 }
 
-class _AntiBiogramDataState extends State<AntiBiogramData> {
+class _AntiBiogramDataMEdicineState extends State<AntiBiogramDataMEdicine> {
   @override
   Widget build(BuildContext context) {
     return Pager(

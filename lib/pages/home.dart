@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:get/get.dart';
 import 'package:microbicpro/pages/ebrast/ebrast.dart';
 import 'package:microbicpro/pages/guidelines/guidelines.dart';
 import 'package:microbicpro/pages/medicines/medicines.dart';
@@ -80,12 +81,7 @@ class _HomeState extends State<Home> {
                         size: 23, color: Colors.blue, weight: FontWeight.w600)
                   ],
                 ),
-                onTap: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (BuildContext context) => Pathogens()));
-                },
+                onTap: () => Get.to(Pathogens()),
               ),
               InkWell(
                 child: Column(

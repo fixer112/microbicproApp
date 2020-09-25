@@ -1,34 +1,68 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:microbicpro/model/pathogen.dart';
+import 'package:microbicpro/pages/guidelines/disease/single.dart';
 import 'package:microbicpro/pages/pathogens/anti_biogram_data.dart';
+import 'package:microbicpro/pages/pathogens/anti_biogram_data_pathogen.dart';
+import 'package:microbicpro/pages/pathogens/pathogens.dart';
+import 'package:microbicpro/provider/main.dart';
 import 'package:microbicpro/widgets/page.dart';
 import 'package:microbicpro/widgets/widgets.dart';
+import 'package:provider/provider.dart';
 
+// ignore: must_be_immutable
 class EachPathogen extends StatefulWidget {
+  final int id;
+  EachPathogen(this.id);
   @override
   _EachPathogenState createState() => _EachPathogenState();
 }
 
 class _EachPathogenState extends State<EachPathogen> {
+  Pathogen pathogen;
+  @override
+  void initState() {
+    super.initState();
+    var main = Provider.of<MainModel>(context, listen: false);
+    pathogen = main.getPathogens
+        .firstWhere((pathogen) => pathogen.id == widget.id, orElse: () => null);
+    if (pathogen == null) {
+      Get.to(Pathogens());
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    //print(pathogen.precautions);
     return Pager(
-      'Pathogen Title',
+      pathogen.name,
       [
         Widgets.header('General Information'),
-        Widgets.collapsible('Overview', []),
-        Widgets.collapsible('Epidermology', []),
-        Widgets.collapsible('Diseases', []),
-        Widgets.header('Anti-Microbial Spectrum'),
-        Card(
-          child: ListTile(
-            title: Widgets.text('Ideal Spectrum', size: 17),
-            trailing: Icon(
-              Icons.arrow_forward_ios,
-              size: 20,
-            ),
-            onTap: () {},
+        Widgets.collapsible('Overview', [
+          Widgets.text(pathogen.overview),
+        ]),
+        Widgets.collapsible('Epidermology', [
+          Widgets.text(pathogen.epidemiology),
+        ]),
+        Widgets.collapsible('Diseases', [
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: pathogen.diseases
+                .map((disease) => InkWell(
+                      onTap: () => Get.to(SingleDisease(disease['id'])),
+                      child: Card(
+                        child: ListTile(
+                          title: Text(disease['name']),
+                        ),
+                      ),
+                    ))
+                .toList(),
           ),
-        ),
+        ]),
+        Widgets.header('Anti-Microbial Spectrum'),
+        Widgets.collapsible('Ideal Spectrum', [
+          Widgets.text(pathogen.spectrum),
+        ]),
         Card(
           child: ListTile(
             title: Widgets.text('Antibiogram Data', size: 17),
@@ -41,43 +75,22 @@ class _EachPathogenState extends State<EachPathogen> {
                   context,
                   MaterialPageRoute(
                       builder: (BuildContext context) =>
-                          AntiBiogramData(title: 'Pathogen Title', content: [
-                            {
-                              'title': 'MIXED ISOLATE',
-                              'content': [
-                                {
-                                  'title': 'Something',
-                                  'per': 89,
-                                  'isno': 5,
-                                },
-                                {
-                                  'title': 'Something',
-                                  'per': 49,
-                                  'isno': 5,
-                                }
-                              ],
-                            },
-                            {
-                              'title': 'URINE ONLY',
-                              'content': [
-                                {
-                                  'title': 'Something',
-                                  'per': 50,
-                                  'isno': 5,
-                                },
-                                {
-                                  'title': 'Something',
-                                  'per': 69,
-                                  'isno': 5,
-                                }
-                              ],
-                            }
-                          ])));
+                          AntiBiogramDataPathogen(pathogen)));
             },
           ),
         ),
         Widgets.header('Infection Control'),
-        Widgets.collapsible('Precautions', []),
+        Widgets.collapsible('Precautions', [
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: pathogen.precautions
+                .map((precausion) => InkWell(
+                      onTap: () => Get.to(SingleDisease(precausion['id'])),
+                      child: Text("- ${precausion['description']}"),
+                    ))
+                .toList(),
+          ),
+        ]),
       ],
     );
   }

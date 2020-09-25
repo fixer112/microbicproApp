@@ -38,7 +38,7 @@ class _AntiBioticsState extends State<AntiBiotics> {
           child: ListTile(
             onTap: () {
               Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => SingleDrug()));
+                  MaterialPageRoute(builder: (context) => SingleDrug(1)));
             },
             leading: Icon(
               FontAwesomeIcons.squareFull,
@@ -54,7 +54,7 @@ class _AntiBioticsState extends State<AntiBiotics> {
           child: ListTile(
             onTap: () {
               Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => SingleDrug()));
+                  MaterialPageRoute(builder: (context) => SingleDrug(1)));
             },
             leading: Icon(
               FontAwesomeIcons.squareFull,
@@ -70,7 +70,7 @@ class _AntiBioticsState extends State<AntiBiotics> {
           child: ListTile(
             onTap: () {
               Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => SingleDrug()));
+                  MaterialPageRoute(builder: (context) => SingleDrug(1)));
             },
             leading: Icon(
               FontAwesomeIcons.squareFull,

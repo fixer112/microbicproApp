@@ -26,8 +26,7 @@ class _MedicinesState extends State<Medicines> {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (BuildContext context) =>
-                            SingleDrug()));
+                        builder: (BuildContext context) => SingleDrug(1)));
               },
             ),
           );

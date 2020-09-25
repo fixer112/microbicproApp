@@ -1,5 +1,6 @@
 import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import '../values.dart';
 
 class Widgets {
@@ -102,6 +103,34 @@ class Widgets {
         final Rect rect = Rect.fromLTRB(0, 0, size, size);
         return gradient.createShader(rect);
       },
+    );
+  }
+
+  static centerText(String text) {
+    return Center(
+      child: Text(text),
+    );
+  }
+
+  static Widget loader() {
+    return Container(
+      color: Colors.white,
+      child: Center(
+        child: CircularProgressIndicator(),
+      ),
+    );
+  }
+
+  static snackbar(message, {title = 'Error'}) {
+    Get.snackbar(
+      title,
+      message,
+      snackPosition: SnackPosition.BOTTOM,
+      backgroundColor: Colors.black,
+      colorText: Colors.white,
+      padding: EdgeInsets.all(10),
+      margin: EdgeInsets.all(10),
+      borderRadius: 5,
     );
   }
 }

@@ -1,16 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:microbicpro/pages/splashscreen.dart';
+import 'package:provider/provider.dart';
+import 'provider/main.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(
+    MultiProvider(providers: [
+      ChangeNotifierProvider<MainModel>(create: (context) => MainModel()),
+    ], child: MyApp()),
+  );
 }
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return GetMaterialApp(
       title: 'MicrobicPro',
       theme: ThemeData(
         textTheme: GoogleFonts.rubikTextTheme(Theme.of(context).textTheme),
