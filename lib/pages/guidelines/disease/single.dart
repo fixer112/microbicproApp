@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:microbicpro/model/disease.dart';
 import 'package:microbicpro/pages/guidelines/disease/drug.dart';
-import 'package:microbicpro/values.dart';
+import 'package:microbicpro/provider/main.dart';
 import 'package:microbicpro/widgets/page.dart';
 import 'package:microbicpro/widgets/widgets.dart';
+import 'package:provider/provider.dart';
+
+import '../../../api_functions.dart';
 
 class SingleDisease extends StatefulWidget {
   final int id;
@@ -12,37 +16,55 @@ class SingleDisease extends StatefulWidget {
 }
 
 class _SingleDiseaseState extends State<SingleDisease> {
+  Disease disease;
+  @override
+  void initState() {
+    super.initState();
+    var main = Provider.of<MainModel>(context, listen: false);
+    disease = main.diseases
+        .firstWhere((disease) => disease.id == widget.id, orElse: () => null);
+    if (disease == null) {
+      fetch();
+      // Widgets.snackbar('Pathogen not found');
+      // Get.to(Pathogens());
+    }
+  }
+
+  fetch() async {
+    disease = await getDisease(widget.id, context);
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     return Pager(
-      'Otitis Media (Acute)',
-      [
-        Widgets.collapsible('Overview', [
-          Widgets.text(
-              'A disorder of the ear, tympanic membrane, common in tropics')
-        ]),
-        Widgets.collapsible('Clinical Features', [
-          Widgets.text('Prulent discharge from ears often smelly, ear pain')
-        ]),
-        Widgets.collapsible('Treatment Objectives',
-            [Widgets.text('- Eliminate pain\n- Eradicate infection')]),
-        Card(
-          child: ListTile(
-            title: Widgets.text('Drug Management',
-                size: 17, weight: FontWeight.w600),
-            trailing: Icon(
-              Icons.arrow_forward_ios,
-              size: 20,
-            ),
-            onTap: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (BuildContext context) => DrugManagement()));
-            },
-          ),
-        ),
-      ],
+      disease == null ? 'Disease Not Found' : disease.name,
+      disease == null
+          ? [Widgets.centerText('Disease Not Found', context)]
+          : [
+              Widgets.collapsible('Overview', [Widgets.text(disease.overview)]),
+              Widgets.collapsible(
+                  'Clinical Features', [Widgets.text(disease.features)]),
+              Widgets.collapsible('Treatment Objectives',
+                  [Widgets.text(disease.treatmentObjectives)]),
+              Card(
+                child: ListTile(
+                  title: Widgets.text('Drug Management',
+                      size: 17, weight: FontWeight.w600),
+                  trailing: Icon(
+                    Icons.arrow_forward_ios,
+                    size: 20,
+                  ),
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (BuildContext context) =>
+                                DrugManagement()));
+                  },
+                ),
+              ),
+            ],
       search: false,
     );
   }

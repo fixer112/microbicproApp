@@ -8,7 +8,8 @@ class Pager extends StatefulWidget {
   final List<Widget> widgets;
   final bool search;
 
-  const Pager(this.title, this.widgets, {Key key, this.search}) : super(key: key);
+  const Pager(this.title, this.widgets, {Key key, this.search})
+      : super(key: key);
 
   @override
   _PagerState createState() => _PagerState();
@@ -19,21 +20,29 @@ class _PagerState extends State<Pager> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: IconButton(icon: Icon( Icons.arrow_back ), onPressed: (){
-          Navigator.pop(context);
-        }),
+        leading: IconButton(
+            icon: Icon(Icons.arrow_back),
+            onPressed: () {
+              Navigator.pop(context);
+            }),
         actions: [
-          widget.search!=false ? IconButton(
-            icon: Icon( Icons.search ),
-            onPressed: (){
-              Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => SearchPage()));
-            },
-          ): Container(),
+          widget.search != false
+              ? IconButton(
+                  icon: Icon(Icons.search),
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (BuildContext context) => SearchPage()));
+                  },
+                )
+              : Container(),
         ],
-        title: Text( widget.title ),
+        title: Text(widget.title),
         backgroundColor: primaryColor,
       ),
       body: ListView(
+        shrinkWrap: true,
         padding: EdgeInsets.all(10),
         children: widget.widgets,
       ),

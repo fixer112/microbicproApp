@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:microbicpro/api_functions.dart';
 import 'package:microbicpro/model/pathogen.dart';
 import 'package:microbicpro/pages/guidelines/disease/single.dart';
 import 'package:microbicpro/pages/pathogens/anti_biogram_data.dart';
@@ -27,71 +28,81 @@ class _EachPathogenState extends State<EachPathogen> {
     pathogen = main.getPathogens
         .firstWhere((pathogen) => pathogen.id == widget.id, orElse: () => null);
     if (pathogen == null) {
-      Get.to(Pathogens());
+      fetch();
+      // Widgets.snackbar('Pathogen not found');
+      // Get.to(Pathogens());
     }
+  }
+
+  fetch() async {
+    pathogen = await getPathogen(widget.id, context);
+    setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
     //print(pathogen.precautions);
     return Pager(
-      pathogen.name,
-      [
-        Widgets.header('General Information'),
-        Widgets.collapsible('Overview', [
-          Widgets.text(pathogen.overview),
-        ]),
-        Widgets.collapsible('Epidermology', [
-          Widgets.text(pathogen.epidemiology),
-        ]),
-        Widgets.collapsible('Diseases', [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: pathogen.diseases
-                .map((disease) => InkWell(
-                      onTap: () => Get.to(SingleDisease(disease['id'])),
-                      child: Card(
-                        child: ListTile(
-                          title: Text(disease['name']),
-                        ),
-                      ),
-                    ))
-                .toList(),
-          ),
-        ]),
-        Widgets.header('Anti-Microbial Spectrum'),
-        Widgets.collapsible('Ideal Spectrum', [
-          Widgets.text(pathogen.spectrum),
-        ]),
-        Card(
-          child: ListTile(
-            title: Widgets.text('Antibiogram Data', size: 17),
-            trailing: Icon(
-              Icons.arrow_forward_ios,
-              size: 20,
-            ),
-            onTap: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (BuildContext context) =>
-                          AntiBiogramDataPathogen(pathogen)));
-            },
-          ),
-        ),
-        Widgets.header('Infection Control'),
-        Widgets.collapsible('Precautions', [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: pathogen.precautions
-                .map((precausion) => InkWell(
-                      onTap: () => Get.to(SingleDisease(precausion['id'])),
-                      child: Text("- ${precausion['description']}"),
-                    ))
-                .toList(),
-          ),
-        ]),
-      ],
+      pathogen == null ? 'Pathogen Not Found' : pathogen.name,
+      pathogen == null
+          ? [Widgets.centerText('Pathogen Not Found', context)]
+          : [
+              Widgets.header('General Information'),
+              Widgets.collapsible('Overview', [
+                Widgets.text(pathogen.overview),
+              ]),
+              Widgets.collapsible('Epidermology', [
+                Widgets.text(pathogen.epidemiology),
+              ]),
+              Widgets.collapsible('Diseases', [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: pathogen.diseases
+                      .map((disease) => InkWell(
+                            onTap: () => Get.to(SingleDisease(disease['id'])),
+                            child: Card(
+                              child: ListTile(
+                                title: Text(disease['name']),
+                              ),
+                            ),
+                          ))
+                      .toList(),
+                ),
+              ]),
+              Widgets.header('Anti-Microbial Spectrum'),
+              Widgets.collapsible('Ideal Spectrum', [
+                Widgets.text(pathogen.spectrum),
+              ]),
+              Card(
+                child: ListTile(
+                  title: Widgets.text('Antibiogram Data', size: 17),
+                  trailing: Icon(
+                    Icons.arrow_forward_ios,
+                    size: 20,
+                  ),
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (BuildContext context) =>
+                                AntiBiogramDataPathogen(pathogen)));
+                  },
+                ),
+              ),
+              Widgets.header('Infection Control'),
+              Widgets.collapsible('Precautions', [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: pathogen.precautions
+                      .map((precausion) => InkWell(
+                            onTap: () =>
+                                Get.to(SingleDisease(precausion['id'])),
+                            child: Text("- ${precausion['description']}"),
+                          ))
+                      .toList(),
+                ),
+              ]),
+            ],
     );
   }
 }

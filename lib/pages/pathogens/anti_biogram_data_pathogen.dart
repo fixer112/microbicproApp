@@ -24,7 +24,7 @@ class _AntiBiogramDataState extends State<AntiBiogramDataPathogen> {
   Widget build(BuildContext context) {
     Pathogen pathogen = widget.pathogen;
     List<PathogenAntibiogramData> antiBiogramDatas = pathogen.antibiogramDatas;
-    var main = Provider.of<MainModel>(context, listen: false);
+    //var main = Provider.of<MainModel>(context, listen: false);
     var samples = antiBiogramDatas
         .map((e) {
           return e.sample;

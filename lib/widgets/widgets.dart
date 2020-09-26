@@ -106,9 +106,12 @@ class Widgets {
     );
   }
 
-  static centerText(String text) {
-    return Center(
-      child: Text(text),
+  static centerText(String text, BuildContext context) {
+    return Container(
+      height: MediaQuery.of(context).size.height / 1.2,
+      child: Center(
+        child: Widgets.text(text, size: 20.0),
+      ),
     );
   }
 
