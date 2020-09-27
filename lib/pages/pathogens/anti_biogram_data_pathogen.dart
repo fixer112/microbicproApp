@@ -1,14 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:microbicpro/api_functions.dart';
 import 'package:microbicpro/model/PathogenAntibiogramData.dart';
-import 'package:microbicpro/model/medicine.dart';
 import 'package:microbicpro/model/pathogen.dart';
 import 'package:microbicpro/pages/ebrast/single_drug.dart';
-import 'package:microbicpro/provider/main.dart';
 import 'package:microbicpro/widgets/page.dart';
 import 'package:microbicpro/widgets/widgets.dart';
-import 'package:provider/provider.dart';
 
 class AntiBiogramDataPathogen extends StatefulWidget {
   final Pathogen pathogen;

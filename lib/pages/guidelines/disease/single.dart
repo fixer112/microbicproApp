@@ -17,6 +17,7 @@ class SingleDisease extends StatefulWidget {
 
 class _SingleDiseaseState extends State<SingleDisease> {
   Disease disease;
+  bool loading = false;
   @override
   void initState() {
     super.initState();
@@ -31,40 +32,48 @@ class _SingleDiseaseState extends State<SingleDisease> {
   }
 
   fetch() async {
+    setState(() {
+      loading = true;
+    });
     disease = await getDisease(widget.id, context);
-    setState(() {});
+    setState(() {
+      loading = false;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return Pager(
-      disease == null ? 'Disease Not Found' : disease.name,
-      disease == null
-          ? [Widgets.centerText('Disease Not Found', context)]
-          : [
-              Widgets.collapsible('Overview', [Widgets.text(disease.overview)]),
-              Widgets.collapsible(
-                  'Clinical Features', [Widgets.text(disease.features)]),
-              Widgets.collapsible('Treatment Objectives',
-                  [Widgets.text(disease.treatmentObjectives)]),
-              Card(
-                child: ListTile(
-                  title: Widgets.text('Drug Management',
-                      size: 17, weight: FontWeight.w600),
-                  trailing: Icon(
-                    Icons.arrow_forward_ios,
-                    size: 20,
+      disease == null ? 'Disease Not Found' : "Disease - ${disease.name}",
+      loading
+          ? [Widgets.loader()]
+          : disease == null
+              ? [Widgets.centerText('Disease Not Found', context)]
+              : [
+                  Widgets.collapsible(
+                      'Overview', [Widgets.text(disease.overview)]),
+                  Widgets.collapsible(
+                      'Clinical Features', [Widgets.text(disease.features)]),
+                  Widgets.collapsible('Treatment Objectives',
+                      [Widgets.text(disease.treatmentObjectives)]),
+                  Card(
+                    child: ListTile(
+                      title: Widgets.text('Drug Management',
+                          size: 17, weight: FontWeight.w600),
+                      trailing: Icon(
+                        Icons.arrow_forward_ios,
+                        size: 20,
+                      ),
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (BuildContext context) =>
+                                    DrugManagement(disease.id)));
+                      },
+                    ),
                   ),
-                  onTap: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (BuildContext context) =>
-                                DrugManagement(disease.id)));
-                  },
-                ),
-              ),
-            ],
+                ],
       search: false,
     );
   }

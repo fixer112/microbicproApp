@@ -1,24 +1,38 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:microbicpro/model/MedicineAntiBiogramData.dart';
+import 'package:microbicpro/model/medicine.dart';
+import 'package:microbicpro/pages/ebrast/single_drug.dart';
+import 'package:microbicpro/pages/pathogens/each.dart';
 import 'package:microbicpro/widgets/page.dart';
 import 'package:microbicpro/widgets/widgets.dart';
 
-class AntiBiogramDataMEdicine extends StatefulWidget {
-  final String title;
-  final dynamic content;
+class AntiBiogramDataMedicine extends StatefulWidget {
+  final Medicine medicine;
 
-  const AntiBiogramDataMEdicine({Key key, this.title, this.content})
-      : super(key: key);
+  const AntiBiogramDataMedicine(this.medicine);
 
   @override
-  _AntiBiogramDataMEdicineState createState() =>
-      _AntiBiogramDataMEdicineState();
+  _AntiBiogramDataState createState() => _AntiBiogramDataState();
 }
 
-class _AntiBiogramDataMEdicineState extends State<AntiBiogramDataMEdicine> {
+class _AntiBiogramDataState extends State<AntiBiogramDataMedicine> {
   @override
   Widget build(BuildContext context) {
+    Medicine medicine = widget.medicine;
+    List<MedicineAntiBiogramData> antiBiogramDatas = medicine.antibiogramDatas;
+    //var main = Provider.of<MainModel>(context, listen: false);
+    var samples = antiBiogramDatas
+        .map((e) {
+          return e.sample;
+
+          //return if e.id > 0 ? e.id: ;
+        })
+        .toList()
+        .toSet()
+        .toList();
     return Pager(
-      widget.title,
+      '${medicine.name} Antibiogram Data',
       [
         SizedBox(
           height: 10,
@@ -29,26 +43,42 @@ class _AntiBiogramDataMEdicineState extends State<AntiBiogramDataMEdicine> {
           height: 20,
         ),
         Column(
-          children: List.generate(widget.content.length, (inx) {
+          children: List.generate(samples.length, (inx) {
+            var datas = antiBiogramDatas
+                .where((data) => data.sample == samples[inx])
+                .toList();
+            //var antiBiogramData = antiBiogramDatas[inx];
+            //print(antiBiogramData.sample);
             var children = <Widget>[];
-            children.add(Widgets.header('URINE'));
+            children.add(Widgets.header(samples[inx].toUpperCase()));
 
-            widget.content[inx]['content'].forEach((e) {
+            //print(medicine);
+
+            datas.forEach((antiBiogramData) {
+              //print(antiBiogramDatas[inx].);
+
               children.add(Container(
-                child: Card(
-                  child: ListTile(
-                      dense: true,
-                      title: Widgets.text(e['title'],
-                          size: 18,
-                          color: getColor(double.parse(e['per'].toString()))),
-                      subtitle: Widgets.text('isno: ${e['isno']}',
-                          size: 15,
-                          color: getColor(double.parse(e['per'].toString()))),
-                      trailing: Widgets.text(
-                        '${e['per']}%',
-                        size: 16,
-                        color: getColor(double.parse(e['per'].toString())),
-                      )),
+                child: InkWell(
+                  onTap: () => Get.to(EachPathogen(antiBiogramData.pathogenId)),
+                  child: Card(
+                    child: ListTile(
+                        dense: true,
+                        title: Widgets.text(antiBiogramData.pathogenName,
+                            size: 18,
+                            color: getColor(double.parse(
+                                antiBiogramData.percentage.toString()))),
+                        subtitle: Widgets.text(
+                            'isno: ${antiBiogramData.isolateNumber}',
+                            size: 15,
+                            color: getColor(double.parse(
+                                antiBiogramData.percentage.toString()))),
+                        trailing: Widgets.text(
+                          '${antiBiogramData.percentage}%',
+                          size: 16,
+                          color: getColor(double.parse(
+                              antiBiogramData.percentage.toString())),
+                        )),
+                  ),
                 ),
               ));
             });

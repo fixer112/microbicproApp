@@ -7,8 +7,6 @@ import 'package:microbicpro/pages/medicines/medicines.dart';
 import 'package:microbicpro/pages/pathogens/pathogens.dart';
 import 'package:microbicpro/widgets/widgets.dart';
 
-import '../values.dart';
-
 class Home extends StatefulWidget {
   @override
   _HomeState createState() => _HomeState();
@@ -54,10 +52,7 @@ class _HomeState extends State<Home> {
                   ],
                 ),
                 onTap: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (BuildContext context) => Guidelines()));
+                  Get.off(Guidelines());
                 },
               ),
               InkWell(
@@ -81,7 +76,7 @@ class _HomeState extends State<Home> {
                         size: 23, color: Colors.blue, weight: FontWeight.w600)
                   ],
                 ),
-                onTap: () => Get.to(Pathogens()),
+                onTap: () => Get.off(Pathogens()),
               ),
               InkWell(
                 child: Column(
@@ -105,10 +100,7 @@ class _HomeState extends State<Home> {
                   ],
                 ),
                 onTap: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (BuildContext context) => Medicines()));
+                  Get.off(Medicines());
                 },
               ),
               InkWell(
@@ -133,10 +125,7 @@ class _HomeState extends State<Home> {
                   ],
                 ),
                 onTap: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (BuildContext context) => Ebrast()));
+                  Get.off(Ebrast());
                 },
               ),
             ],

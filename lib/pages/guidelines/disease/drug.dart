@@ -19,6 +19,7 @@ class _DrugManagementState extends State<DrugManagement> {
   Disease disease;
   List<Medicine> medicines;
   List<bool> panels = [];
+  bool loading = false;
 
   // int currentIndex = 0;
   // List<Drug>
@@ -38,8 +39,13 @@ class _DrugManagementState extends State<DrugManagement> {
   }
 
   fetch() async {
+    setState(() {
+      loading = true;
+    });
     disease = await getDisease(widget.id, context);
-    setState(() {});
+    setState(() {
+      loading = false;
+    });
   }
 
   @override
@@ -66,127 +72,108 @@ class _DrugManagementState extends State<DrugManagement> {
         Scaffold(
       appBar: AppBar(
         backgroundColor: primaryColor,
-        title: Text(disease == null ? 'Disease not found' : disease.name),
-        /*  bottom: disease == null || disease.drugManagements.isEmpty
-              ? null
-              : TabBar(
-                  isScrollable: true,
-                  onTap: (int index) {
-                    /* setState(() {
-                      currentIndex = index;
-
-                    });
-                    print(currentIndex); */
-                  },
-                  tabs: List.generate(
-                    types.length,
-                    (index) => Tab(
-                      text: types[index].toUpperCase(),
-                    ),
-                  ),
-                ),
-         */
+        title: Text(disease == null
+            ? 'Disease not found'
+            : "${disease.name} Drug Management"),
       ),
-      body: disease == null
-          ? Widgets.centerText('Disease not found', context)
-          : disease.drugManagements.isEmpty
-              ? Widgets.centerText('No Drug Management found', context)
-              : Container(
-                  padding: EdgeInsets.all(10),
-                  child:
-                      /* TabBarView(
-                    children: List.generate(
-                        types.length,
-                        (index) =>  */
+      body: loading
+          ? Widgets.loader()
+          : disease == null
+              ? Widgets.centerText('Disease not found', context)
+              : disease.drugManagements.isEmpty
+                  ? Widgets.centerText('No Drug Management found', context)
+                  : Container(
+                      padding: EdgeInsets.all(10),
+                      child: ListView(children: [
+                        ExpansionPanelList(
+                          expansionCallback: (index, isExpanded) {
+                            setState(() {
+                              panels[index] = !isExpanded;
+                            });
+                            //print(index);
+                          },
+                          children: List.generate(types.length, (index) {
+                            // print(types);
+                            // print(panels);
 
-                      ListView(children: [
-                    ExpansionPanelList(
-                      expansionCallback: (index, isExpanded) {
-                        setState(() {
-                          panels[index] = !isExpanded;
-                        });
-                        //print(index);
-                      },
-                      children: List.generate(types.length, (index) {
-                        // print(types);
-                        // print(panels);
-
-                        var drugManagements = disease.drugManagements
-                            .where((e) => e.type == types[index])
-                            .toList();
-                        var categories =
-                            drugManagements.map((e) => e.category).toList();
-                        return Widgets.expansion(
-                          types[index].toUpperCase(),
-                          List.generate(categories.length, (index) {
-                            var stageDrugManagements = drugManagements
-                                .where((element) =>
-                                    element.category == categories[index])
+                            var drugManagements = disease.drugManagements
+                                .where((e) => e.type == types[index])
                                 .toList();
-                            //print(stageDrugManagements[0].category);
-                            var stages = stageDrugManagements
-                                .map((e) => e.stage)
-                                .toList();
+                            var categories =
+                                drugManagements.map((e) => e.category).toList();
+                            return Widgets.expansion(
+                              types[index].toUpperCase(),
+                              List.generate(categories.length, (index) {
+                                var stageDrugManagements = drugManagements
+                                    .where((element) =>
+                                        element.category == categories[index])
+                                    .toList();
+                                //print(stageDrugManagements[0].category);
+                                var stages = stageDrugManagements
+                                    .map((e) => e.stage)
+                                    .toList();
 
-                            return Widgets.collapsible(
-                                categories[index].toUpperCase(),
-                                List.generate(stages.length, (index) {
-                                  var classDrugManageMents =
-                                      stageDrugManagements
-                                          .where((element) =>
-                                              element.stage == stages[index])
+                                return Widgets.collapsible(
+                                    categories[index].toUpperCase(),
+                                    List.generate(stages.length, (index) {
+                                      var classDrugManageMents =
+                                          stageDrugManagements
+                                              .where((element) =>
+                                                  element.stage ==
+                                                  stages[index])
+                                              .toList();
+                                      var classes = stageDrugManagements
+                                          .map((e) => e.cLass)
+                                          .toList()
+                                          .toSet()
                                           .toList();
-                                  var classes = stageDrugManagements
-                                      .map((e) => e.cLass)
-                                      .toList()
-                                      .toSet()
-                                      .toList();
-                                  return Column(
-                                    children: [
-                                      Widgets.header(
-                                          stages[index].toUpperCase()),
-                                      Column(
-                                        children: List.generate(classes.length,
-                                            (index) {
-                                          var alternativeDrugManageMents =
-                                              stageDrugManagements
-                                                  .where((element) =>
-                                                      element.cLass ==
-                                                      classes[index])
-                                                  .toList();
-                                          var alternatives =
-                                              alternativeDrugManageMents
-                                                  .map((e) => e.alternative)
-                                                  .toList()
-                                                  .toSet()
-                                                  .toList();
-                                          return Widgets.collapsible(
-                                              classes[index].toUpperCase(),
-                                              List.generate(alternatives.length,
-                                                  (index) {
-                                                var drugs =
-                                                    alternativeDrugManageMents
-                                                        .where((element) =>
-                                                            element
-                                                                .alternative ==
-                                                            alternatives[index])
-                                                        .toList();
-                                                return Widgets.collapsible(
-                                                    "Alternative ${alternatives[index].toString()}",
-                                                    [
-                                                      Column(
-                                                          crossAxisAlignment:
-                                                              CrossAxisAlignment
-                                                                  .stretch,
-                                                          children: List.generate(
-                                                              alternativeDrugManageMents
-                                                                  .length,
-                                                              (index) {
-                                                            var drug =
-                                                                alternativeDrugManageMents[
-                                                                    index];
-                                                            Medicine medicine =
-                                                                medicines.firstWhere(
+                                      return Column(
+                                        children: [
+                                          Widgets.header(
+                                              stages[index].toUpperCase()),
+                                          Column(
+                                            children: List.generate(
+                                                classes.length, (index) {
+                                              var alternativeDrugManageMents =
+                                                  stageDrugManagements
+                                                      .where((element) =>
+                                                          element.cLass ==
+                                                          classes[index])
+                                                      .toList();
+                                              var alternatives =
+                                                  alternativeDrugManageMents
+                                                      .map((e) => e.alternative)
+                                                      .toList()
+                                                      .toSet()
+                                                      .toList();
+                                              return Widgets.collapsible(
+                                                  classes[index].toUpperCase(),
+                                                  List.generate(
+                                                      alternatives.length,
+                                                      (index) {
+                                                    var drugs =
+                                                        alternativeDrugManageMents
+                                                            .where((element) =>
+                                                                element
+                                                                    .alternative ==
+                                                                alternatives[
+                                                                    index])
+                                                            .toList();
+                                                    return Widgets.collapsible(
+                                                        "Alternative ${alternatives[index].toString()}",
+                                                        [
+                                                          Column(
+                                                              crossAxisAlignment:
+                                                                  CrossAxisAlignment
+                                                                      .stretch,
+                                                              children: List.generate(
+                                                                  alternativeDrugManageMents
+                                                                      .length,
+                                                                  (index) {
+                                                                var drug =
+                                                                    alternativeDrugManageMents[
+                                                                        index];
+                                                                Medicine medicine = medicines.firstWhere(
                                                                     (element) =>
                                                                         element
                                                                             .id ==
@@ -194,86 +181,55 @@ class _DrugManagementState extends State<DrugManagement> {
                                                                             .medicineId,
                                                                     orElse: () =>
                                                                         null);
-                                                            if (medicine ==
-                                                                null) {
-                                                              getMedicine(
-                                                                      drug
-                                                                          .medicineId,
-                                                                      context)
-                                                                  .then(
-                                                                      (value) {
-                                                                setState(() {
-                                                                  medicine =
-                                                                      value;
-                                                                });
-                                                              });
-                                                            }
+                                                                if (medicine ==
+                                                                    null) {
+                                                                  getMedicine(
+                                                                          drug
+                                                                              .medicineId,
+                                                                          context)
+                                                                      .then(
+                                                                          (value) {
+                                                                    setState(
+                                                                        () {
+                                                                      medicine =
+                                                                          value;
+                                                                    });
+                                                                  });
+                                                                }
 
-                                                            return medicine ==
-                                                                    null
-                                                                ? Container(
-                                                                    child:
-                                                                        ListTile(
-                                                                      title: Text(
-                                                                          'Medicine Not Found'),
-                                                                    ),
-                                                                  )
-                                                                : Card(
-                                                                    child:
-                                                                        Container(
-                                                                      padding:
-                                                                          EdgeInsets.all(
-                                                                              15),
-                                                                      child: Widgets
-                                                                          .text(
-                                                                              '${medicine.name} ${drug.strength} ${drug.interval} for ${drug.duration}'),
-                                                                    ),
-                                                                  );
-                                                          }))
-                                                    ]);
-                                              }));
-                                        }),
-                                      )
-                                    ],
-                                  );
-                                }));
-                          }),
-                          isExpanded: panels[index],
-                        );
-                      }),
-                    ),
-                  ]),
-                  /*
-                  Widgets.header('ADULTS'),
-                   Widgets.collapsible('AntiBiotics', [
-                                Column(
-                                  children: [
-                                    Widgets.collapsible('Alternative 1', [
-                                      Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.stretch,
-                                        children: [
-                                          Card(
-                                            child: Container(
-                                              padding: EdgeInsets.all(15),
-                                              child: Widgets.text(
-                                                  'Ceftriaxone 1g 12 hourly for 7days'),
-                                            ),
-                                          ),
-                                          Card(
-                                            child: Container(
-                                              padding: EdgeInsets.all(15),
-                                              child: Widgets.text(
-                                                  'Amoxillin 1g 8 hourly for 14days'),
-                                            ),
-                                          ),
+                                                                return medicine ==
+                                                                        null
+                                                                    ? Container(
+                                                                        child:
+                                                                            ListTile(
+                                                                          title:
+                                                                              Text('Medicine Not Found'),
+                                                                        ),
+                                                                      )
+                                                                    : Card(
+                                                                        child:
+                                                                            Container(
+                                                                          padding:
+                                                                              EdgeInsets.all(15),
+                                                                          child:
+                                                                              Widgets.text('${medicine.name} ${drug.strength} ${drug.interval} for ${drug.duration}'),
+                                                                        ),
+                                                                      );
+                                                              }))
+                                                        ]);
+                                                  }));
+                                            }),
+                                          )
                                         ],
-                                      ),
-                                    ]),
-                                  ],
-                                )
-                              ]), */
-                ),
+                                      );
+                                    }));
+                              }),
+                              isExpanded: panels[index],
+                            );
+                          }),
+                        ),
+                      ]),
+                    ),
     );
     //);
   }

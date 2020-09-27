@@ -76,7 +76,7 @@ Future<List<Medicine>> getMedicines(BuildContext context) async {
     print('Response status: ${response.statusCode}');
     print('Response body: ${body}');
     medicines =
-        List<Medicine>.from(body.map((i) => Pathogen.fromMap(i)).toList());
+        List<Medicine>.from(body.map((i) => Medicine.fromMap(i)).toList());
 
     main.setMedicines(medicines);
   } on SocketException {

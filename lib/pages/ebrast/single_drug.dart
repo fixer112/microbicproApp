@@ -3,8 +3,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:microbicpro/api_functions.dart';
 import 'package:microbicpro/model/medicine.dart';
-import 'package:microbicpro/pages/medicines/medicines.dart';
-import 'package:microbicpro/pages/pathogens/anti_biogram_data.dart';
+import 'package:microbicpro/pages/medicines/anti_biogram_data_medicine.dart';
 import 'package:microbicpro/provider/main.dart';
 import 'package:microbicpro/widgets/page.dart';
 import 'package:microbicpro/widgets/widgets.dart';
@@ -22,6 +21,7 @@ class SingleDrug extends StatefulWidget {
 
 class _SingleDrugState extends State<SingleDrug> {
   Medicine medicine;
+  bool loading = false;
   @override
   void initState() {
     super.initState();
@@ -36,81 +36,75 @@ class _SingleDrugState extends State<SingleDrug> {
   }
 
   fetch() async {
+    setState(() {
+      loading = true;
+    });
     medicine = await getMedicine(widget.id, context);
-    setState(() {});
+    setState(() {
+      loading = false;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return Pager(
-      medicine == null ? 'Medicine Not Found' : 'Amoxycillin',
-      medicine == null
-          ? [Widgets.centerText('Medicine Not Found', context)]
-          : [
-              Widgets.header('ANTIMICROBIAL SPECTRUM'),
-              Card(
-                child: ListTile(
-                  onTap: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (BuildContext context) => AntiBiogramData(
-                                    title: 'Pathogen Title',
-                                    content: [
-                                      {
-                                        'title': 'MIXED ISOLATE',
-                                        'content': [
-                                          {
-                                            'title': 'Something',
-                                            'per': 79,
-                                            'isno': 3,
-                                          },
-                                          {
-                                            'title': 'Something',
-                                            'per': 29,
-                                            'isno': 5,
-                                          }
-                                        ],
-                                      },
-                                      {
-                                        'title': 'URINE ONLY',
-                                        'content': [
-                                          {
-                                            'title': 'Something',
-                                            'per': 59,
-                                            'isno': 5,
-                                          },
-                                          {
-                                            'title': 'Something',
-                                            'per': 89,
-                                            'isno': 5,
-                                          }
-                                        ],
-                                      }
-                                    ])));
-                  },
-                  trailing: Icon(
-                    FontAwesomeIcons.chevronCircleRight,
-                    color: primaryColor,
-                    size: 16,
+      medicine == null ? 'Medicine Not Found' : "Medicine - ${medicine.name}",
+      loading
+          ? Widgets.loader()
+          : medicine == null
+              ? [Widgets.centerText('Medicine Not Found', context)]
+              : [
+                  Widgets.header('ANTIMICROBIAL SPECTRUM'),
+                  Widgets.collapsible('Ideal Spectrum', [
+                    Widgets.text(medicine.spectrum),
+                  ]),
+                  Card(
+                    child: ListTile(
+                      onTap: () {
+                        Get.to(AntiBiogramDataMedicine(medicine));
+                      },
+                      trailing: Icon(
+                        FontAwesomeIcons.chevronCircleRight,
+                        color: primaryColor,
+                        size: 16,
+                      ),
+                      title: Widgets.text('Antibiogram data',
+                          weight: FontWeight.w500),
+                    ),
                   ),
-                  title:
-                      Widgets.text('Antibiogram data', weight: FontWeight.w500),
-                ),
-              ),
-              Widgets.header('PHARMACOLOGY'),
-              Widgets.collapsible('Drug class', []),
-              Widgets.collapsible('Mechanism of action', []),
-              Widgets.collapsible('Pharmacokinetics', []),
-              Widgets.collapsible('Significant interactions', []),
-              Widgets.collapsible('Pregnancy category', []),
-              Widgets.collapsible('Contraindications', []),
-              Widgets.collapsible('Adverse effects', []),
-              Widgets.header('DOSE SCHEDULE'),
-              Widgets.collapsible('Renal', []),
-              Widgets.collapsible('Adult', []),
-              Widgets.collapsible('Child', []),
-            ],
+                  Widgets.header('PHARMACOLOGY'),
+                  Widgets.collapsible('Drug class', [
+                    Widgets.text(medicine.drugClass),
+                  ]),
+                  Widgets.collapsible('Mechanism of action', [
+                    Widgets.text(medicine.action),
+                  ]),
+                  Widgets.collapsible('Pharmacokinetics', [
+                    Widgets.text(medicine.pharmacokinetics),
+                  ]),
+                  Widgets.collapsible('Significant interactions', [
+                    Widgets.text(medicine.interactions),
+                  ]),
+                  Widgets.collapsible('Pregnancy category', [
+                    Widgets.text(medicine.pregnancyCategory),
+                  ]),
+                  /*  Widgets.collapsible('Contraindications', [
+                Widgets.text(medicine.drugClass),
+              ]), */
+                  Widgets.collapsible('Adverse effects', [
+                    Widgets.text(medicine.adverseEffects),
+                  ]),
+                  Widgets.header('DOSE SCHEDULE'),
+                  Widgets.collapsible('Renal', [
+                    Widgets.text(medicine.renal),
+                  ]),
+                  Widgets.collapsible('Adult', [
+                    Widgets.text(medicine.adult),
+                  ]),
+                  Widgets.collapsible('Child', [
+                    Widgets.text(medicine.child),
+                  ]),
+                ],
       search: false,
     );
   }
