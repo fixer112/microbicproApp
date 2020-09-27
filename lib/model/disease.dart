@@ -1,3 +1,5 @@
+import 'package:microbicpro/model/DrugManagement.dart';
+
 class Disease {
   final int id;
   final String name;
@@ -6,6 +8,7 @@ class Disease {
   final String features;
   final String treatmentObjectives;
   final String location;
+  List<DrugManagement> drugManagements;
 
   Disease({
     this.category,
@@ -15,6 +18,7 @@ class Disease {
     this.overview,
     this.id,
     this.location,
+    this.drugManagements,
   });
 
   factory Disease.fromMap(Map data) {
@@ -26,6 +30,9 @@ class Disease {
       category: data['category'],
       treatmentObjectives: data['treatment_objectives'],
       features: data['features'],
+      drugManagements: List<DrugManagement>.from(
+              data['drug_managements'].map((i) => DrugManagement.fromMap(i)))
+          .toList(),
     );
   }
 
@@ -37,5 +44,6 @@ class Disease {
         'features': features,
         'treatment_objectives': treatmentObjectives,
         'category': category,
+        'drug_managements': drugManagements,
       };
 }

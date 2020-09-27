@@ -54,6 +54,25 @@ class Widgets {
     );
   }
 
+  static ExpansionPanel expansion(title, List<Widget> widgets,
+      {bool isExpanded = false}) {
+    return ExpansionPanel(
+      isExpanded: isExpanded,
+      canTapOnHeader: true,
+      headerBuilder: (context, isExpanded) {
+        //print(isExpanded);
+        return ListTile(
+          title: Widgets.text(title, size: 17, weight: FontWeight.w600),
+        );
+      },
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: widgets,
+      ),
+    );
+  }
+
   static header(String title) {
     return Container(
       child: Widgets.text(title, size: 20),

@@ -60,7 +60,7 @@ class _SingleDiseaseState extends State<SingleDisease> {
                         context,
                         MaterialPageRoute(
                             builder: (BuildContext context) =>
-                                DrugManagement()));
+                                DrugManagement(disease.id)));
                   },
                 ),
               ),
