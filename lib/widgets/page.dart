@@ -29,6 +29,10 @@ class Pager extends StatefulWidget {
 }
 
 class _PagerState extends State<Pager> {
+  Future<bool> fetch() {
+    return Future.delayed(Duration(microseconds: 10), () => true);
+  }
+
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -58,7 +62,12 @@ class _PagerState extends State<Pager> {
             backgroundColor: primaryColor,
           ),
           body: RefreshIndicator(
-            onRefresh: () => widget.refresh(),
+            onRefresh: () async {
+              if (widget.refresh != null) {
+                widget.refresh();
+              }
+              return fetch();
+            },
             child: ListView(
               shrinkWrap: true,
               padding: EdgeInsets.all(10),
