@@ -41,27 +41,29 @@ class _MedicinesState extends State<Medicines> {
         : Consumer<MainModel>(builder: (context, main, child) {
             var medicines = main.getMedicines;
             return Pager(
-                'Medicines',
-                medicines.isEmpty
-                    ? [Widgets.centerText('No Medicine Available', context)]
-                    : List.generate(medicines.length, (index) {
-                        Medicine medicine = medicines[index];
-                        return Card(
-                          child: ListTile(
-                            title: Widgets.text(medicine.name,
-                                weight: FontWeight.w400),
-                            trailing: Icon(
-                              Icons.arrow_forward_ios,
-                              size: 20,
-                            ),
-                            onTap: () {
-                              Get.to(SingleDrug(medicine.id));
-                            },
+              'Medicines',
+              medicines.isEmpty
+                  ? [Widgets.centerText('No Medicine Available', context)]
+                  : List.generate(medicines.length, (index) {
+                      Medicine medicine = medicines[index];
+                      return Card(
+                        child: ListTile(
+                          title: Widgets.text(medicine.name,
+                              weight: FontWeight.w400),
+                          trailing: Icon(
+                            Icons.arrow_forward_ios,
+                            size: 20,
                           ),
-                        );
-                      }),
-                //willPop: false,
-                refresh: () => fetch());
+                          onTap: () {
+                            Get.to(SingleDrug(medicine.id));
+                          },
+                        ),
+                      );
+                    }),
+              //willPop: false,
+              refresh: () => fetch(),
+              bottomBarIndex: 2,
+            );
           });
   }
 }

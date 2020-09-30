@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:microbicpro/pages/auth/login.dart';
 import 'package:microbicpro/pages/home.dart';
 import 'package:microbicpro/widgets/widgets.dart';
 
@@ -18,7 +19,7 @@ class _SplashState extends State<Splash> {
       Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-            builder: (BuildContext context) => Home(),
+            builder: (BuildContext context) => Login(),
           ));
     });
   }

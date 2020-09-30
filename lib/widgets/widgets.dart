@@ -156,4 +156,27 @@ class Widgets {
       borderRadius: 5,
     );
   }
+
+  static textField(
+      TextEditingController controller, TextInputType type, String hintText, { suffixWidget } ) {
+    return Container(
+      height: 50.0,
+      margin: EdgeInsets.only(top: 10.0),
+      child: TextField(
+          controller: controller,
+          decoration: InputDecoration(
+              suffixIcon: suffixWidget,
+              fillColor: Colors.white,
+              filled: true,
+              border: OutlineInputBorder(
+                borderSide: BorderSide(color: primaryColor, width: 5),
+                borderRadius: BorderRadius.all( Radius.circular(25) ),
+              ),
+              hintText: hintText,
+              contentPadding: EdgeInsets.all(10).copyWith( left: 30),
+              hintStyle: TextStyle(color: Colors.black)),
+          obscureText: type == TextInputType.visiblePassword ? true : false,
+          keyboardType: type),
+    );
+  }
 }

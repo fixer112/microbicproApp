@@ -72,7 +72,7 @@ class _EbrastState extends State<Ebrast> {
           ),
         ),
       ],
-      search: false,
+      bottomBarIndex: 3,
     );
   }
 }

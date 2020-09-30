@@ -30,6 +30,6 @@ class _GuidelinesState extends State<Guidelines> {
         onTap: () {},
         child: Widgets.container('AWARE Antimicrobials'),
       ),
-    ]);
+    ], bottomBarIndex: 0,);
   }
 }
