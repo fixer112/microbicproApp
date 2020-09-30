@@ -44,37 +44,36 @@ class _SingleDiseaseState extends State<SingleDisease> {
   @override
   Widget build(BuildContext context) {
     return Pager(
-      disease == null ? 'Disease Not Found' : "Disease - ${disease.name}",
-      loading
-          ? [Widgets.loader()]
-          : disease == null
-              ? [Widgets.centerText('Disease Not Found', context)]
-              : [
-                  Widgets.collapsible(
-                      'Overview', [Widgets.text(disease.overview)]),
-                  Widgets.collapsible(
-                      'Clinical Features', [Widgets.text(disease.features)]),
-                  Widgets.collapsible('Treatment Objectives',
-                      [Widgets.text(disease.treatmentObjectives)]),
-                  Card(
-                    child: ListTile(
-                      title: Widgets.text('Drug Management',
-                          size: 17, weight: FontWeight.w600),
-                      trailing: Icon(
-                        Icons.arrow_forward_ios,
-                        size: 20,
+        disease == null ? 'Disease Not Found' : "Disease - ${disease.name}",
+        loading
+            ? [Widgets.loader()]
+            : disease == null
+                ? [Widgets.centerText('Disease Not Found', context)]
+                : [
+                    Widgets.collapsible(
+                        'Overview', [Widgets.text(disease.overview)]),
+                    Widgets.collapsible(
+                        'Clinical Features', [Widgets.text(disease.features)]),
+                    Widgets.collapsible('Treatment Objectives',
+                        [Widgets.text(disease.treatmentObjectives)]),
+                    Card(
+                      child: ListTile(
+                        title: Widgets.text('Drug Management',
+                            size: 17, weight: FontWeight.w600),
+                        trailing: Icon(
+                          Icons.arrow_forward_ios,
+                          size: 20,
+                        ),
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (BuildContext context) =>
+                                      DrugManagement(disease.id)));
+                        },
                       ),
-                      onTap: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (BuildContext context) =>
-                                    DrugManagement(disease.id)));
-                      },
                     ),
-                  ),
-                ],
-      search: false,
-    );
+                  ],
+        refresh: () => fetch());
   }
 }

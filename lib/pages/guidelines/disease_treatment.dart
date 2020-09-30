@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:microbicpro/api_functions.dart';
+import 'package:microbicpro/model/disease.dart';
 import 'package:microbicpro/pages/guidelines/disease/single.dart';
+import 'package:microbicpro/provider/main.dart';
 import 'package:microbicpro/widgets/page.dart';
 import 'package:microbicpro/widgets/widgets.dart';
+import 'package:provider/provider.dart';
 
 class DiseaseTreatment extends StatefulWidget {
   @override
@@ -9,94 +14,77 @@ class DiseaseTreatment extends StatefulWidget {
 }
 
 class _DiseaseTreatmentState extends State<DiseaseTreatment> {
+  bool loading = false;
+  @override
+  void initState() {
+    super.initState();
+    var main = Provider.of<MainModel>(context, listen: false);
+    if (main.diseases.isEmpty) {
+      fetch();
+    }
+  }
+
+  fetch() async {
+    setState(() {
+      loading = true;
+    });
+    await getDiseases(context);
+    setState(() {
+      loading = false;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Pager(
-        'Disease Treatment Guidelines',
-        [
-          Widgets.header('Bone and Joints'),
-          Column(
-            children: [
-              Card(
-                child: ListTile(
-                  title: Widgets.text('Infective Arthritis',
-                      weight: FontWeight.w600),
-                  trailing: Icon(
-                    Icons.arrow_forward_ios,
-                    size: 20,
-                  ),
-                ),
-              ),
-              Card(
-                child: ListTile(
-                  title: Widgets.text('Infective Arthritis',
-                      weight: FontWeight.w600),
-                  trailing: Icon(
-                    Icons.arrow_forward_ios,
-                    size: 20,
-                  ),
-                ),
-              ),
-            ],
-          ),
-          Widgets.header('Ear, Nose and Throat'),
-          Column(
-            children: [
-              Card(
-                child: ListTile(
-                  title: Widgets.text('Infective Arthritis',
-                      weight: FontWeight.w600),
-                  trailing: Icon(
-                    Icons.arrow_forward_ios,
-                    size: 20,
-                  ),
-                ),
-              ),
-              Card(
-                child: ListTile(
-                  title: Widgets.text('Otitis Media (Acute)',
-                      weight: FontWeight.w600),
-                  trailing: Icon(
-                    Icons.arrow_forward_ios,
-                    size: 20,
-                  ),
-                  onTap: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (BuildContext context) =>
-                                SingleDisease(1)));
-                  },
-                ),
-              ),
-            ],
-          ),
-          Widgets.header('Central Nervous System'),
-          Column(
-            children: [
-              Card(
-                child: ListTile(
-                  title: Widgets.text('Infective Arthritis',
-                      weight: FontWeight.w600),
-                  trailing: Icon(
-                    Icons.arrow_forward_ios,
-                    size: 20,
-                  ),
-                ),
-              ),
-              Card(
-                child: ListTile(
-                  title: Widgets.text('Infective Arthritis',
-                      weight: FontWeight.w600),
-                  trailing: Icon(
-                    Icons.arrow_forward_ios,
-                    size: 20,
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ],
-        search: false);
+    return loading
+        ? Widgets.loader()
+        : Consumer<MainModel>(builder: (context, main, child) {
+            var diseases = main.diseases;
+            List<String> categories =
+                diseases.map((e) => e.category).toList().toSet().toList();
+
+            return Pager(
+              'Disease Treatment Guidelines',
+              diseases.isEmpty
+                  ? [Widgets.centerText('No Disease Available', context)]
+                  : List.generate(categories.length, (index) {
+                      List<Disease> catDiseases = diseases
+                          .where((element) =>
+                              element.category == categories[index])
+                          .toList();
+                      return Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            Widgets.header(categories[index].toUpperCase()),
+                            Column(
+                              children:
+                                  List.generate(catDiseases.length, (index) {
+                                return Column(
+                                  children: [
+                                    InkWell(
+                                      onTap: () => Get.to(
+                                          SingleDisease(catDiseases[index].id)),
+                                      child: Card(
+                                        child: ListTile(
+                                          title: Widgets.text(
+                                              catDiseases[index].name,
+                                              weight: FontWeight.w600),
+                                          trailing: Icon(
+                                            Icons.arrow_forward_ios,
+                                            size: 20,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                );
+                              }),
+                            ),
+                          ]);
+                    }),
+              search: false,
+              refresh: () => fetch(),
+            );
+          });
   }
 }

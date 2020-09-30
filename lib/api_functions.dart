@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
+import 'package:microbicpro/model/Ebrast.dart';
 import 'package:microbicpro/model/medicine.dart';
 import 'package:microbicpro/provider/main.dart';
 import 'package:microbicpro/values.dart';
@@ -12,12 +13,13 @@ import 'package:http/http.dart' as http;
 import 'model/disease.dart';
 import 'model/pathogen.dart';
 
-Future<List<Pathogen>> getPathogens(BuildContext context) async {
+Future<List<Pathogen>> getPathogens(BuildContext context, {location}) async {
   List<Pathogen> pathogens;
   try {
     var main = Provider.of<MainModel>(context, listen: false);
 
     var link = '$url/api/pathogens';
+    link = location != null ? "$link/?location=$location" : link;
     var response = await http.get(link, headers: {
       'Accept': 'application/json',
     });
@@ -53,6 +55,14 @@ Future<Pathogen> getPathogen(int id, BuildContext context) async {
     pathogen = Pathogen.fromMap(body);
 
     var oldPathogens = main.getPathogens;
+
+    var exist = oldPathogens.firstWhere((element) => element.id == id,
+        orElse: () => null);
+
+    if (exist != null) {
+      oldPathogens.removeWhere((element) => element.id == id);
+    }
+
     oldPathogens.add(pathogen);
     main.setPathogens(oldPathogens);
   } on SocketException {
@@ -63,12 +73,13 @@ Future<Pathogen> getPathogen(int id, BuildContext context) async {
   return pathogen;
 }
 
-Future<List<Medicine>> getMedicines(BuildContext context) async {
+Future<List<Medicine>> getMedicines(BuildContext context, {location}) async {
   List<Medicine> medicines;
   try {
     var main = Provider.of<MainModel>(context, listen: false);
 
     var link = '$url/api/medicines';
+    link = location != null ? "$link/?location=$location" : link;
     var response = await http.get(link, headers: {
       'Accept': 'application/json',
     });
@@ -104,6 +115,14 @@ Future<Medicine> getMedicine(int id, BuildContext context) async {
     medicine = Medicine.fromMap(body);
 
     var oldMedicines = main.getMedicines;
+
+    var exist = oldMedicines.firstWhere((element) => element.id == id,
+        orElse: () => null);
+
+    if (exist != null) {
+      oldMedicines.removeWhere((element) => element.id == id);
+    }
+
     oldMedicines.add(medicine);
     main.setMedicines(oldMedicines);
   } on SocketException {
@@ -115,20 +134,20 @@ Future<Medicine> getMedicine(int id, BuildContext context) async {
   return medicine;
 }
 
-Future<List<Disease>> getDiseases(BuildContext context) async {
+Future<List<Disease>> getDiseases(BuildContext context, {location}) async {
   List<Disease> diseases;
   try {
     var main = Provider.of<MainModel>(context, listen: false);
 
     var link = '$url/api/diseases';
+    link = location != null ? "$link/?location=$location" : link;
     var response = await http.get(link, headers: {
       'Accept': 'application/json',
     });
     var body = json.decode(response.body);
     print('Response status: ${response.statusCode}');
     print('Response body: ${body}');
-    diseases =
-        List<Disease>.from(body.map((i) => Pathogen.fromMap(i)).toList());
+    diseases = List<Disease>.from(body.map((i) => Disease.fromMap(i)).toList());
 
     main.setDiseases(diseases);
   } on SocketException {
@@ -156,6 +175,14 @@ Future<Disease> getDisease(int id, BuildContext context) async {
     disease = Disease.fromMap(body);
 
     var oldDiseases = main.getDiseases;
+
+    var exist = oldDiseases.firstWhere((element) => element.id == id,
+        orElse: () => null);
+
+    if (exist != null) {
+      oldDiseases.removeWhere((element) => element.id == id);
+    }
+
     oldDiseases.add(disease);
     main.setDiseases(oldDiseases);
   } on SocketException {
@@ -165,4 +192,63 @@ Future<Disease> getDisease(int id, BuildContext context) async {
     Widgets.snackbar('An Error Occured');
   }
   return disease;
+}
+
+Future<List<Ebrast>> getEbrasts(BuildContext context, {String location}) async {
+  List<Ebrast> ebrasts;
+  try {
+    var main = Provider.of<MainModel>(context, listen: false);
+
+    var link = '$url/api/ebrasts';
+    link = location != null ? "$link/?location=$location" : link;
+    var response = await http.get(link, headers: {
+      'Accept': 'application/json',
+    });
+    var body = json.decode(response.body);
+    print('Response status: ${response.statusCode}');
+    print('Response body: ${body}');
+    ebrasts = List<Ebrast>.from(body.map((i) => Ebrast.fromMap(i)).toList());
+
+    main.setEbrasts(ebrasts);
+  } on SocketException {
+    Widgets.snackbar('Please Connect to the internet');
+  } catch (e) {
+    print(e);
+    Widgets.snackbar('An Error Occured');
+  }
+  return ebrasts;
+}
+
+Future<Ebrast> getEbrast(int id, BuildContext context) async {
+  Ebrast ebrast;
+  try {
+    var main = Provider.of<MainModel>(context, listen: false);
+
+    var link = '$url/api/ebrasts/$id';
+    var response = await http.get(link, headers: {
+      'Accept': 'application/json',
+    });
+    var body = json.decode(response.body);
+    print('Response status: ${response.statusCode}');
+    print('Response body: ${body}');
+    //return;
+    ebrast = Ebrast.fromMap(body);
+
+    var oldEbrasts = main.getEbrasts;
+
+    var exist = oldEbrasts.firstWhere((element) => element.id == id,
+        orElse: () => null);
+
+    if (exist != null) {
+      oldEbrasts.removeWhere((element) => element.id == id);
+    }
+    oldEbrasts.add(ebrast);
+    main.setEbrasts(oldEbrasts);
+  } on SocketException {
+    Widgets.snackbar('Please Connect to the internet');
+  } catch (e) {
+    print(e);
+    Widgets.snackbar('An Error Occured');
+  }
+  return ebrast;
 }

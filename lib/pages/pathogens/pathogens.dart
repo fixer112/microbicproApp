@@ -42,31 +42,31 @@ class _PathogensState extends State<Pathogens> {
         : Consumer<MainModel>(builder: (context, main, child) {
             //print(main.pathogens[0].antibiogramDatas[0]);
             return Pager(
-              'Pathogens',
-              main.pathogens.isEmpty
-                  ? [Widgets.centerText('No Pathogen Available', context)]
-                  : List.generate(main.pathogens.length, (index) {
-                      Pathogen pathogen = main.pathogens[index];
-                      return Card(
-                        child: ListTile(
-                          title: Widgets.text(pathogen.name,
-                              weight: FontWeight.w400),
-                          trailing: Icon(
-                            Icons.arrow_forward_ios,
-                            size: 20,
+                'Pathogens',
+                main.pathogens.isEmpty
+                    ? [Widgets.centerText('No Pathogen Available', context)]
+                    : List.generate(main.pathogens.length, (index) {
+                        Pathogen pathogen = main.pathogens[index];
+                        return Card(
+                          child: ListTile(
+                            title: Widgets.text(pathogen.name,
+                                weight: FontWeight.w400),
+                            trailing: Icon(
+                              Icons.arrow_forward_ios,
+                              size: 20,
+                            ),
+                            onTap: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (BuildContext context) =>
+                                          EachPathogen(pathogen.id)));
+                            },
                           ),
-                          onTap: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (BuildContext context) =>
-                                        EachPathogen(pathogen.id)));
-                          },
-                        ),
-                      );
-                    }),
-              //willPop: false,
-            );
+                        );
+                      }),
+                //willPop: false,
+                refresh: () => fetch());
           });
   }
 }

@@ -75,6 +75,7 @@ class Widgets {
 
   static header(String title) {
     return Container(
+      //width: MediaQuery.of(context).size.width,
       child: Widgets.text(title, size: 20),
       padding: EdgeInsets.all(10),
       margin: EdgeInsets.symmetric(vertical: 20),

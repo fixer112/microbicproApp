@@ -6,21 +6,23 @@ class Pathogen {
   final String overview;
   final String epidemiology;
   final String spectrum;
-  final String location;
+  //final String location;
   final List precautions;
   List<PathogenAntibiogramData> antibiogramDatas;
   List diseases;
+  final String reference;
 
   Pathogen({
     this.name,
     this.overview,
     this.epidemiology,
     this.spectrum,
-    this.location,
+    //this.location,
     this.antibiogramDatas,
     this.id,
     this.diseases,
     this.precautions,
+    this.reference,
   });
 
   factory Pathogen.fromMap(Map data) {
@@ -30,9 +32,10 @@ class Pathogen {
         overview: data['overview'],
         epidemiology: data['epidemiology'],
         spectrum: data['spectrum'],
-        location: data['location'],
+        //location: data['location'],
         diseases: data['diseases'] ?? [],
         precautions: data['precausions'] ?? [],
+        reference: data['reference'],
         antibiogramDatas: List<PathogenAntibiogramData>.from(data['medicines']
             .map((i) => PathogenAntibiogramData.fromMap(i))
             .toList()));
@@ -44,9 +47,10 @@ class Pathogen {
         'overview': overview,
         'epidemiology': epidemiology,
         'spectrum': spectrum,
-        'location': location,
+        //'location': location,
         'medicines': antibiogramDatas,
         'diseases': diseases,
         'precausions': precautions,
+        'reference': reference,
       };
 }

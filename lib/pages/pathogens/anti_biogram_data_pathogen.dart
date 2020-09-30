@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:microbicpro/functions.dart';
 import 'package:microbicpro/model/PathogenAntibiogramData.dart';
 import 'package:microbicpro/model/pathogen.dart';
 import 'package:microbicpro/pages/ebrast/single_drug.dart';
@@ -91,14 +92,5 @@ class _AntiBiogramDataState extends State<AntiBiogramDataPathogen> {
       ],
       search: false,
     );
-  }
-
-  Color getColor(double per) {
-    if (per < 50) {
-      return Colors.red;
-    } else if (per > 70) {
-      return Colors.green;
-    }
-    return Colors.yellow[600];
   }
 }

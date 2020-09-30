@@ -8,6 +8,8 @@ class MedicineAntiBiogramData {
   final int pathogenId;
   final String pathogenName;
   final String sample;
+  final int referenceID;
+  final String location;
 
   MedicineAntiBiogramData({
     this.isolateNumber,
@@ -17,6 +19,8 @@ class MedicineAntiBiogramData {
     this.pathogenName,
     this.id,
     this.sample,
+    this.referenceID,
+    this.location,
   });
 
   factory MedicineAntiBiogramData.fromMap(Map data) {
@@ -28,6 +32,8 @@ class MedicineAntiBiogramData {
       pathogenId: int.parse(data['pivot']['pathogen_id']),
       pathogenName: data['name'],
       sample: data['pivot']['sample'],
+      referenceID: data['pivot']['reference_id'],
+      location: data['pivot']['location'],
     );
   }
   Map<String, dynamic> toJson() => {
@@ -38,6 +44,8 @@ class MedicineAntiBiogramData {
           'percentage': percentage,
           'medicine_id': pathogenId,
           'sample': sample,
+          'reference_id': referenceID,
+          'location': location,
         },
         'name': pathogenName,
       };

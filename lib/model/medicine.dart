@@ -17,7 +17,8 @@ class Medicine {
   final String adult;
   final String child;
   final String spectrum;
-  final String location;
+  //final String location;
+  final String reference;
   List<MedicineAntiBiogramData> antibiogramDatas;
 
   Medicine({
@@ -26,7 +27,7 @@ class Medicine {
     this.overview,
     this.avgCost,
     this.spectrum,
-    this.location,
+    //this.location,
     this.action,
     this.adult,
     this.adverseEffects,
@@ -39,6 +40,7 @@ class Medicine {
     this.pregnancyCategory,
     this.renal,
     this.type,
+    this.reference,
   });
 
   factory Medicine.fromMap(Map data) {
@@ -48,7 +50,7 @@ class Medicine {
         overview: data['overview'],
         avgCost: data['avg_cost'],
         spectrum: data['spectrum'],
-        location: data['location'],
+        //location: data['location'],
         action: data['action'],
         adult: data['adult'],
         adverseEffects: data['adverse_effects'],
@@ -60,6 +62,7 @@ class Medicine {
         pregnancyCategory: data['pregnancy_category'],
         renal: data['renal'],
         type: data['type'],
+        reference: data['reference'],
         antibiogramDatas: List<MedicineAntiBiogramData>.from(data['pathogens']
             .map((i) => MedicineAntiBiogramData.fromMap(i))
             .toList()));
@@ -82,6 +85,7 @@ class Medicine {
         'overview': overview,
         'avg_cost': avgCost,
         'spectrum': spectrum,
-        'location': location,
+        //'location': location,
+        'reference': reference,
       };
 }

@@ -52,7 +52,7 @@ class _HomeState extends State<Home> {
                   ],
                 ),
                 onTap: () {
-                  Get.off(Guidelines());
+                  Get.to(Guidelines());
                 },
               ),
               InkWell(
@@ -76,7 +76,7 @@ class _HomeState extends State<Home> {
                         size: 23, color: Colors.blue, weight: FontWeight.w600)
                   ],
                 ),
-                onTap: () => Get.off(Pathogens()),
+                onTap: () => Get.to(Pathogens()),
               ),
               InkWell(
                 child: Column(
@@ -100,7 +100,7 @@ class _HomeState extends State<Home> {
                   ],
                 ),
                 onTap: () {
-                  Get.off(Medicines());
+                  Get.to(Medicines());
                 },
               ),
               InkWell(
@@ -125,7 +125,7 @@ class _HomeState extends State<Home> {
                   ],
                 ),
                 onTap: () {
-                  Get.off(Ebrast());
+                  Get.to(Ebrast());
                 },
               ),
             ],

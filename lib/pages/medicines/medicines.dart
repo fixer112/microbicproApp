@@ -14,7 +14,6 @@ class Medicines extends StatefulWidget {
 }
 
 class _MedicinesState extends State<Medicines> {
-  List<Medicine> medicines;
   bool loading = false;
   @override
   void initState() {
@@ -40,29 +39,29 @@ class _MedicinesState extends State<Medicines> {
     return loading
         ? Widgets.loader()
         : Consumer<MainModel>(builder: (context, main, child) {
-            medicines = main.getMedicines;
+            var medicines = main.getMedicines;
             return Pager(
-              'Medicines',
-              medicines.isEmpty
-                  ? [Widgets.centerText('No Medicine Available', context)]
-                  : List.generate(medicines.length, (index) {
-                      Medicine medicine = medicines[index];
-                      return Card(
-                        child: ListTile(
-                          title: Widgets.text(medicine.name,
-                              weight: FontWeight.w400),
-                          trailing: Icon(
-                            Icons.arrow_forward_ios,
-                            size: 20,
+                'Medicines',
+                medicines.isEmpty
+                    ? [Widgets.centerText('No Medicine Available', context)]
+                    : List.generate(medicines.length, (index) {
+                        Medicine medicine = medicines[index];
+                        return Card(
+                          child: ListTile(
+                            title: Widgets.text(medicine.name,
+                                weight: FontWeight.w400),
+                            trailing: Icon(
+                              Icons.arrow_forward_ios,
+                              size: 20,
+                            ),
+                            onTap: () {
+                              Get.to(SingleDrug(medicine.id));
+                            },
                           ),
-                          onTap: () {
-                            Get.to(SingleDrug(medicine.id));
-                          },
-                        ),
-                      );
-                    }),
-              //willPop: false,
-            );
+                        );
+                      }),
+                //willPop: false,
+                refresh: () => fetch());
           });
   }
 }

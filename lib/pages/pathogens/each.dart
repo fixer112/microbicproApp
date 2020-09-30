@@ -47,69 +47,69 @@ class _EachPathogenState extends State<EachPathogen> {
   Widget build(BuildContext context) {
     //print(pathogen.precautions);
     return Pager(
-      pathogen == null ? 'Pathogen Not Found' : "Pathogen - ${pathogen.name}",
-      loading
-          ? [Widgets.loader()]
-          : pathogen == null
-              ? [Widgets.centerText('Pathogen Not Found', context)]
-              : [
-                  Widgets.header('General Information'),
-                  Widgets.collapsible('Overview', [
-                    Widgets.text(pathogen.overview),
-                  ]),
-                  Widgets.collapsible('Epidermology', [
-                    Widgets.text(pathogen.epidemiology),
-                  ]),
-                  Widgets.collapsible('Diseases', [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: pathogen.diseases
-                          .map((disease) => InkWell(
-                                onTap: () =>
-                                    Get.to(SingleDisease(disease['id'])),
-                                child: Card(
-                                  child: ListTile(
-                                    title: Text(disease['name']),
+        pathogen == null ? 'Pathogen Not Found' : "Pathogen - ${pathogen.name}",
+        loading
+            ? [Widgets.loader()]
+            : pathogen == null
+                ? [Widgets.centerText('Pathogen Not Found', context)]
+                : [
+                    Widgets.header('General Information'),
+                    Widgets.collapsible('Overview', [
+                      Widgets.text(pathogen.overview),
+                    ]),
+                    Widgets.collapsible('Epidermology', [
+                      Widgets.text(pathogen.epidemiology),
+                    ]),
+                    Widgets.collapsible('Diseases', [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: pathogen.diseases
+                            .map((disease) => InkWell(
+                                  onTap: () =>
+                                      Get.to(SingleDisease(disease['id'])),
+                                  child: Card(
+                                    child: ListTile(
+                                      title: Text(disease['name']),
+                                    ),
                                   ),
-                                ),
-                              ))
-                          .toList(),
-                    ),
-                  ]),
-                  Widgets.header('Anti-Microbial Spectrum'),
-                  Widgets.collapsible('Ideal Spectrum', [
-                    Widgets.text(pathogen.spectrum),
-                  ]),
-                  Card(
-                    child: ListTile(
-                      title: Widgets.text('Antibiogram Data', size: 17),
-                      trailing: Icon(
-                        Icons.arrow_forward_ios,
-                        size: 20,
+                                ))
+                            .toList(),
                       ),
-                      onTap: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (BuildContext context) =>
-                                    AntiBiogramDataPathogen(pathogen)));
-                      },
+                    ]),
+                    Widgets.header('Anti-Microbial Spectrum'),
+                    Widgets.collapsible('Ideal Spectrum', [
+                      Widgets.text(pathogen.spectrum),
+                    ]),
+                    Card(
+                      child: ListTile(
+                        title: Widgets.text('Antibiogram Data', size: 17),
+                        trailing: Icon(
+                          Icons.arrow_forward_ios,
+                          size: 20,
+                        ),
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (BuildContext context) =>
+                                      AntiBiogramDataPathogen(pathogen)));
+                        },
+                      ),
                     ),
-                  ),
-                  Widgets.header('Infection Control'),
-                  Widgets.collapsible('Precautions', [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: pathogen.precautions
-                          .map((precausion) => InkWell(
-                                onTap: () =>
-                                    Get.to(SingleDisease(precausion['id'])),
-                                child: Text("- ${precausion['description']}"),
-                              ))
-                          .toList(),
-                    ),
-                  ]),
-                ],
-    );
+                    Widgets.header('Infection Control'),
+                    Widgets.collapsible('Precautions', [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: pathogen.precautions
+                            .map((precausion) => InkWell(
+                                  onTap: () =>
+                                      Get.to(SingleDisease(precausion['id'])),
+                                  child: Text("- ${precausion['description']}"),
+                                ))
+                            .toList(),
+                      ),
+                    ]),
+                  ],
+        refresh: () => fetch());
   }
 }
