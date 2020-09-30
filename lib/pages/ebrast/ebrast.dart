@@ -55,6 +55,6 @@ class _EbrastState extends State<Ebrast> {
           ),
         ),
       ),
-    ], search: false,);
+    ], search: false, bottomBarIndex: 3, );
   }
 }

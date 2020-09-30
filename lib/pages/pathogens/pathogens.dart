@@ -66,7 +66,7 @@ class _PathogensState extends State<Pathogens> {
                       );
                     }),
               //willPop: false,
-            );
+            bottomBarIndex: 1,);
           });
   }
 }

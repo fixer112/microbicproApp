@@ -62,7 +62,7 @@ class _MedicinesState extends State<Medicines> {
                       );
                     }),
               //willPop: false,
-            );
+            bottomBarIndex: 2,);
           });
   }
 }
