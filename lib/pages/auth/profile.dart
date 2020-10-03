@@ -21,7 +21,7 @@ class _ProfileState extends State<Profile> {
   void initState() {
     super.initState();
     var main = Provider.of<MainModel>(context, listen: false);
-    main.getUser().then((value) => user = value);
+    user = main.getUser;
   }
 
   @override

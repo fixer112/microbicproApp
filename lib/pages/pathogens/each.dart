@@ -24,16 +24,13 @@ class _EachPathogenState extends State<EachPathogen> {
   void initState() {
     super.initState();
     var main = Provider.of<MainModel>(context, listen: false);
-    main.getPathogens().then((value) {
-      pathogen = value.firstWhere((pathogen) => pathogen.id == widget.id,
-          orElse: () => null);
-      setState(() {});
-      if (pathogen == null) {
-        fetch();
-        // Widgets.snackbar('Pathogen not found');
-        // Get.to(Pathogens());
-      }
-    });
+    pathogen = main.getPathogens
+        .firstWhere((pathogen) => pathogen.id == widget.id, orElse: () => null);
+    if (pathogen == null) {
+      fetch();
+      // Widgets.snackbar('Pathogen not found');
+      // Get.to(Pathogens());
+    }
   }
 
   fetch() async {

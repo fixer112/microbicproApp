@@ -6,7 +6,6 @@ import 'package:get/get.dart';
 import 'package:http/http.dart';
 import 'package:microbicpro/model/Ebrast.dart';
 import 'package:microbicpro/model/medicine.dart';
-import 'package:microbicpro/model/user.dart';
 import 'package:microbicpro/pages/auth/login.dart';
 import 'package:microbicpro/pages/home.dart';
 import 'package:microbicpro/provider/main.dart';
@@ -46,35 +45,35 @@ Future<List<Pathogen>> getPathogens(BuildContext context) async {
 
 Future<Pathogen> getPathogen(int id, BuildContext context) async {
   Pathogen pathogen;
-  //try {
-  var main = Provider.of<MainModel>(context, listen: false);
+  try {
+    var main = Provider.of<MainModel>(context, listen: false);
 
-  var link = '$url/api/pathogens/$id';
-  var response = await http.get(link, headers: {
-    'Accept': 'application/json',
-  });
-  var body = json.decode(response.body);
-  print('Response status: ${response.statusCode}');
-  print('Response body: ${body}');
-  //return;
-  pathogen = Pathogen.fromMap(body);
+    var link = '$url/api/pathogens/$id';
+    var response = await http.get(link, headers: {
+      'Accept': 'application/json',
+    });
+    var body = json.decode(response.body);
+    print('Response status: ${response.statusCode}');
+    print('Response body: ${body}');
+    //return;
+    pathogen = Pathogen.fromMap(body);
 
-  var oldPathogens = await main.getPathogens();
+    var oldPathogens = main.getPathogens;
 
-  var exist = oldPathogens.firstWhere((element) => element.id == id,
-      orElse: () => null);
+    var exist = oldPathogens.firstWhere((element) => element.id == id,
+        orElse: () => null);
 
-  if (exist != null) {
-    oldPathogens.removeWhere((element) => element.id == id);
-  }
+    if (exist != null) {
+      oldPathogens.removeWhere((element) => element.id == id);
+    }
 
-  oldPathogens.add(pathogen);
-  main.setPathogens(oldPathogens);
-  /* } on SocketException {
+    oldPathogens.add(pathogen);
+    main.setPathogens(oldPathogens);
+  } on SocketException {
     Widgets.snackbar('Please Connect to the internet');
   } catch (e) {
     Widgets.snackbar('An Error Occured');
-  } */
+  }
   return pathogen;
 }
 
@@ -119,7 +118,7 @@ Future<Medicine> getMedicine(int id, BuildContext context) async {
     //return;
     medicine = Medicine.fromMap(body);
 
-    var oldMedicines = await main.getMedicines();
+    var oldMedicines = main.getMedicines;
 
     var exist = oldMedicines.firstWhere((element) => element.id == id,
         orElse: () => null);
@@ -179,7 +178,7 @@ Future<Disease> getDisease(int id, BuildContext context) async {
     //return;
     disease = Disease.fromMap(body);
 
-    var oldDiseases = await main.getDiseases();
+    var oldDiseases = main.getDiseases;
 
     var exist = oldDiseases.firstWhere((element) => element.id == id,
         orElse: () => null);
@@ -239,7 +238,7 @@ Future<Ebrast> getEbrast(int id, BuildContext context) async {
     //return;
     ebrast = Ebrast.fromMap(body);
 
-    var oldEbrasts = await main.getEbrasts();
+    var oldEbrasts = main.getEbrasts;
 
     var exist = oldEbrasts.firstWhere((element) => element.id == id,
         orElse: () => null);
@@ -270,42 +269,14 @@ Future login(Map<String, String> data, BuildContext context) async {
     print('Response status: ${response.statusCode}');
     print('Response body: ${body}');
 
-    request(response, () {
-      var user = User.fromMap(data);
-      main.setUser(user);
-      Get.off(Home());
-    }, context);
+    request(response, () => Get.off(Home()), context);
   } on SocketException {
     Widgets.snackbar('Please Connect to the internet');
   } catch (e) {
     print(e);
     Widgets.snackbar('An Error Occured');
   }
-}
-
-Future register(Map<String, String> data, BuildContext context) async {
-  try {
-    var main = Provider.of<MainModel>(context, listen: false);
-
-    var link = '$url/api/register';
-    var response = await http.post(link, body: data, headers: {
-      'Accept': 'application/json',
-    });
-    var body = json.decode(response.body);
-    print('Response status: ${response.statusCode}');
-    print('Response body: ${body}');
-
-    request(response, () {
-      var user = User.fromMap(data);
-      main.setUser(user);
-      Get.off(Home());
-    }, context);
-  } on SocketException {
-    Widgets.snackbar('Please Connect to the internet');
-  } catch (e) {
-    print(e);
-    Widgets.snackbar('An Error Occured');
-  }
+  //return ebrast;
 }
 
 request(Response response, Function action, context) {

@@ -23,15 +23,13 @@ class _AntiBioticsState extends State<AntiBiotics> {
   void initState() {
     super.initState();
     var main = Provider.of<MainModel>(context, listen: false);
-    main.getEbrasts().then((value) {
-      ebrast = value.firstWhere((ebrast) => ebrast.id == widget.id,
-          orElse: () => null);
-      if (ebrast == null) {
-        fetch();
-        // Widgets.snackbar('Ebrast not found');
-        // Get.to(Ebrasts());
-      }
-    });
+    ebrast = main.getEbrasts
+        .firstWhere((ebrast) => ebrast.id == widget.id, orElse: () => null);
+    if (ebrast == null) {
+      fetch();
+      // Widgets.snackbar('Ebrast not found');
+      // Get.to(Ebrasts());
+    }
   }
 
   fetch() async {
