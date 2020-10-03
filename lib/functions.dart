@@ -1,6 +1,8 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:microbicpro/pages/auth/login.dart';
 import 'package:path_provider/path_provider.dart';
 
 Color getColor(double per) {
@@ -43,4 +45,9 @@ Future<Null> removeJson({String fileName = 'user.json'}) async {
   var jsonFile = new File(path + "/" + fileName);
   bool fileExists = jsonFile.existsSync();
   if (fileExists) jsonFile.delete();
+}
+
+logout() {
+  removeJson();
+  Get.off(Login());
 }

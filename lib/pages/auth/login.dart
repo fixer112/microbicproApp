@@ -1,6 +1,10 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:microbicpro/api_functions.dart';
+import 'package:microbicpro/functions.dart';
+import 'package:microbicpro/model/user.dart';
 import 'package:microbicpro/pages/auth/register.dart';
 import 'package:microbicpro/pages/home.dart';
 import 'package:microbicpro/provider/main.dart';
@@ -24,9 +28,12 @@ class _LoginState extends State<Login> {
   void initState() {
     super.initState();
     var main = Provider.of<MainModel>(context, listen: false);
-    if (main.getUser != null) {
-      Get.off(Home());
-    }
+    getJson().then((value) {
+      if (value != null) {
+        main.setUser(User.fromMap(json.decode(value)));
+        Get.off(Home());
+      }
+    });
   }
 
   @override

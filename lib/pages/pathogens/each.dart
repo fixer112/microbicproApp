@@ -27,6 +27,7 @@ class _EachPathogenState extends State<EachPathogen> {
     main.getPathogens().then((value) {
       pathogen = value.firstWhere((pathogen) => pathogen.id == widget.id,
           orElse: () => null);
+      setState(() {});
       if (pathogen == null) {
         fetch();
         // Widgets.snackbar('Pathogen not found');

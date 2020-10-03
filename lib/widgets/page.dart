@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:get/get.dart';
+import 'package:microbicpro/pages/auth/profile.dart';
 import 'package:microbicpro/pages/ebrast/ebrast.dart';
 import 'package:microbicpro/pages/guidelines/guidelines.dart';
 import 'package:microbicpro/pages/medicines/medicines.dart';
@@ -134,9 +136,30 @@ class _PagerState extends State<Pager> {
                     )),
                 title: Widgets.text('Ebrast', color: Colors.black),
               ),
+              BottomNavigationBarItem(
+                icon: Widgets.gradienticon(
+                    FontAwesomeIcons.user,
+                    20,
+                    LinearGradient(
+                      colors: <Color>[
+                        Colors.red,
+                        Colors.brown,
+                      ],
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                    )),
+                title: Widgets.text('Profile', color: Colors.black),
+              ),
             ],
             onTap: (index) {
-              Navigator.pushReplacement(
+              return Get.to([
+                Guidelines(),
+                Pathogens(),
+                Medicines(),
+                Ebrast(),
+                Profile(),
+              ][index]);
+              /* Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
                       builder: (context) => [
@@ -144,7 +167,8 @@ class _PagerState extends State<Pager> {
                             Pathogens(),
                             Medicines(),
                             Ebrast()
-                          ][index]));
+
+                          ][index])) ;*/
             },
           ),
         ));

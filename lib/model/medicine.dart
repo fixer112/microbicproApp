@@ -1,3 +1,6 @@
+import 'package:microbicpro/provider/main.dart';
+import 'package:provider/provider.dart';
+
 import 'MedicineAntiBiogramData.dart';
 
 class Medicine {

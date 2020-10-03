@@ -46,35 +46,35 @@ Future<List<Pathogen>> getPathogens(BuildContext context) async {
 
 Future<Pathogen> getPathogen(int id, BuildContext context) async {
   Pathogen pathogen;
-  try {
-    var main = Provider.of<MainModel>(context, listen: false);
+  //try {
+  var main = Provider.of<MainModel>(context, listen: false);
 
-    var link = '$url/api/pathogens/$id';
-    var response = await http.get(link, headers: {
-      'Accept': 'application/json',
-    });
-    var body = json.decode(response.body);
-    print('Response status: ${response.statusCode}');
-    print('Response body: ${body}');
-    //return;
-    pathogen = Pathogen.fromMap(body);
+  var link = '$url/api/pathogens/$id';
+  var response = await http.get(link, headers: {
+    'Accept': 'application/json',
+  });
+  var body = json.decode(response.body);
+  print('Response status: ${response.statusCode}');
+  print('Response body: ${body}');
+  //return;
+  pathogen = Pathogen.fromMap(body);
 
-    var oldPathogens = await main.getPathogens();
+  var oldPathogens = await main.getPathogens();
 
-    var exist = oldPathogens.firstWhere((element) => element.id == id,
-        orElse: () => null);
+  var exist = oldPathogens.firstWhere((element) => element.id == id,
+      orElse: () => null);
 
-    if (exist != null) {
-      oldPathogens.removeWhere((element) => element.id == id);
-    }
+  if (exist != null) {
+    oldPathogens.removeWhere((element) => element.id == id);
+  }
 
-    oldPathogens.add(pathogen);
-    main.setPathogens(oldPathogens);
-  } on SocketException {
+  oldPathogens.add(pathogen);
+  main.setPathogens(oldPathogens);
+  /* } on SocketException {
     Widgets.snackbar('Please Connect to the internet');
   } catch (e) {
     Widgets.snackbar('An Error Occured');
-  }
+  } */
   return pathogen;
 }
 
