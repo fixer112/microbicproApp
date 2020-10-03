@@ -2,8 +2,13 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
+import 'package:get/get.dart';
+import 'package:http/http.dart';
 import 'package:microbicpro/model/Ebrast.dart';
 import 'package:microbicpro/model/medicine.dart';
+import 'package:microbicpro/model/user.dart';
+import 'package:microbicpro/pages/auth/login.dart';
+import 'package:microbicpro/pages/home.dart';
 import 'package:microbicpro/provider/main.dart';
 import 'package:microbicpro/values.dart';
 import 'package:microbicpro/widgets/widgets.dart';
@@ -13,13 +18,13 @@ import 'package:http/http.dart' as http;
 import 'model/disease.dart';
 import 'model/pathogen.dart';
 
-Future<List<Pathogen>> getPathogens(BuildContext context, {location}) async {
+Future<List<Pathogen>> getPathogens(BuildContext context) async {
   List<Pathogen> pathogens;
   try {
     var main = Provider.of<MainModel>(context, listen: false);
 
     var link = '$url/api/pathogens';
-    link = location != null ? "$link/?location=$location" : link;
+    //link = location != null ? "$link/?location=$location" : link;
     var response = await http.get(link, headers: {
       'Accept': 'application/json',
     });
@@ -54,7 +59,7 @@ Future<Pathogen> getPathogen(int id, BuildContext context) async {
     //return;
     pathogen = Pathogen.fromMap(body);
 
-    var oldPathogens = main.getPathogens;
+    var oldPathogens = await main.getPathogens();
 
     var exist = oldPathogens.firstWhere((element) => element.id == id,
         orElse: () => null);
@@ -73,13 +78,13 @@ Future<Pathogen> getPathogen(int id, BuildContext context) async {
   return pathogen;
 }
 
-Future<List<Medicine>> getMedicines(BuildContext context, {location}) async {
+Future<List<Medicine>> getMedicines(BuildContext context) async {
   List<Medicine> medicines;
   try {
     var main = Provider.of<MainModel>(context, listen: false);
 
     var link = '$url/api/medicines';
-    link = location != null ? "$link/?location=$location" : link;
+    //link = location != null ? "$link/?location=$location" : link;
     var response = await http.get(link, headers: {
       'Accept': 'application/json',
     });
@@ -114,7 +119,7 @@ Future<Medicine> getMedicine(int id, BuildContext context) async {
     //return;
     medicine = Medicine.fromMap(body);
 
-    var oldMedicines = main.getMedicines;
+    var oldMedicines = await main.getMedicines();
 
     var exist = oldMedicines.firstWhere((element) => element.id == id,
         orElse: () => null);
@@ -134,13 +139,13 @@ Future<Medicine> getMedicine(int id, BuildContext context) async {
   return medicine;
 }
 
-Future<List<Disease>> getDiseases(BuildContext context, {location}) async {
+Future<List<Disease>> getDiseases(BuildContext context) async {
   List<Disease> diseases;
   try {
     var main = Provider.of<MainModel>(context, listen: false);
 
     var link = '$url/api/diseases';
-    link = location != null ? "$link/?location=$location" : link;
+    //link = location != null ? "$link/?location=$location" : link;
     var response = await http.get(link, headers: {
       'Accept': 'application/json',
     });
@@ -174,7 +179,7 @@ Future<Disease> getDisease(int id, BuildContext context) async {
     //return;
     disease = Disease.fromMap(body);
 
-    var oldDiseases = main.getDiseases;
+    var oldDiseases = await main.getDiseases();
 
     var exist = oldDiseases.firstWhere((element) => element.id == id,
         orElse: () => null);
@@ -234,7 +239,7 @@ Future<Ebrast> getEbrast(int id, BuildContext context) async {
     //return;
     ebrast = Ebrast.fromMap(body);
 
-    var oldEbrasts = main.getEbrasts;
+    var oldEbrasts = await main.getEbrasts();
 
     var exist = oldEbrasts.firstWhere((element) => element.id == id,
         orElse: () => null);
@@ -251,4 +256,88 @@ Future<Ebrast> getEbrast(int id, BuildContext context) async {
     Widgets.snackbar('An Error Occured');
   }
   return ebrast;
+}
+
+Future login(Map<String, String> data, BuildContext context) async {
+  try {
+    var main = Provider.of<MainModel>(context, listen: false);
+
+    var link = '$url/api/login';
+    var response = await http.post(link, body: data, headers: {
+      'Accept': 'application/json',
+    });
+    var body = json.decode(response.body);
+    print('Response status: ${response.statusCode}');
+    print('Response body: ${body}');
+
+    request(response, () {
+      var user = User.fromMap(data);
+      main.setUser(user);
+      Get.off(Home());
+    }, context);
+  } on SocketException {
+    Widgets.snackbar('Please Connect to the internet');
+  } catch (e) {
+    print(e);
+    Widgets.snackbar('An Error Occured');
+  }
+}
+
+Future register(Map<String, String> data, BuildContext context) async {
+  try {
+    var main = Provider.of<MainModel>(context, listen: false);
+
+    var link = '$url/api/register';
+    var response = await http.post(link, body: data, headers: {
+      'Accept': 'application/json',
+    });
+    var body = json.decode(response.body);
+    print('Response status: ${response.statusCode}');
+    print('Response body: ${body}');
+
+    request(response, () {
+      var user = User.fromMap(data);
+      main.setUser(user);
+      Get.off(Home());
+    }, context);
+  } on SocketException {
+    Widgets.snackbar('Please Connect to the internet');
+  } catch (e) {
+    print(e);
+    Widgets.snackbar('An Error Occured');
+  }
+}
+
+request(Response response, Function action, context) {
+  print(response.statusCode);
+  var body = json.decode(response.body);
+  print(body);
+  return processResponse(response.statusCode, body, action, context);
+}
+
+processResponse(statusCode, body, Function action, context) {
+  if (statusCode == 401) {
+    Widgets.snackbar('Please re login');
+    return Get.off(Login());
+  }
+  if (statusCode == 422) {
+    var errors = '';
+    body['errors'].forEach((error, data) => errors += '${data[0]}\n');
+    //return snackbar(errors, context, _scaffoldKey);
+    return Widgets.snackbar(errors);
+  }
+
+  if (statusCode >= 200 && statusCode < 300) {
+    if (body.containsKey('error')) {
+      return Widgets.snackbar(body['error']);
+    }
+    if (body.containsKey('success')) {
+      return Widgets.snackbar(body['success']);
+    }
+    action();
+  } else {
+    return Widgets.snackbar('An error occured, Please try later.');
+    /*  return snackbar(
+        'An error occured, Please try later.', context, _scaffoldKey); */
+  }
 }

@@ -28,14 +28,14 @@ class _DrugManagementState extends State<DrugManagement> {
   void initState() {
     super.initState();
     var main = Provider.of<MainModel>(context, listen: false);
-    medicines = main.getMedicines;
-    disease = main.diseases
-        .firstWhere((disease) => disease.id == widget.id, orElse: () => null);
-    if (disease == null || disease.drugManagements.isEmpty) {
-      fetch();
-      // Widgets.snackbar('Pathogen not found');
-      // Get.to(Pathogens());
-    }
+    main.getMedicines().then((value) => medicines = value);
+    main.getDiseases().then((value) {
+      disease = value.firstWhere((disease) => disease.id == widget.id,
+          orElse: () => null);
+      if (disease == null || disease.drugManagements.isEmpty) {
+        fetch();
+      }
+    });
   }
 
   fetch() async {

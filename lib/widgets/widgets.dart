@@ -158,7 +158,8 @@ class Widgets {
   }
 
   static textField(
-      TextEditingController controller, TextInputType type, String hintText, { suffixWidget } ) {
+      TextEditingController controller, TextInputType type, String hintText,
+      {suffixWidget}) {
     return Container(
       height: 50.0,
       margin: EdgeInsets.only(top: 10.0),
@@ -170,13 +171,40 @@ class Widgets {
               filled: true,
               border: OutlineInputBorder(
                 borderSide: BorderSide(color: primaryColor, width: 5),
-                borderRadius: BorderRadius.all( Radius.circular(25) ),
+                borderRadius: BorderRadius.all(Radius.circular(25)),
               ),
               hintText: hintText,
-              contentPadding: EdgeInsets.all(10).copyWith( left: 30),
+              contentPadding: EdgeInsets.all(10).copyWith(left: 30),
               hintStyle: TextStyle(color: Colors.black)),
           obscureText: type == TextInputType.visiblePassword ? true : false,
           keyboardType: type),
+    );
+  }
+
+  static textFormField(String hint, TextEditingController controller,
+      {validate(String text), type = TextInputType.text}) {
+    return Container(
+      //height: 50.0,
+      margin: EdgeInsets.only(top: 10.0),
+      child: TextFormField(
+        keyboardType: type,
+        obscureText: type == TextInputType.visiblePassword ? true : false,
+        controller: controller,
+        decoration: InputDecoration(
+            //suffixIcon: suffixWidget,
+            fillColor: Colors.white,
+            filled: true,
+            //errorBorder: OutlineInputBorder(),
+            border: OutlineInputBorder(
+              borderSide: BorderSide(color: primaryColor, width: 5),
+              borderRadius: BorderRadius.all(Radius.circular(25)),
+            ),
+            hintText: hint,
+            contentPadding: EdgeInsets.all(10).copyWith(left: 30),
+            hintStyle: TextStyle(color: Colors.black)),
+        //textAlign: TextAlign.center,
+        validator: validate,
+      ),
     );
   }
 }

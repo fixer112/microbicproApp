@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:microbicpro/pages/splashscreen.dart';
+import 'package:microbicpro/values.dart';
 import 'package:provider/provider.dart';
 import 'provider/main.dart';
 
@@ -20,6 +21,8 @@ class MyApp extends StatelessWidget {
     return GetMaterialApp(
       title: 'MicrobicPro',
       theme: ThemeData(
+        indicatorColor: primaryColor,
+        cursorColor: primaryColor,
         textTheme: GoogleFonts.rubikTextTheme(Theme.of(context).textTheme),
         // This is the theme of your application.
         //

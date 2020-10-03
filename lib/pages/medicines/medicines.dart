@@ -39,7 +39,8 @@ class _MedicinesState extends State<Medicines> {
     return loading
         ? Widgets.loader()
         : Consumer<MainModel>(builder: (context, main, child) {
-            var medicines = main.getMedicines;
+            List<Medicine> medicines = [];
+            main.getMedicines().then((value) => medicines = value);
             return Pager(
               'Medicines',
               medicines.isEmpty

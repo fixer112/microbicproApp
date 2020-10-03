@@ -30,7 +30,7 @@ class _EbrastLocationState extends State<EbrastLocation> {
     setState(() {
       loading = true;
     });
-    await getEbrasts(context, location: widget.location);
+    await getEbrasts(context);
     setState(() {
       loading = false;
     });
