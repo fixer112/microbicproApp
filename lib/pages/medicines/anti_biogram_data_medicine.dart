@@ -49,72 +49,75 @@ class _AntiBiogramDataState extends State<AntiBiogramDataMedicine> {
           height: 20,
         ),
         Column(
-          children: List.generate(samples.length, (inx) {
-            var datas = antiBiogramDatas
-                .where((data) => data.sample == samples[inx])
-                .toList();
-            //var antiBiogramData = antiBiogramDatas[inx];
-            //print(antiBiogramData.sample);
-            var children = <Widget>[];
-            children.add(Widgets.header(samples[inx].toUpperCase()));
+          children: [
+            Column(
+              children: List.generate(samples.length, (inx) {
+                var datas = antiBiogramDatas
+                    .where((data) => data.sample == samples[inx])
+                    .toList();
+                //var antiBiogramData = antiBiogramDatas[inx];
+                //print(antiBiogramData.sample);
+                var children = <Widget>[];
+                children.add(Widgets.header(samples[inx].toUpperCase()));
 
-            //print(medicine);
+                //print(medicine);
 
-            datas.forEach((antiBiogramData) {
-              //print(antiBiogramDatas[inx].);
+                datas.forEach((antiBiogramData) {
+                  //print(antiBiogramDatas[inx].);
 
-              children.add(Container(
-                child: InkWell(
-                  onTap: () => Get.to(EachPathogen(antiBiogramData.pathogenId)),
-                  child: Card(
-                    child: ListTile(
-                        dense: true,
-                        title: Widgets.text(antiBiogramData.pathogenName,
-                            size: 18,
-                            color: getColor(double.parse(
-                                antiBiogramData.percentage.toString()))),
-                        subtitle: Widgets.text(
-                            'isno: ${antiBiogramData.isolateNumber}',
-                            size: 15,
-                            color: getColor(double.parse(
-                                antiBiogramData.percentage.toString()))),
-                        trailing: Column(
-                          children: [
-                            Widgets.text(
-                              '${antiBiogramData.percentage}%',
-                              size: 16,
-                              color: getColor(double.parse(
-                                  antiBiogramData.percentage.toString())),
-                            ),
-                            SizedBox(
-                              height: 10,
-                            ),
-                            Widgets.text('[${antiBiogramData.referenceID}]',
-                                color: Colors.blue),
-                          ],
-                        )),
-                  ),
-                ),
-              ));
-              children.add(Widgets.header('REFERENCES'));
-              children.add(
-                Container(
-                  decoration: BoxDecoration(
-                    color: primaryColor,
-                    borderRadius: BorderRadius.circular(5),
-                  ),
-                  //color: primaryColor,
-                  padding: EdgeInsets.all(20),
-                  child: Widgets.text(medicine.reference, color: Colors.white),
-                ),
-              );
-            });
+                  children.add(Container(
+                    child: InkWell(
+                      onTap: () =>
+                          Get.to(EachPathogen(antiBiogramData.pathogenId)),
+                      child: Card(
+                        child: ListTile(
+                            dense: true,
+                            title: Widgets.text(antiBiogramData.pathogenName,
+                                size: 18,
+                                color: getColor(double.parse(
+                                    antiBiogramData.percentage.toString()))),
+                            subtitle: Widgets.text(
+                                'isno: ${antiBiogramData.isolateNumber}',
+                                size: 15,
+                                color: getColor(double.parse(
+                                    antiBiogramData.percentage.toString()))),
+                            trailing: Column(
+                              children: [
+                                Widgets.text(
+                                  '${antiBiogramData.percentage}%',
+                                  size: 16,
+                                  color: getColor(double.parse(
+                                      antiBiogramData.percentage.toString())),
+                                ),
+                                SizedBox(
+                                  height: 10,
+                                ),
+                                Widgets.text('[${antiBiogramData.referenceID}]',
+                                    color: Colors.blue),
+                              ],
+                            )),
+                      ),
+                    ),
+                  ));
+                });
 
-            return Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: children,
-            );
-          }),
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: children,
+                );
+              }),
+            ),
+            Widgets.header('REFERENCES'),
+            Container(
+              decoration: BoxDecoration(
+                color: primaryColor,
+                borderRadius: BorderRadius.circular(5),
+              ),
+              //color: primaryColor,
+              padding: EdgeInsets.all(20),
+              child: Widgets.text(medicine.reference, color: Colors.white),
+            ),
+          ],
         ),
       ],
       search: false,
