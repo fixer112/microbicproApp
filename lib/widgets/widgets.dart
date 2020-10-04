@@ -1,5 +1,6 @@
 import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import '../values.dart';
 
@@ -193,18 +194,76 @@ class Widgets {
         obscureText: type == TextInputType.visiblePassword ? true : false,
         controller: controller,
         decoration: InputDecoration(
-            //suffixIcon: suffixWidget,
-            fillColor: Colors.white,
-            filled: true,
-            //errorBorder: OutlineInputBorder(),
-            border: OutlineInputBorder(
-              borderSide: BorderSide(color: primaryColor, width: 5),
-              borderRadius: BorderRadius.all(Radius.circular(25)),
-            ),
-            hintText: hint,
-            contentPadding: EdgeInsets.all(10).copyWith(left: 30),
-            hintStyle: TextStyle(color: Colors.black)),
+          //suffixIcon: suffixWidget,
+          fillColor: Colors.white,
+          filled: true,
+          //errorBorder: OutlineInputBorder(),
+          border: OutlineInputBorder(
+            borderSide: BorderSide(color: primaryColor, width: 5),
+            borderRadius: BorderRadius.all(Radius.circular(25)),
+          ),
+          hintText: hint,
+          contentPadding: EdgeInsets.all(10).copyWith(left: 30),
+          hintStyle: TextStyle(color: Colors.black),
+        ),
         //textAlign: TextAlign.center,
+        validator: validate,
+      ),
+    );
+  }
+
+  static Widget dropdown(
+      hint, value, List<DropdownMenuItem> items, action(val)) {
+    return Container(
+      margin: EdgeInsets.only(top: 10.0),
+      decoration: BoxDecoration(
+          border: Border.all(),
+          borderRadius: BorderRadius.all(Radius.circular(25))),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 10),
+        child: DropdownButton(
+          value: value,
+          items: items,
+          hint: Widgets.text(hint, weight: FontWeight.bold),
+          icon: Icon(
+            FontAwesomeIcons.chevronDown,
+            size: 20,
+          ),
+          underline: Container(),
+          isExpanded: true,
+          onChanged: action,
+        ),
+      ),
+    );
+  }
+
+  static Widget dropdownForm(hint, value, List<DropdownMenuItem> items,
+      {action(val), validate(val)}) {
+    return Container(
+      margin: EdgeInsets.only(top: 10.0),
+      child: DropdownButtonFormField(
+        decoration: InputDecoration(
+          //suffixIcon: suffixWidget,
+          fillColor: Colors.white,
+          filled: true,
+          //errorBorder: OutlineInputBorder(),
+          border: OutlineInputBorder(
+            borderSide: BorderSide(color: primaryColor, width: 5),
+            borderRadius: BorderRadius.all(Radius.circular(25)),
+          ),
+          hintText: hint,
+          contentPadding: EdgeInsets.all(10).copyWith(left: 30),
+          hintStyle: TextStyle(color: Colors.black),
+        ),
+        value: value,
+        items: items,
+        hint: Widgets.text(hint, weight: FontWeight.bold),
+        icon: Icon(
+          FontAwesomeIcons.chevronDown,
+          size: 20,
+        ),
+        isExpanded: true,
+        onChanged: action,
         validator: validate,
       ),
     );

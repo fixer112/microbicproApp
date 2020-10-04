@@ -287,7 +287,7 @@ Future login(Map data, BuildContext context) async {
   //return ebrast;
 }
 
-Future register(Map<String, String> data, BuildContext context) async {
+Future register(Map data, BuildContext context) async {
   try {
     var main = Provider.of<MainModel>(context, listen: false);
 

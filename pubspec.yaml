@@ -37,13 +37,18 @@ dependencies:
   path_provider: any
   #hive: ^1.4.4+1
   #hive_flutter: ^0.3.0+2
+  flutter_launcher_icons: ^0.8.1
 
 dev_dependencies:
   #hive_generator: ^0.7.0+2
   #build_runner: ^1.8.1
   flutter_test:
     sdk: flutter
-
+  
+flutter_icons:
+  android: true
+  ios: true
+  image_path: assets/img/logo.jpeg
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 
