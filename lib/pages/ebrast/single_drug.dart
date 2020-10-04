@@ -50,7 +50,7 @@ class _SingleDrugState extends State<SingleDrug> {
     return Pager(
       medicine == null ? 'Medicine Not Found' : "Medicine - ${medicine.name}",
       loading
-          ? Widgets.loader()
+          ? [Widgets.loader()]
           : medicine == null
               ? [Widgets.centerText('Medicine Not Found', context)]
               : [

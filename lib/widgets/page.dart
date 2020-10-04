@@ -19,12 +19,15 @@ class Pager extends StatefulWidget {
   final Function refresh;
   final int bottomBarIndex;
 
-  Pager(this.title, this.widgets,
-      {Key key,
-      this.search = false,
-      this.willPop = true,
-      this.refresh,
-      this.bottomBarIndex = 0});
+  Pager(
+    this.title,
+    this.widgets, {
+    Key key,
+    this.search = false,
+    this.willPop = true,
+    this.refresh,
+    this.bottomBarIndex = 0,
+  });
 
   @override
   _PagerState createState() => _PagerState();

@@ -4,8 +4,11 @@ import 'package:microbicpro/model/MedicineAntiBiogramData.dart';
 import 'package:microbicpro/model/medicine.dart';
 import 'package:microbicpro/pages/ebrast/single_drug.dart';
 import 'package:microbicpro/pages/pathogens/each.dart';
+import 'package:microbicpro/provider/main.dart';
+import 'package:microbicpro/values.dart';
 import 'package:microbicpro/widgets/page.dart';
 import 'package:microbicpro/widgets/widgets.dart';
+import 'package:provider/provider.dart';
 
 class AntiBiogramDataMedicine extends StatefulWidget {
   final Medicine medicine;
@@ -19,9 +22,12 @@ class AntiBiogramDataMedicine extends StatefulWidget {
 class _AntiBiogramDataState extends State<AntiBiogramDataMedicine> {
   @override
   Widget build(BuildContext context) {
+    var main = Provider.of<MainModel>(context, listen: false);
     Medicine medicine = widget.medicine;
-    List<MedicineAntiBiogramData> antiBiogramDatas = medicine.antibiogramDatas;
-    //var main = Provider.of<MainModel>(context, listen: false);
+
+    List<MedicineAntiBiogramData> antiBiogramDatas = medicine.antibiogramDatas
+        .where((element) => element.location == main.getUser.location)
+        .toList();
     var samples = antiBiogramDatas
         .map((e) {
           return e.sample;
@@ -72,15 +78,36 @@ class _AntiBiogramDataState extends State<AntiBiogramDataMedicine> {
                             size: 15,
                             color: getColor(double.parse(
                                 antiBiogramData.percentage.toString()))),
-                        trailing: Widgets.text(
-                          '${antiBiogramData.percentage}%',
-                          size: 16,
-                          color: getColor(double.parse(
-                              antiBiogramData.percentage.toString())),
+                        trailing: Column(
+                          children: [
+                            Widgets.text(
+                              '${antiBiogramData.percentage}%',
+                              size: 16,
+                              color: getColor(double.parse(
+                                  antiBiogramData.percentage.toString())),
+                            ),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            Widgets.text('[${antiBiogramData.referenceID}]',
+                                color: Colors.blue),
+                          ],
                         )),
                   ),
                 ),
               ));
+              children.add(Widgets.header('REFERENCES'));
+              children.add(
+                Container(
+                  decoration: BoxDecoration(
+                    color: primaryColor,
+                    borderRadius: BorderRadius.circular(5),
+                  ),
+                  //color: primaryColor,
+                  padding: EdgeInsets.all(20),
+                  child: Widgets.text(medicine.reference, color: Colors.white),
+                ),
+              );
             });
 
             return Column(

@@ -35,8 +35,12 @@ dependencies:
   provider: ^4.1.0
   get: ^2.6.0
   path_provider: any
+  #hive: ^1.4.4+1
+  #hive_flutter: ^0.3.0+2
 
 dev_dependencies:
+  #hive_generator: ^0.7.0+2
+  #build_runner: ^1.8.1
   flutter_test:
     sdk: flutter
 

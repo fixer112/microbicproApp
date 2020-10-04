@@ -6,7 +6,7 @@ import 'package:microbicpro/values.dart';
 import 'package:provider/provider.dart';
 import 'provider/main.dart';
 
-void main() {
+Future<void> main() async {
   runApp(
     MultiProvider(providers: [
       ChangeNotifierProvider<MainModel>(create: (context) => MainModel()),

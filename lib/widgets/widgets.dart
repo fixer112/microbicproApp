@@ -5,16 +5,18 @@ import '../values.dart';
 
 class Widgets {
   static button(String text, Function callback,
-      {Color color, Color tcolor = Colors.black, double size = 15.0}) {
+      {Color color, Color tcolor = Colors.white, double size = 15.0}) {
     return FlatButton(
       onPressed: callback,
-      color: color,
+      color: color == null ? primaryColor : color,
+
       child: Widgets.text(text, size: size, color: tcolor),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
       //splashColor: primaryColor,
     );
   }
 
-  static text(
+  static Text text(
     String text, {
     Color color,
     double size,

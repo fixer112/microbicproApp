@@ -44,7 +44,7 @@ class _AntiBioticsState extends State<AntiBiotics> {
 
   @override
   Widget build(BuildContext context) {
-    print(ebrast.medicines);
+    //print(ebrast.medicines);
     return Pager(
       ebrast == null
           ? 'Ebrast Not Found'

@@ -27,17 +27,24 @@ class _LoginState extends State<Login> {
   @override
   void initState() {
     super.initState();
-    var main = Provider.of<MainModel>(context, listen: false);
+    //var main = Provider.of<MainModel>(context, listen: false);
+
+    //print(data.runtimeType);
     getJson().then((value) {
       if (value != null) {
-        main.setUser(User.fromMap(json.decode(value)));
-        Get.off(Home());
+        login(jsonDecode(value), context);
       }
     });
   }
 
   @override
   Widget build(BuildContext context) {
+    getJson().then((value) {
+      if (value != null) {
+        print(jsonDecode(value));
+        login(jsonDecode(value), context);
+      }
+    });
     return Scaffold(
       body: Center(
         child: ListView(

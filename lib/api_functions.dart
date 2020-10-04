@@ -4,8 +4,10 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart';
+import 'package:microbicpro/functions.dart';
 import 'package:microbicpro/model/Ebrast.dart';
 import 'package:microbicpro/model/medicine.dart';
+import 'package:microbicpro/model/user.dart';
 import 'package:microbicpro/pages/auth/login.dart';
 import 'package:microbicpro/pages/home.dart';
 import 'package:microbicpro/provider/main.dart';
@@ -257,7 +259,7 @@ Future<Ebrast> getEbrast(int id, BuildContext context) async {
   return ebrast;
 }
 
-Future login(Map<String, String> data, BuildContext context) async {
+Future login(Map data, BuildContext context) async {
   try {
     var main = Provider.of<MainModel>(context, listen: false);
 
@@ -267,9 +269,42 @@ Future login(Map<String, String> data, BuildContext context) async {
     });
     var body = json.decode(response.body);
     print('Response status: ${response.statusCode}');
+    //print('Response body: ${body}');
+
+    request(response, () async {
+      main.setUser(User.fromMap(body));
+      //await updateBox('credentials', Map<String, dynamic>.from(data));
+      saveJson(jsonEncode(data));
+      //print(data);
+      Get.off(Home());
+    }, context);
+  } on SocketException {
+    Widgets.snackbar('Please Connect to the internet');
+  } catch (e) {
+    print(e);
+    Widgets.snackbar('An Error Occured');
+  }
+  //return ebrast;
+}
+
+Future register(Map<String, String> data, BuildContext context) async {
+  try {
+    var main = Provider.of<MainModel>(context, listen: false);
+
+    var link = '$url/api/register';
+    var response = await http.post(link, body: data, headers: {
+      'Accept': 'application/json',
+    });
+    var body = json.decode(response.body);
+    print('Response status: ${response.statusCode}');
     print('Response body: ${body}');
 
-    request(response, () => Get.off(Home()), context);
+    request(response, () {
+      main.setUser(User.fromMap(body));
+      saveJson(json.encode(data));
+
+      Get.off(Home());
+    }, context);
   } on SocketException {
     Widgets.snackbar('Please Connect to the internet');
   } catch (e) {

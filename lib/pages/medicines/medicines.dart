@@ -36,6 +36,8 @@ class _MedicinesState extends State<Medicines> {
 
   @override
   Widget build(BuildContext context) {
+    var main = Provider.of<MainModel>(context, listen: false);
+    //print(main.getUser.toJson());
     return loading
         ? Widgets.loader()
         : Consumer<MainModel>(builder: (context, main, child) {
