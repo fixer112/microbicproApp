@@ -40,6 +40,7 @@ class _DiseaseTreatmentState extends State<DiseaseTreatment> {
         ? Widgets.loader()
         : Consumer<MainModel>(builder: (context, main, child) {
             var diseases = main.diseases;
+            diseases.sort((a, b) => a.name.compareTo(b.name));
             List<String> categories =
                 diseases.map((e) => e.category).toList().toSet().toList();
 

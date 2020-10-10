@@ -22,18 +22,20 @@ class Disease {
   });
 
   factory Disease.fromMap(Map data) {
-    return Disease(
+    var disease = Disease(
       id: data['id'],
       name: data['name'],
-      overview: data['overview'],
-      location: data['location'],
-      category: data['category'],
-      treatmentObjectives: data['treatment_objectives'],
-      features: data['features'],
+      overview: data['overview'] ?? '',
+      location: data['location'] ?? '',
+      category: data['category'] ?? '',
+      treatmentObjectives: data['treatment_objectives'] ?? '',
+      features: data['features'] ?? '',
       drugManagements: List<DrugManagement>.from(
               data['drug_managements'].map((i) => DrugManagement.fromMap(i)))
           .toList(),
     );
+    //disease.drugManagements.sort((a, b) => a. .compareTo(b.name));
+    return disease;
   }
 
   Map<String, dynamic> toJson() => {

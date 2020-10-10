@@ -16,10 +16,10 @@ class Ebrast {
   factory Ebrast.fromMap(Map data) {
     return Ebrast(
       id: data['id'],
-      diseases: data['diseases'],
-      medicines: data['medicines'],
-      location: data['location'],
-      sample: data['sample'],
+      diseases: data['diseases'] ?? '',
+      medicines: data['medicines'] ?? '',
+      location: data['location'] ?? '',
+      sample: data['sample'] ?? '',
     );
   }
 

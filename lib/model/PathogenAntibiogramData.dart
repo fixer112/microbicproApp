@@ -25,15 +25,16 @@ class PathogenAntibiogramData {
 
   factory PathogenAntibiogramData.fromMap(Map data) {
     return PathogenAntibiogramData(
-        id: data['pivot']['id'],
-        isolateNumber: data['pivot']['isolate_number'],
-        year: data['pivot']['year'],
-        percentage: data['pivot']['percentage'],
-        medicineId: int.parse(data['pivot']['medicine_id']),
-        medicineName: data['name'],
-        sample: data['pivot']['sample'],
-        referenceID: data['pivot']['reference_id'],
-        location: data['pivot']['location']);
+      id: data['pivot']['id'],
+      isolateNumber: data['pivot']['isolate_number'] ?? '',
+      year: data['pivot']['year'] ?? '',
+      percentage: data['pivot']['percentage'] ?? '',
+      medicineId: int.parse(data['pivot']['medicine_id']),
+      medicineName: data['name'] ?? '',
+      sample: data['pivot']['sample'] ?? '',
+      referenceID: int.parse(data['pivot']['reference_id'].toString()),
+      location: data['pivot']['location'] ?? '',
+    );
   }
   Map<String, dynamic> toJson() => {
         'pivot': {

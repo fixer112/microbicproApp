@@ -34,7 +34,7 @@ Future<List<Pathogen>> getPathogens(BuildContext context) async {
     print('Response body: ${body}');
     pathogens =
         List<Pathogen>.from(body.map((i) => Pathogen.fromMap(i)).toList());
-
+    pathogens.sort((a, b) => a.name.compareTo(b.name));
     main.setPathogens(pathogens);
   } on SocketException {
     Widgets.snackbar('Please Connect to the internet');
@@ -95,6 +95,7 @@ Future<List<Medicine>> getMedicines(BuildContext context) async {
     medicines =
         List<Medicine>.from(body.map((i) => Medicine.fromMap(i)).toList());
 
+    medicines.sort((a, b) => a.name.compareTo(b.name));
     main.setMedicines(medicines);
   } on SocketException {
     Widgets.snackbar('Please Connect to the internet');
@@ -154,7 +155,7 @@ Future<List<Disease>> getDiseases(BuildContext context) async {
     print('Response status: ${response.statusCode}');
     print('Response body: ${body}');
     diseases = List<Disease>.from(body.map((i) => Disease.fromMap(i)).toList());
-
+    diseases.sort((a, b) => a.name.compareTo(b.name));
     main.setDiseases(diseases);
   } on SocketException {
     Widgets.snackbar('Please Connect to the internet');
@@ -214,7 +215,7 @@ Future<List<Ebrast>> getEbrasts(BuildContext context, {String location}) async {
     print('Response status: ${response.statusCode}');
     print('Response body: ${body}');
     ebrasts = List<Ebrast>.from(body.map((i) => Ebrast.fromMap(i)).toList());
-
+    ebrasts.sort((a, b) => a.location.compareTo(b.location));
     main.setEbrasts(ebrasts);
   } on SocketException {
     Widgets.snackbar('Please Connect to the internet');

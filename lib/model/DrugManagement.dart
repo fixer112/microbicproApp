@@ -30,17 +30,17 @@ class DrugManagement {
   factory DrugManagement.fromMap(Map data) {
     return DrugManagement(
       diseaseId: int.parse(data['disease_id'].toString()),
-      type: data['type'],
-      stage: data['stage'],
-      strength: data['strength'],
-      interval: data['interval'],
-      duration: data['duration'],
-      root: data['root'],
-      cLass: data['class'],
-      alternative: data['alternative'],
+      type: data['type'] ?? '',
+      stage: data['stage'] ?? '',
+      strength: data['strength'] ?? '',
+      interval: data['interval'] ?? '',
+      duration: data['duration'] ?? '',
+      root: data['root'] ?? '',
+      cLass: data['class'] ?? '',
+      alternative: data['alternative'] ?? '',
       medicineId: int.parse(data['medicine_id'].toString()),
       id: int.parse(data['id'].toString()),
-      category: data['category'],
+      category: data['category'] ?? '',
     );
   }
 

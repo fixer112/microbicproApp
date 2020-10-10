@@ -29,13 +29,13 @@ class Pathogen {
     return Pathogen(
         id: data['id'],
         name: data['name'],
-        overview: data['overview'],
-        epidemiology: data['epidemiology'],
-        spectrum: data['spectrum'],
+        overview: data['overview'] ?? '',
+        epidemiology: data['epidemiology'] ?? '',
+        spectrum: data['spectrum'] ?? '',
         //location: data['location'],
         diseases: data['diseases'] ?? [],
         precautions: data['precausions'] ?? [],
-        reference: data['reference'],
+        reference: data['reference'] ?? '',
         antibiogramDatas: List<PathogenAntibiogramData>.from(data['medicines']
             .map((i) => PathogenAntibiogramData.fromMap(i))
             .toList()));
