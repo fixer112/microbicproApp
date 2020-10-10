@@ -25,7 +25,7 @@ class PathogenAntibiogramData {
 
   factory PathogenAntibiogramData.fromMap(Map data) {
     return PathogenAntibiogramData(
-      id: data['pivot']['id'],
+      id: int.parse(data['pivot']['id'].toString()),
       isolateNumber: data['pivot']['isolate_number'] ?? '',
       year: data['pivot']['year'] ?? '',
       percentage: data['pivot']['percentage'] ?? '',

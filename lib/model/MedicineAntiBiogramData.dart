@@ -25,7 +25,7 @@ class MedicineAntiBiogramData {
 
   factory MedicineAntiBiogramData.fromMap(Map data) {
     return MedicineAntiBiogramData(
-      id: data['pivot']['id'],
+      id: int.parse(data['pivot']['id'].toString()),
       isolateNumber: data['pivot']['isolate_number'] ?? '',
       year: data['pivot']['year'] ?? '',
       percentage: data['pivot']['percentage'] ?? '',
