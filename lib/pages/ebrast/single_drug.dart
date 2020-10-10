@@ -54,6 +54,22 @@ class _SingleDrugState extends State<SingleDrug> {
           : medicine == null
               ? [Widgets.centerText('Medicine Not Found', context)]
               : [
+                  Container(
+                    child: Center(
+                      child: Padding(
+                        padding: const EdgeInsets.all(25.0),
+                        child: Widgets.text(
+                            "W.H.O recommended ${medicine.type} antibiotic",
+                            color: Colors.white,
+                            size: 15,
+                            weight: FontWeight.bold),
+                      ),
+                    ),
+                    decoration: BoxDecoration(
+                      color: getTypeColor(medicine.type),
+                      borderRadius: BorderRadius.all(Radius.circular(15)),
+                    ),
+                  ),
                   Widgets.header('ANTIMICROBIAL SPECTRUM'),
                   Widgets.collapsible('Ideal Spectrum', [
                     Widgets.text(medicine.spectrum),
@@ -107,5 +123,20 @@ class _SingleDrugState extends State<SingleDrug> {
                 ],
       search: false,
     );
+  }
+
+  Color getTypeColor(String type) {
+    if (type == 'reserve') {
+      return Colors.red;
+    }
+    if (type == 'aware') {
+      return Colors.green;
+    }
+
+    if (type == 'watch') {
+      return Colors.yellow[600];
+    }
+
+    return Colors.blue;
   }
 }

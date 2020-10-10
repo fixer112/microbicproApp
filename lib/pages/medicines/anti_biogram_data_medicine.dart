@@ -49,6 +49,7 @@ class _AntiBiogramDataState extends State<AntiBiogramDataMedicine> {
           height: 20,
         ),
         Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Column(
               children: List.generate(samples.length, (inx) {

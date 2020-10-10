@@ -52,6 +52,7 @@ class _AntiBiogramDataState extends State<AntiBiogramDataPathogen> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: List.generate(samples.length, (inx) {
                 var datas = antiBiogramDatas
                     .where((data) => data.sample == samples[inx])
