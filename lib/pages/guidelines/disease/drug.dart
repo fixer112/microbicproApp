@@ -85,7 +85,7 @@ class _DrugManagementState extends State<DrugManagement> {
                         : [
                             Container(
                               padding: EdgeInsets.all(10),
-                              child: ListView(children: [
+                              child: ListView(shrinkWrap: true, children: [
                                 ExpansionPanelList(
                                   expansionCallback: (index, isExpanded) {
                                     setState(() {
@@ -135,6 +135,8 @@ class _DrugManagementState extends State<DrugManagement> {
                                                   .toSet()
                                                   .toList();
                                               return Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.stretch,
                                                 children: [
                                                   Widgets.header(stages[index]
                                                       .toUpperCase()),

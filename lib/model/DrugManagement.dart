@@ -37,7 +37,9 @@ class DrugManagement {
       duration: data['duration'] ?? '',
       root: data['root'] ?? '',
       cLass: data['class'] ?? '',
-      alternative: data['alternative'] ?? '',
+      alternative: data['alternative'] != null
+          ? int.parse(data['alternative'].toString())
+          : '',
       medicineId: int.parse(data['medicine_id'].toString()),
       id: int.parse(data['id'].toString()),
       category: data['category'] ?? '',

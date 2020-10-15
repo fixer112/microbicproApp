@@ -143,26 +143,26 @@ Future<Medicine> getMedicine(int id, BuildContext context) async {
 
 Future<List<Disease>> getDiseases(BuildContext context) async {
   List<Disease> diseases;
-  try {
-    var main = Provider.of<MainModel>(context, listen: false);
+  //try {
+  var main = Provider.of<MainModel>(context, listen: false);
 
-    var link = '$url/api/diseases';
-    //link = location != null ? "$link/?location=$location" : link;
-    var response = await http.get(link, headers: {
-      'Accept': 'application/json',
-    });
-    var body = json.decode(response.body);
-    print('Response status: ${response.statusCode}');
-    print('Response body: ${body}');
-    diseases = List<Disease>.from(body.map((i) => Disease.fromMap(i)).toList());
-    diseases.sort((a, b) => a.name.compareTo(b.name));
-    main.setDiseases(diseases);
-  } on SocketException {
+  var link = '$url/api/diseases';
+  //link = location != null ? "$link/?location=$location" : link;
+  var response = await http.get(link, headers: {
+    'Accept': 'application/json',
+  });
+  var body = json.decode(response.body);
+  print('Response status: ${response.statusCode}');
+  print('Response body: ${body}');
+  diseases = List<Disease>.from(body.map((i) => Disease.fromMap(i)).toList());
+  diseases.sort((a, b) => a.name.compareTo(b.name));
+  main.setDiseases(diseases);
+  /* } on SocketException {
     Widgets.snackbar('Please Connect to the internet');
   } catch (e) {
     print(e);
     Widgets.snackbar('An Error Occured');
-  }
+  } */
   return diseases;
 }
 
