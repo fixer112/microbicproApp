@@ -129,7 +129,7 @@ class _SingleDrugState extends State<SingleDrug> {
     if (type == 'reserve') {
       return Colors.red;
     }
-    if (type == 'aware') {
+    if (type == 'access') {
       return Colors.green;
     }
 
