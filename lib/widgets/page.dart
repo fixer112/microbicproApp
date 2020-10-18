@@ -95,7 +95,7 @@ class _PagerState extends State<Pager> {
                       begin: Alignment.topLeft,
                       end: Alignment.bottomRight,
                     )),
-                label: 'Guidelines',
+                title: Widgets.text('Guidelines', color: Colors.black),
               ),
               BottomNavigationBarItem(
                 icon: Widgets.gradienticon(
@@ -109,7 +109,7 @@ class _PagerState extends State<Pager> {
                       begin: Alignment.topLeft,
                       end: Alignment.bottomRight,
                     )),
-                label: 'Pathogens',
+                title: Widgets.text('Pathogens', color: Colors.black),
               ),
               BottomNavigationBarItem(
                 icon: Widgets.gradienticon(
@@ -123,7 +123,7 @@ class _PagerState extends State<Pager> {
                       begin: Alignment.topLeft,
                       end: Alignment.bottomRight,
                     )),
-                label: 'Medicines',
+                title: Widgets.text('Medicines', color: Colors.black),
               ),
               BottomNavigationBarItem(
                 icon: Widgets.gradienticon(
@@ -137,7 +137,7 @@ class _PagerState extends State<Pager> {
                       begin: Alignment.topLeft,
                       end: Alignment.bottomRight,
                     )),
-                label: 'Ebrast',
+                title: Widgets.text('Ebrast', color: Colors.black),
               ),
               BottomNavigationBarItem(
                 icon: Widgets.gradienticon(
@@ -151,7 +151,7 @@ class _PagerState extends State<Pager> {
                       begin: Alignment.topLeft,
                       end: Alignment.bottomRight,
                     )),
-                label: 'Profile',
+                title: Widgets.text('Profile', color: Colors.black),
               ),
             ],
             onTap: (index) {
