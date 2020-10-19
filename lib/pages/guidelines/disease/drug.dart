@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:microbicpro/model/disease.dart';
 import 'package:microbicpro/model/medicine.dart';
+import 'package:microbicpro/pages/ebrast/single_drug.dart';
 import 'package:microbicpro/provider/main.dart';
 import 'package:microbicpro/widgets/page.dart';
 import 'package:microbicpro/widgets/widgets.dart';
@@ -204,10 +206,13 @@ class _DrugManagementState extends State<DrugManagement> {
                                                                                       title: Text('Medicine Not Found'),
                                                                                     ),
                                                                                   )
-                                                                                : Card(
-                                                                                    child: Container(
-                                                                                      padding: EdgeInsets.all(15),
-                                                                                      child: Widgets.text('${medicine.name} ${drug.strength} ${drug.interval} for ${drug.duration}'),
+                                                                                : InkWell(
+                                                                                    onTap: () => Get.to(SingleDrug(medicine.id)),
+                                                                                    child: Card(
+                                                                                      child: Container(
+                                                                                        padding: EdgeInsets.all(15),
+                                                                                        child: Widgets.text('${medicine.name} ${drug.strength} ${drug.interval} for ${drug.duration}'),
+                                                                                      ),
                                                                                     ),
                                                                                   );
                                                                           }))

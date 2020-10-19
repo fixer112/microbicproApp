@@ -57,7 +57,7 @@ class _EachPathogenState extends State<EachPathogen> {
                     Widgets.collapsible('Overview', [
                       Widgets.text(pathogen.overview),
                     ]),
-                    Widgets.collapsible('Epidermology', [
+                    Widgets.collapsible('Epidemiology', [
                       Widgets.text(pathogen.epidemiology),
                     ]),
                     Widgets.collapsible('Diseases', [
