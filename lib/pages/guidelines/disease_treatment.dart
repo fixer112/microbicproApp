@@ -43,6 +43,7 @@ class _DiseaseTreatmentState extends State<DiseaseTreatment> {
             diseases.sort((a, b) => a.name.compareTo(b.name));
             List<String> categories =
                 diseases.map((e) => e.category).toList().toSet().toList();
+            categories.sort((a, b) => a.compareTo(b));
 
             return Pager(
               'Disease Treatment Guidelines',
@@ -53,6 +54,7 @@ class _DiseaseTreatmentState extends State<DiseaseTreatment> {
                           .where((element) =>
                               element.category == categories[index])
                           .toList();
+
                       return Column(
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [

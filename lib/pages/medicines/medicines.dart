@@ -9,6 +9,8 @@ import 'package:microbicpro/widgets/widgets.dart';
 import 'package:provider/provider.dart';
 
 class Medicines extends StatefulWidget {
+  final String type;
+  Medicines({this.type});
   @override
   _MedicinesState createState() => _MedicinesState();
 }
@@ -36,14 +38,18 @@ class _MedicinesState extends State<Medicines> {
 
   @override
   Widget build(BuildContext context) {
-    var main = Provider.of<MainModel>(context, listen: false);
-    //print(main.getUser.toJson());
     return loading
         ? Widgets.loader()
         : Consumer<MainModel>(builder: (context, main, child) {
             var medicines = main.getMedicines;
+            if (widget.type != null) {
+              medicines = medicines
+                  .where((element) => element.type == widget.type)
+                  .toList();
+            }
+            var type = widget.type ?? '';
             return Pager(
-              'Medicines',
+              '${type.toUpperCase()} Medicines',
               medicines.isEmpty
                   ? [Widgets.centerText('No Medicine Available', context)]
                   : List.generate(medicines.length, (index) {

@@ -260,7 +260,7 @@ Future<Ebrast> getEbrast(int id, BuildContext context) async {
   return ebrast;
 }
 
-Future login(Map data, BuildContext context) async {
+Future login(Map data, BuildContext context, {refresh: false}) async {
   try {
     var main = Provider.of<MainModel>(context, listen: false);
 
@@ -277,7 +277,8 @@ Future login(Map data, BuildContext context) async {
       //await updateBox('credentials', Map<String, dynamic>.from(data));
       saveJson(jsonEncode(data));
       //print(data);
-      Get.off(Home());
+
+      if (!refresh) Get.off(Home());
     }, context);
   } on SocketException {
     Widgets.snackbar('Please Connect to the internet');
@@ -305,6 +306,32 @@ Future register(Map data, BuildContext context) async {
       saveJson(json.encode(data));
 
       Get.off(Home());
+    }, context);
+  } on SocketException {
+    Widgets.snackbar('Please Connect to the internet');
+  } catch (e) {
+    print(e);
+    Widgets.snackbar('An Error Occured');
+  }
+  //return ebrast;
+}
+
+Future changeLocation(String location, BuildContext context) async {
+  try {
+    var main = Provider.of<MainModel>(context, listen: false);
+
+    var link =
+        '$url/api/user/${main.getUser.id}/location?api_token=${main.getUser.apiToken}';
+    var response = await http.post(link, body: location, headers: {
+      'Accept': 'application/json',
+    });
+
+    print('Response status: ${response.statusCode}');
+
+    request(response, () async {
+      var data = await getJson();
+      Widgets.snackbar('Location changed');
+      await login(jsonDecode(data), context, refresh: true);
     }, context);
   } on SocketException {
     Widgets.snackbar('Please Connect to the internet');

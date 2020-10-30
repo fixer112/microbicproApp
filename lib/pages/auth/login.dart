@@ -1,16 +1,12 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:microbicpro/api_functions.dart';
 import 'package:microbicpro/functions.dart';
-import 'package:microbicpro/model/user.dart';
 import 'package:microbicpro/pages/auth/register.dart';
-import 'package:microbicpro/pages/home.dart';
-import 'package:microbicpro/provider/main.dart';
 import 'package:microbicpro/values.dart';
 import 'package:microbicpro/widgets/widgets.dart';
-import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class Login extends StatefulWidget {
   @override
@@ -39,12 +35,12 @@ class _LoginState extends State<Login> {
 
   @override
   Widget build(BuildContext context) {
-    getJson().then((value) {
+    /* getJson().then((value) {
       if (value != null) {
         print(jsonDecode(value));
         login(jsonDecode(value), context);
       }
-    });
+    }); */
     return Scaffold(
       body: Center(
         child: ListView(
@@ -57,8 +53,8 @@ class _LoginState extends State<Login> {
                 child: Column(
                   children: [
                     Container(
-                      width: 150,
-                      child: Image.asset('assets/img/logo.jpeg'),
+                      width: 100,
+                      child: Image.asset('assets/img/logo.png'),
                     ),
                     SizedBox(
                       height: 30,
@@ -138,6 +134,27 @@ class _LoginState extends State<Login> {
                                 MaterialPageRoute(
                                   builder: (context) => Register(),
                                 ));
+                          },
+                        ),
+                      ],
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Widgets.text('Forgot Password? '),
+                        InkWell(
+                          child: Widgets.text('Change Password',
+                              color: primaryColor),
+                          onTap: () async {
+                            var link = "$url/password/reset";
+                            if (await canLaunch(link)) {
+                              await launch(link);
+                            } else {
+                              Widgets.snackbar('Error loading link');
+                            }
                           },
                         ),
                       ],

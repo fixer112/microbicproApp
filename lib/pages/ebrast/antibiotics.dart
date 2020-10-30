@@ -44,7 +44,7 @@ class _AntiBioticsState extends State<AntiBiotics> {
 
   @override
   Widget build(BuildContext context) {
-    //print(ebrast.medicines);
+    //print(ebrast.medicines[0]['pivot']);
     return Pager(
       ebrast == null
           ? 'Ebrast Not Found'
@@ -85,7 +85,8 @@ class _AntiBioticsState extends State<AntiBiotics> {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => SingleDrug(1)));
+                                    builder: (context) =>
+                                        SingleDrug(medicine['id'])));
                           },
                           leading: Icon(
                             FontAwesomeIcons.squareFull,

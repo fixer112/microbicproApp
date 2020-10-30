@@ -39,18 +39,29 @@ class Widgets {
     );
   }
 
-  static collapsible(String title, List<Widget> widgets) {
+  static Widget collapsible(String title, List<Widget> widgets) {
     return Card(
       child: Container(
         padding: EdgeInsets.all(10),
-        child: ExpandablePanel(
-          header: Container(
-            padding: EdgeInsets.only(top: 8),
-            child: Widgets.text(title, size: 17, weight: FontWeight.w600),
-          ),
-          expanded: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: widgets,
+        child: ExpandableNotifier(
+          child: ScrollOnExpand(
+            scrollOnExpand: true,
+            scrollOnCollapse: false,
+            child: ExpandablePanel(
+              header: Container(
+                padding: EdgeInsets.only(top: 8),
+                child: Widgets.text(title, size: 17, weight: FontWeight.w600),
+              ),
+              expanded: ListView(
+                shrinkWrap: true,
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: widgets,
+                  ),
+                ],
+              ),
+            ),
           ),
         ),
       ),
@@ -76,7 +87,7 @@ class Widgets {
     );
   }
 
-  static header(String title) {
+  static Widget header(String title) {
     return Container(
       //width: MediaQuery.of(context).size.width,
       child: Widgets.text(title, size: 20),

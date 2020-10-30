@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:microbicpro/pages/auth/login.dart';
-import 'package:microbicpro/pages/home.dart';
 import 'package:microbicpro/widgets/widgets.dart';
 
 import '../values.dart';
@@ -28,42 +27,21 @@ class _SplashState extends State<Splash> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      body: SafeArea(
-          child: Padding(
-        padding: EdgeInsets.all(30),
-        child: Row(
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          //mainAxisSize: MainAxisSize.max,
+          //crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Expanded(
-                child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              mainAxisSize: MainAxisSize.max,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Container(
-                  width: 250,
-                  child: Image.asset('assets/img/logo.jpeg'),
-                ),
-                /*
-
-                SizedBox(height: 20,),*/
-                /* Widgets.text('MicrobicPro',
-                    size: 40,
-                    color: primaryColor,
-                    weight: FontWeight.bold,
-                    align: TextAlign.center,
-                    family: 'PicedownBl'), */
-
-                //Image.asset('assets/img/logo.jpeg'),
-                SizedBox(
-                  height: 10,
-                ),
-                Widgets.text('Promoting Rational Use of Antimicrobials',
-                    color: primaryColor, style: FontStyle.italic),
-              ],
-            )),
+            Container(
+              width: 150,
+              child: Image.asset('assets/img/logo.png'),
+            ),
+            Widgets.text('Promoting Rational Use of Antimicrobials',
+                color: primaryColor, style: FontStyle.italic, size: 12),
           ],
         ),
-      )),
+      ),
     );
   }
 }

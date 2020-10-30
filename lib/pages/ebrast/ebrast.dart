@@ -70,7 +70,7 @@ class _EbrastState extends State<Ebrast> {
                   padding: EdgeInsets.all(20),
                   margin: EdgeInsets.symmetric(vertical: 30),
                   child: Widgets.text(
-                      'THIS DECISION SUPPORT TOOL IS BASED ON ANTIBIOTIC SUSCEPTABILITY OF PATHOGENS AND THEIR PREVALENCE',
+                      'THIS DECISION SUPPORT TOOL IS BASED ON ANTIBIOTIC SUSCEPTIBILITY OF PATHOGENS AND THEIR PREVALENCE',
                       size: 16,
                       color: Color(0xff0c5460)),
                 ),

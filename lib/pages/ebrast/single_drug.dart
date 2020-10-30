@@ -59,7 +59,7 @@ class _SingleDrugState extends State<SingleDrug> {
                       child: Padding(
                         padding: const EdgeInsets.all(25.0),
                         child: Widgets.text(
-                            "W.H.O recommended ${medicine.type} antibiotic",
+                            "W.H.O recommended ${medicine.type.toUpperCase()} antibiotic",
                             color: Colors.white,
                             size: 15,
                             weight: FontWeight.bold),
