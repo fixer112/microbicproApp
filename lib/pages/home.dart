@@ -23,7 +23,7 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  bool loading = false;
+  bool loading = true;
   @override
   void initState() {
     super.initState();

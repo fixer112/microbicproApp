@@ -49,5 +49,6 @@ Future<Null> removeJson({String fileName = 'user.json'}) async {
 
 logout() {
   removeJson();
+  removeJson(fileName: 'users.json');
   Get.off(Login());
 }

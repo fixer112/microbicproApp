@@ -48,7 +48,7 @@ class _LoginState extends State<Login> {
         data = jsonDecode(data);
         User user = User.fromMap(data);
         main.setUser(user);
-        if (main.getUser != null) Get.to(Home());
+        if (main.getUser != null) Get.off(Home());
       }
       setState(() {
         loading = false;
