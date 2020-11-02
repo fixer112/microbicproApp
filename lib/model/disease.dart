@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:microbicpro/model/DrugManagement.dart';
 
 class Disease {
@@ -30,9 +32,10 @@ class Disease {
       category: data['category'] ?? '',
       treatmentObjectives: data['treatment_objectives'] ?? '',
       features: data['features'] ?? '',
-      drugManagements: List<DrugManagement>.from(
-              data['drug_managements'].map((i) => DrugManagement.fromMap(i)))
-          .toList(),
+      drugManagements: data['drug_managements'] != null
+          ? List<DrugManagement>.from(data['drug_managements']
+              .map((i) => DrugManagement.fromMap(i))).toList()
+          : [],
     );
     //disease.drugManagements.sort((a, b) => a. .compareTo(b.name));
     return disease;
@@ -46,6 +49,6 @@ class Disease {
         'features': features,
         'treatment_objectives': treatmentObjectives,
         'category': category,
-        'drug_managements': drugManagements,
+        'drug_managements': jsonEncode(drugManagements),
       };
 }

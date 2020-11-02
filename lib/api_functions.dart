@@ -36,6 +36,7 @@ Future<List<Pathogen>> getPathogens(BuildContext context) async {
         List<Pathogen>.from(body.map((i) => Pathogen.fromMap(i)).toList());
     pathogens.sort((a, b) => a.name.compareTo(b.name));
     main.setPathogens(pathogens);
+    saveJson(jsonEncode(pathogens), fileName: 'pathogens.json');
   } on SocketException {
     Widgets.snackbar('Please Connect to the internet');
   } catch (e) {
@@ -71,6 +72,7 @@ Future<Pathogen> getPathogen(int id, BuildContext context) async {
 
     oldPathogens.add(pathogen);
     main.setPathogens(oldPathogens);
+    saveJson(jsonEncode(oldPathogens), fileName: 'pathogens.json');
   } on SocketException {
     Widgets.snackbar('Please Connect to the internet');
   } catch (e) {
@@ -97,6 +99,7 @@ Future<List<Medicine>> getMedicines(BuildContext context) async {
 
     medicines.sort((a, b) => a.name.compareTo(b.name));
     main.setMedicines(medicines);
+    saveJson(jsonEncode(medicines), fileName: 'medicines.json');
   } on SocketException {
     Widgets.snackbar('Please Connect to the internet');
   } catch (e) {
@@ -132,6 +135,7 @@ Future<Medicine> getMedicine(int id, BuildContext context) async {
 
     oldMedicines.add(medicine);
     main.setMedicines(oldMedicines);
+    saveJson(jsonEncode(oldMedicines), fileName: 'medicines.json');
   } on SocketException {
     Widgets.snackbar('Please Connect to the internet');
   } catch (e) {
@@ -157,6 +161,7 @@ Future<List<Disease>> getDiseases(BuildContext context) async {
   diseases = List<Disease>.from(body.map((i) => Disease.fromMap(i)).toList());
   diseases.sort((a, b) => a.name.compareTo(b.name));
   main.setDiseases(diseases);
+  saveJson(jsonEncode(diseases), fileName: 'diseases.json');
   /* } on SocketException {
     Widgets.snackbar('Please Connect to the internet');
   } catch (e) {
@@ -192,6 +197,7 @@ Future<Disease> getDisease(int id, BuildContext context) async {
 
     oldDiseases.add(disease);
     main.setDiseases(oldDiseases);
+    saveJson(jsonEncode(oldDiseases), fileName: 'diseases.json');
   } on SocketException {
     Widgets.snackbar('Please Connect to the internet');
   } catch (e) {
@@ -217,6 +223,7 @@ Future<List<Ebrast>> getEbrasts(BuildContext context, {String location}) async {
     ebrasts = List<Ebrast>.from(body.map((i) => Ebrast.fromMap(i)).toList());
     ebrasts.sort((a, b) => a.location.compareTo(b.location));
     main.setEbrasts(ebrasts);
+    saveJson(jsonEncode(ebrasts), fileName: 'ebrasts.json');
   } on SocketException {
     Widgets.snackbar('Please Connect to the internet');
   } catch (e) {
@@ -251,6 +258,8 @@ Future<Ebrast> getEbrast(int id, BuildContext context) async {
     }
     oldEbrasts.add(ebrast);
     main.setEbrasts(oldEbrasts);
+
+    saveJson(jsonEncode(oldEbrasts), fileName: 'ebrasts.json');
   } on SocketException {
     Widgets.snackbar('Please Connect to the internet');
   } catch (e) {
@@ -270,12 +279,16 @@ Future login(Map data, BuildContext context, {refresh: false}) async {
     });
     var body = json.decode(response.body);
     print('Response status: ${response.statusCode}');
-    //print('Response body: ${body}');
+    print('Response body: ${body}');
 
     request(response, () async {
-      main.setUser(User.fromMap(body));
-      //await updateBox('credentials', Map<String, dynamic>.from(data));
+      var user = User.fromMap(body);
+      main.setUser(user);
+
       saveJson(jsonEncode(data));
+      saveJson(jsonEncode(user), fileName: 'users.json');
+
+      //await updateBox('credentials', Map<String, dynamic>.from(data));
       //print(data);
 
       if (!refresh) Get.off(Home());
@@ -301,11 +314,12 @@ Future register(Map data, BuildContext context) async {
     print('Response status: ${response.statusCode}');
     print('Response body: ${body}');
 
-    request(response, () {
+    request(response, () async {
       main.setUser(User.fromMap(body));
       saveJson(json.encode(data));
+      await login(data, context);
 
-      Get.off(Home());
+      //Get.off(Home());
     }, context);
   } on SocketException {
     Widgets.snackbar('Please Connect to the internet');
@@ -322,16 +336,18 @@ Future changeLocation(String location, BuildContext context) async {
 
     var link =
         '$url/api/user/${main.getUser.id}/location?api_token=${main.getUser.apiToken}';
-    var response = await http.post(link, body: location, headers: {
+    var response = await http.post(link, body: {
+      'location': location
+    }, headers: {
       'Accept': 'application/json',
     });
 
     print('Response status: ${response.statusCode}');
 
     request(response, () async {
-      var data = await getJson();
+      //var data = await getJson();
+      //await login(jsonDecode(data), context, refresh: true);
       Widgets.snackbar('Location changed');
-      await login(jsonDecode(data), context, refresh: true);
     }, context);
   } on SocketException {
     Widgets.snackbar('Please Connect to the internet');

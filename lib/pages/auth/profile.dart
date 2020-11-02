@@ -33,9 +33,9 @@ class _ProfileState extends State<Profile> {
         Consumer<MainModel>(builder: (context, main, child) {
           User user = main.getUser;
           location() async {
+            String _location;
             bool loading = false;
 
-            String _location = user.location;
             var locationList = user.settings['locations'];
             locationList.sort();
             List<DropdownMenuItem<String>> locations = List.generate(
@@ -46,55 +46,65 @@ class _ProfileState extends State<Profile> {
               ),
             );
             if (!user.settings['hospitals'].contains(user.location)) {
-              Widget widget = Padding(
-                padding: EdgeInsets.all(15),
-                child: Container(
-                  height: 150,
-                  child: Column(
-                    //crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      //Widgets.header('Change Location'),
-                      Card(
-                        //margin: EdgeInsets.symmetric(vertical: 30, horizontal: 20),
-                        child: Container(
-                          //padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-                          child: DropdownButton(
-                            value: _location,
-                            items: locations,
-                            hint: Widgets.text('Select Location',
-                                weight: FontWeight.bold),
-                            icon: Icon(
-                              FontAwesomeIcons.chevronDown,
-                              size: 20,
+              Widget widget = StatefulBuilder(builder: (BuildContext context,
+                  StateSetter setState /*You can rename this!*/) {
+                return Padding(
+                  padding: EdgeInsets.all(15),
+                  child: Container(
+                    height: 150,
+                    child: Column(
+                      //crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        //Widgets.header('Change Location'),
+                        Card(
+                          //margin: EdgeInsets.symmetric(vertical: 30, horizontal: 20),
+                          child: Container(
+                            //padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+                            child: DropdownButton(
+                              value:
+                                  _location == null ? user.location : _location,
+                              items: locations,
+                              hint: Widgets.text('Select Location',
+                                  weight: FontWeight.bold),
+                              icon: Icon(
+                                FontAwesomeIcons.chevronDown,
+                                size: 20,
+                              ),
+                              underline: Container(),
+                              isExpanded: true,
+                              onChanged: (val) {
+                                setState(() {
+                                  _location = val;
+                                  print(_location);
+                                });
+                              },
                             ),
-                            underline: Container(),
-                            isExpanded: true,
-                            onChanged: (val) {
-                              setState(() {
-                                _location = val;
-                              });
-                            },
                           ),
                         ),
-                      ),
-                      SizedBox(
-                        height: 20,
-                      ),
-                      loading
-                          ? Widgets.loader()
-                          : Widgets.button('Change Location', () async {
-                              setState(() {
-                                loading = true;
-                              });
-                              await changeLocation(_location, context);
-                              setState(() {
-                                loading = false;
-                              });
-                            }),
-                    ],
+                        SizedBox(
+                          height: 20,
+                        ),
+                        loading
+                            ? Widgets.loader()
+                            : Widgets.button('Change Location', () async {
+                                setState(() {
+                                  loading = true;
+                                });
+                                //Get.back();
+                                await changeLocation(_location, context);
+                                var data = await getJson();
+                                await login(jsonDecode(data), context,
+                                    refresh: true);
+                                print(user.location);
+                                setState(() {
+                                  loading = false;
+                                });
+                              }),
+                      ],
+                    ),
                   ),
-                ),
-              );
+                );
+              });
               Get.bottomSheet(widget, backgroundColor: Colors.white);
             }
           }

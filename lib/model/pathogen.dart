@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'PathogenAntibiogramData.dart';
 
 class Pathogen {
@@ -27,18 +29,21 @@ class Pathogen {
 
   factory Pathogen.fromMap(Map data) {
     return Pathogen(
-        id: data['id'],
-        name: data['name'],
-        overview: data['overview'] ?? '',
-        epidemiology: data['epidemiology'] ?? '',
-        spectrum: data['spectrum'] ?? '',
-        //location: data['location'],
-        diseases: data['diseases'] ?? [],
-        precautions: data['precausions'] ?? [],
-        reference: data['reference'] ?? '',
-        antibiogramDatas: List<PathogenAntibiogramData>.from(data['medicines']
-            .map((i) => PathogenAntibiogramData.fromMap(i))
-            .toList()));
+      id: data['id'],
+      name: data['name'],
+      overview: data['overview'] ?? '',
+      epidemiology: data['epidemiology'] ?? '',
+      spectrum: data['spectrum'] ?? '',
+      //location: data['location'],
+      diseases: data['diseases'] ?? [],
+      precautions: data['precausions'] ?? [],
+      reference: data['reference'] ?? '',
+      antibiogramDatas: data['medicines'] != null
+          ? List<PathogenAntibiogramData>.from(data['medicines']
+              .map((i) => PathogenAntibiogramData.fromMap(i))
+              .toList())
+          : [],
+    );
   }
 
   Map<String, dynamic> toJson() => {
@@ -48,7 +53,7 @@ class Pathogen {
         'epidemiology': epidemiology,
         'spectrum': spectrum,
         //'location': location,
-        'medicines': antibiogramDatas,
+        'medicines': jsonEncode(antibiogramDatas),
         'diseases': diseases,
         'precausions': precautions,
         'reference': reference,

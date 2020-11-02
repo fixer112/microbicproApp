@@ -45,6 +45,8 @@ class _AntiBioticsState extends State<AntiBiotics> {
   @override
   Widget build(BuildContext context) {
     //print(ebrast.medicines[0]['pivot']);
+    ebrast.medicines.sort((b, a) =>
+        a['pivot']['ebrast_number'].compareTo(b['pivot']['ebrast_number']));
     return Pager(
       ebrast == null
           ? 'Ebrast Not Found'

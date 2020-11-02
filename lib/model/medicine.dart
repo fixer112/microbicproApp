@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:microbicpro/provider/main.dart';
 import 'package:provider/provider.dart';
 
@@ -48,27 +50,30 @@ class Medicine {
 
   factory Medicine.fromMap(Map data) {
     var medicines = Medicine(
-        id: data['id'],
-        name: data['name'],
-        overview: data['overview'] ?? '',
-        avgCost: data['avg_cost'] ?? '',
-        spectrum: data['spectrum'] ?? '',
-        //location: data['location'],
-        action: data['action'] ?? '',
-        adult: data['adult'] ?? '',
-        adverseEffects: data['adverse_effects'] ?? '',
-        brand: data['brand'] ?? '',
-        child: data['child'] ?? '',
-        drugClass: data['drug_class'] ?? '',
-        interactions: data['interactions'] ?? '',
-        pharmacokinetics: data['pharmacokinetics'] ?? '',
-        pregnancyCategory: data['pregnancy_category'] ?? '',
-        renal: data['renal'] ?? '',
-        type: data['type'] ?? '',
-        reference: data['reference'] ?? '',
-        antibiogramDatas: List<MedicineAntiBiogramData>.from(data['pathogens']
-            .map((i) => MedicineAntiBiogramData.fromMap(i))
-            .toList()));
+      id: data['id'],
+      name: data['name'],
+      overview: data['overview'] ?? '',
+      avgCost: data['avg_cost'] ?? '',
+      spectrum: data['spectrum'] ?? '',
+      //location: data['location'],
+      action: data['action'] ?? '',
+      adult: data['adult'] ?? '',
+      adverseEffects: data['adverse_effects'] ?? '',
+      brand: data['brand'] ?? '',
+      child: data['child'] ?? '',
+      drugClass: data['drug_class'] ?? '',
+      interactions: data['interactions'] ?? '',
+      pharmacokinetics: data['pharmacokinetics'] ?? '',
+      pregnancyCategory: data['pregnancy_category'] ?? '',
+      renal: data['renal'] ?? '',
+      type: data['type'] ?? '',
+      reference: data['reference'] ?? '',
+      antibiogramDatas: data['pathogens'] != null
+          ? List<MedicineAntiBiogramData>.from(data['pathogens']
+              .map((i) => MedicineAntiBiogramData.fromMap(i))
+              .toList())
+          : [],
+    );
     //medicines.antibiogramDatas.sort();
     return medicines;
   }
@@ -85,7 +90,7 @@ class Medicine {
         'pharmacokinetics': pharmacokinetics,
         'renal': renal,
         'type': type,
-        'pathogens': antibiogramDatas,
+        'pathogens': jsonEncode(antibiogramDatas),
         'name': name,
         'overview': overview,
         'avg_cost': avgCost,
