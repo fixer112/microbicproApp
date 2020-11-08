@@ -82,7 +82,7 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
-    double center = MediaQuery.of(context).size.height / 2;
+    //double center = MediaQuery.of(context).size.height / 2;
 
     return Scaffold(
       body: SafeArea(

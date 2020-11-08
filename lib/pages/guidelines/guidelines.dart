@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:microbicpro/pages/guidelines/aware.dart';
 import 'package:microbicpro/pages/guidelines/disease_treatment.dart';
+import 'package:microbicpro/pages/guidelines/stewardship.dart';
 import 'package:microbicpro/widgets/page.dart';
 import 'package:microbicpro/widgets/widgets.dart';
 
@@ -17,7 +18,7 @@ class _GuidelinesState extends State<Guidelines> {
       'Guidelines',
       [
         InkWell(
-          onTap: () {},
+          onTap: () => Get.to(Stewardship()),
           child: Widgets.container('Antimicrobial Stewardship'),
         ),
         InkWell(

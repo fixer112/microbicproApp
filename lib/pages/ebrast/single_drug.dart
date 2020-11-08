@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:microbicpro/api_functions.dart';
+import 'package:microbicpro/functions.dart';
 import 'package:microbicpro/model/medicine.dart';
 import 'package:microbicpro/pages/medicines/anti_biogram_data_medicine.dart';
 import 'package:microbicpro/provider/main.dart';
@@ -122,10 +123,11 @@ class _SingleDrugState extends State<SingleDrug> {
                   ]),
                 ],
       search: false,
+      refresh: () => fetch(),
     );
   }
 
-  Color getTypeColor(String type) {
+  /* Color getTypeColor(String type) {
     if (type == 'reserve') {
       return Colors.red;
     }
@@ -138,5 +140,5 @@ class _SingleDrugState extends State<SingleDrug> {
     }
 
     return Colors.blue;
-  }
+  } */
 }

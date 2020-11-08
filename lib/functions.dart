@@ -23,6 +23,21 @@ String getText(double per) {
   return '${per}W';
 }
 
+Color getTypeColor(String type) {
+  if (type == 'reserve') {
+    return Colors.red;
+  }
+  if (type == 'access') {
+    return Colors.green;
+  }
+
+  if (type == 'watch') {
+    return Colors.yellow[600];
+  }
+
+  return Colors.blue;
+}
+
 Future<Null> saveJson(String content, {String fileName = 'user.json'}) async {
   Directory appDocDir = await getApplicationDocumentsDirectory();
   String path = appDocDir.path;
@@ -47,8 +62,12 @@ Future<Null> removeJson({String fileName = 'user.json'}) async {
   if (fileExists) jsonFile.delete();
 }
 
-logout() {
-  removeJson();
-  removeJson(fileName: 'users.json');
+logout() async {
+  await removeJson();
+  await removeJson(fileName: 'users.json');
+  await removeJson(fileName: 'pathogens.json');
+  await removeJson(fileName: 'medicines.json');
+  await removeJson(fileName: 'ebrasts.json');
+  await removeJson(fileName: 'diseases.json');
   Get.off(Login());
 }

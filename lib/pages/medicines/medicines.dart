@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:microbicpro/api_functions.dart';
+import 'package:microbicpro/functions.dart';
 import 'package:microbicpro/model/medicine.dart';
 import 'package:microbicpro/pages/ebrast/single_drug.dart';
 import 'package:microbicpro/provider/main.dart';
@@ -52,23 +53,45 @@ class _MedicinesState extends State<Medicines> {
               '${type.toUpperCase()} Medicines',
               medicines.isEmpty
                   ? [Widgets.centerText('No Medicine Available', context)]
-                  : List.generate(medicines.length, (index) {
-                      Medicine medicine = medicines[index];
-                      return Card(
-                        child: ListTile(
-                          title: Widgets.text(medicine.name,
-                              weight: FontWeight.w400),
-                          trailing: Icon(
-                            Icons.arrow_forward_ios,
-                            size: 20,
+                  : [
+                      if (widget.type != null)
+                        Container(
+                          child: Center(
+                            child: Padding(
+                              padding: const EdgeInsets.all(25.0),
+                              child: Widgets.text(
+                                  main.getUser.settings[widget.type],
+                                  color: Colors.white,
+                                  size: 15,
+                                  weight: FontWeight.bold),
+                            ),
                           ),
-                          onTap: () {
-                            Get.to(SingleDrug(medicine.id));
-                          },
+                          decoration: BoxDecoration(
+                            color: getTypeColor(widget.type),
+                            borderRadius: BorderRadius.all(Radius.circular(15)),
+                          ),
                         ),
-                      );
-                    }),
-              //willPop: false,
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Column(
+                          children: List.generate(medicines.length, (index) {
+                        Medicine medicine = medicines[index];
+                        return Card(
+                          child: ListTile(
+                            title: Widgets.text(medicine.name,
+                                weight: FontWeight.w400),
+                            trailing: Icon(
+                              Icons.arrow_forward_ios,
+                              size: 20,
+                            ),
+                            onTap: () {
+                              Get.to(SingleDrug(medicine.id));
+                            },
+                          ),
+                        );
+                      }))
+                    ],
               refresh: () => fetch(),
               bottomBarIndex: 2,
             );
