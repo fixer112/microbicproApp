@@ -222,8 +222,8 @@ Future<List<Ebrast>> getEbrasts(BuildContext context, {String location}) async {
     print('Response body: ${body}');
     ebrasts = List<Ebrast>.from(body.map((i) => Ebrast.fromMap(i)).toList());
     ebrasts.sort((a, b) => a.location.compareTo(b.location));
-    main.setEbrasts(ebrasts);
     saveJson(jsonEncode(ebrasts), fileName: 'ebrasts.json');
+    main.setEbrasts(ebrasts);
   } on SocketException {
     Widgets.snackbar('Please Connect to the internet');
   } catch (e) {
@@ -257,9 +257,8 @@ Future<Ebrast> getEbrast(int id, BuildContext context) async {
       oldEbrasts.removeWhere((element) => element.id == id);
     }
     oldEbrasts.add(ebrast);
-    main.setEbrasts(oldEbrasts);
-
     saveJson(jsonEncode(oldEbrasts), fileName: 'ebrasts.json');
+    main.setEbrasts(oldEbrasts);
   } on SocketException {
     Widgets.snackbar('Please Connect to the internet');
   } catch (e) {

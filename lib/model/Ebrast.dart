@@ -17,7 +17,7 @@ class Ebrast {
     return Ebrast(
       id: data['id'],
       diseases: data['diseases'] ?? '',
-      medicines: data['medicines'] ?? '',
+      medicines: data['medicines'] ?? [],
       location: data['location'] ?? '',
       sample: data['sample'] ?? '',
     );

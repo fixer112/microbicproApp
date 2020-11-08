@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:microbicpro/functions.dart';
+
 import 'PathogenAntibiogramData.dart';
 
 class Pathogen {
@@ -28,6 +30,12 @@ class Pathogen {
   });
 
   factory Pathogen.fromMap(Map data) {
+    //print(data['medicines']);
+    if (isJson(data['medicines']))
+      data['medicines'] = jsonDecode(data['medicines']);
+
+    //data['medicines'] = jsonDecode(data['medicines']);
+
     return Pathogen(
       id: data['id'],
       name: data['name'],
@@ -38,11 +46,11 @@ class Pathogen {
       diseases: data['diseases'] ?? [],
       precautions: data['precausions'] ?? [],
       reference: data['reference'] ?? '',
-      antibiogramDatas: data['medicines'] != null
-          ? List<PathogenAntibiogramData>.from(data['medicines']
+      antibiogramDatas: data['medicines'] == null
+          ? null
+          : List<PathogenAntibiogramData>.from(data['medicines']
               .map((i) => PathogenAntibiogramData.fromMap(i))
-              .toList())
-          : [],
+              .toList()),
     );
   }
 

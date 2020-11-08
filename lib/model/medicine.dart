@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:microbicpro/functions.dart';
 import 'package:microbicpro/provider/main.dart';
 import 'package:provider/provider.dart';
 
@@ -49,6 +50,9 @@ class Medicine {
   });
 
   factory Medicine.fromMap(Map data) {
+    //print(data['pathogens']);
+    if (isJson(data['pathogens']))
+      data['pathogens'] = jsonDecode(data['pathogens']);
     var medicines = Medicine(
       id: data['id'],
       name: data['name'],

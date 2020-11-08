@@ -43,7 +43,7 @@ class _LoginState extends State<Login> {
 
     try {
       var data = await getJson(fileName: 'users.json');
-      print(data);
+      //print(data);
       if (data != null) {
         data = jsonDecode(data);
         User user = User.fromMap(data);

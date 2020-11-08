@@ -1,9 +1,11 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:microbicpro/pages/auth/login.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 Color getColor(double per) {
   if (per < 50) {
@@ -38,7 +40,14 @@ Color getTypeColor(String type) {
   return Colors.blue;
 }
 
+storagePermission() async {
+  if (await Permission.storage.isDenied) {
+    await Permission.storage.request();
+  }
+}
+
 Future<Null> saveJson(String content, {String fileName = 'user.json'}) async {
+  await storagePermission();
   Directory appDocDir = await getApplicationDocumentsDirectory();
   String path = appDocDir.path;
   File file = new File(path + "/" + fileName);
@@ -47,6 +56,7 @@ Future<Null> saveJson(String content, {String fileName = 'user.json'}) async {
 }
 
 Future getJson({String fileName = 'user.json'}) async {
+  await storagePermission();
   Directory appDocDir = await getApplicationDocumentsDirectory();
   String path = appDocDir.path;
   var jsonFile = new File(path + "/" + fileName);
@@ -55,6 +65,7 @@ Future getJson({String fileName = 'user.json'}) async {
 }
 
 Future<Null> removeJson({String fileName = 'user.json'}) async {
+  await storagePermission();
   Directory appDocDir = await getApplicationDocumentsDirectory();
   String path = appDocDir.path;
   var jsonFile = new File(path + "/" + fileName);
@@ -70,4 +81,13 @@ logout() async {
   await removeJson(fileName: 'ebrasts.json');
   await removeJson(fileName: 'diseases.json');
   Get.off(Login());
+}
+
+isJson(string) {
+  try {
+    json.decode(string);
+  } catch (e) {
+    return false;
+  }
+  return true;
 }

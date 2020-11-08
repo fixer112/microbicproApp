@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:microbicpro/functions.dart';
 import 'package:microbicpro/model/DrugManagement.dart';
 
 class Disease {
@@ -24,6 +25,8 @@ class Disease {
   });
 
   factory Disease.fromMap(Map data) {
+    if (isJson(data['drug_managements']))
+      data['drug_managements'] = jsonDecode(data['drug_managements']);
     var disease = Disease(
       id: data['id'],
       name: data['name'],

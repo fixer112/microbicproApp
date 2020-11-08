@@ -37,12 +37,16 @@ class _HomeState extends State<Home> {
     var main = Provider.of<MainModel>(context, listen: false);
     try {
       var pData = await getJson(fileName: 'pathogens.json');
+      //print(pData);
 
       if (pData != null) {
         pData = jsonDecode(pData);
+        //print(pData[0]);
 
         List<Pathogen> pathogens =
-            List<Pathogen>.from(pData.map((i) => Pathogen.fromMap(i))).toList();
+            List<Pathogen>.from(pData.map((i) => Pathogen.fromMap((i))))
+                .toList();
+        //print(pathogens);
         main.setPathogens(pathogens);
       }
 
@@ -50,7 +54,7 @@ class _HomeState extends State<Home> {
       if (mData != null) {
         mData = jsonDecode(mData);
         List<Medicine> medicines =
-            List<Medicine>.from(pData.map((i) => Medicine.fromMap(i))).toList();
+            List<Medicine>.from(mData.map((i) => Medicine.fromMap(i))).toList();
         main.setMedicines(medicines);
       }
 
@@ -59,15 +63,16 @@ class _HomeState extends State<Home> {
         dData = jsonDecode(dData);
 
         List<Disease> diseases =
-            List<Disease>.from(pData.map((i) => Disease.fromMap(i))).toList();
+            List<Disease>.from(dData.map((i) => Disease.fromMap(i))).toList();
         main.setDiseases(diseases);
       }
 
       var eData = await getJson(fileName: 'ebrasts.json');
       if (dData != null) {
         eData = jsonDecode(eData);
+        //print(eData);
         List<EbrastModel.Ebrast> ebrasts = List<EbrastModel.Ebrast>.from(
-            pData.map((i) => EbrastModel.Ebrast.fromMap(i))).toList();
+            eData.map((i) => EbrastModel.Ebrast.fromMap(i))).toList();
         main.setEbrasts(ebrasts);
       }
       setState(() {
