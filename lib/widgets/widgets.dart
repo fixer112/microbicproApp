@@ -61,9 +61,9 @@ class Widgets {
                 padding: EdgeInsets.only(top: 8),
                 child: Row(
                   children: [
+                    /* if (icon != null)
+                      iconImage(icon, width: width, height: height), */
                     Widgets.text(title, size: 17, weight: FontWeight.w600),
-                    if (icon != null)
-                      iconImage(icon, width: width, height: height),
                   ],
                 ),
               ),
@@ -108,9 +108,8 @@ class Widgets {
       //width: MediaQuery.of(context).size.width,
       child: Row(
         children: [
+          //if (icon != null) iconImage(icon, width: width, height: height),
           Widgets.text(title, size: 20),
-          if (icon != null)
-            Widgets.iconImage(icon, width: width, height: height),
         ],
       ),
       padding: EdgeInsets.all(10),

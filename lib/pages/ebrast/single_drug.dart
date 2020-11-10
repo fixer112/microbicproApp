@@ -92,12 +92,12 @@ class _SingleDrugState extends State<SingleDrug> {
                       ),
                       title: Row(
                         children: [
+                          //Widgets.iconImage('antibiogram_data.png'),
+                          // SizedBox(
+                          //   width: 10,
+                          // ),
                           Widgets.text('Antibiogram data',
                               weight: FontWeight.w500),
-                          SizedBox(
-                            width: 10,
-                          ),
-                          Widgets.iconImage('antibiogram_data.png'),
                         ],
                       ),
                       //leading: Widgets.iconImage('antibiogram_data.png'),

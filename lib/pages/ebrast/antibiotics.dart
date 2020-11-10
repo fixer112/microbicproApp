@@ -104,7 +104,7 @@ class _AntiBioticsState extends State<AntiBiotics> {
                               SizedBox(
                                 width: 10,
                               ),
-                              Widgets.iconImage('medicines.png'),
+                              //Widgets.iconImage('medicines.png'),
                             ],
                           ),
                           trailing: Widgets.text(

@@ -90,11 +90,11 @@ class _EachPathogenState extends State<EachPathogen> {
                       child: ListTile(
                         title: Row(
                           children: [
+                            //Widgets.iconImage('antibiogram_data.png'),
+                            // SizedBox(
+                            //   width: 10,
+                            // ),
                             Widgets.text('Antibiogram Data', size: 17),
-                            SizedBox(
-                              width: 10,
-                            ),
-                            Widgets.iconImage('antibiogram_data.png'),
                           ],
                         ),
                         trailing: Icon(
