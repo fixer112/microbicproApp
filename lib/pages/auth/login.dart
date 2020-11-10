@@ -6,6 +6,7 @@ import 'package:microbicpro/api_functions.dart';
 import 'package:microbicpro/functions.dart';
 import 'package:microbicpro/model/user.dart';
 import 'package:microbicpro/pages/auth/register.dart';
+import 'package:microbicpro/pages/auth/terms.dart';
 import 'package:microbicpro/pages/home.dart';
 import 'package:microbicpro/provider/main.dart';
 import 'package:microbicpro/values.dart';
@@ -160,13 +161,7 @@ class _LoginState extends State<Login> {
                               InkWell(
                                 child: Widgets.text('Sign up',
                                     color: primaryColor),
-                                onTap: () {
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) => Register(),
-                                      ));
-                                },
+                                onTap: () => Get.to(Terms()),
                               ),
                             ],
                           ),
