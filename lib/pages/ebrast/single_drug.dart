@@ -72,9 +72,14 @@ class _SingleDrugState extends State<SingleDrug> {
                     ),
                   ),
                   Widgets.header('ANTIMICROBIAL SPECTRUM'),
-                  Widgets.collapsible('Ideal Spectrum', [
-                    Widgets.text(medicine.spectrum),
-                  ]),
+                  Widgets.collapsible(
+                      'Ideal Spectrum',
+                      [
+                        Widgets.text(medicine.spectrum),
+                      ],
+                      icon: 'general_spectrum.png',
+                      width: 20,
+                      height: 20),
                   Card(
                     child: ListTile(
                       onTap: () {
@@ -85,39 +90,66 @@ class _SingleDrugState extends State<SingleDrug> {
                         color: primaryColor,
                         size: 16,
                       ),
-                      title: Widgets.text('Antibiogram data',
-                          weight: FontWeight.w500),
+                      title: Row(
+                        children: [
+                          Widgets.text('Antibiogram data',
+                              weight: FontWeight.w500),
+                          SizedBox(
+                            width: 10,
+                          ),
+                          Widgets.iconImage('antibiogram_data.png'),
+                        ],
+                      ),
+                      //leading: Widgets.iconImage('antibiogram_data.png'),
                     ),
                   ),
-                  Widgets.header('PHARMACOLOGY'),
-                  Widgets.collapsible('Drug class', [
-                    Widgets.text(medicine.drugClass),
-                  ]),
-                  Widgets.collapsible('Mechanism of action', [
-                    Widgets.text(medicine.action),
-                  ]),
+                  Widgets.header('PHARMACOLOGY', icon: 'pharmacology.png'),
+                  Widgets.collapsible(
+                      'Drug class',
+                      [
+                        Widgets.text(medicine.drugClass),
+                      ],
+                      icon: 'drug_class.png'),
+                  Widgets.collapsible(
+                      'Mechanism of action',
+                      [
+                        Widgets.text(medicine.action),
+                      ],
+                      icon: 'mechanism_of_action.png'),
                   Widgets.collapsible('Pharmacokinetics', [
                     Widgets.text(medicine.pharmacokinetics),
                   ]),
                   Widgets.collapsible('Significant interactions', [
                     Widgets.text(medicine.interactions),
                   ]),
-                  Widgets.collapsible('Pregnancy category', [
-                    Widgets.text(medicine.pregnancyCategory),
-                  ]),
+                  Widgets.collapsible(
+                      'Pregnancy category',
+                      [
+                        Widgets.text(medicine.pregnancyCategory),
+                      ],
+                      icon: 'pregnancy.png'),
                   /*  Widgets.collapsible('Contraindications', [
                 Widgets.text(medicine.drugClass),
               ]), */
-                  Widgets.collapsible('Adverse effects', [
-                    Widgets.text(medicine.adverseEffects),
-                  ]),
-                  Widgets.header('DOSE SCHEDULE'),
-                  Widgets.collapsible('Renal', [
-                    Widgets.text(medicine.renal),
-                  ]),
-                  Widgets.collapsible('Adult', [
-                    Widgets.text(medicine.adult),
-                  ]),
+                  Widgets.collapsible(
+                      'Adverse effects',
+                      [
+                        Widgets.text(medicine.adverseEffects),
+                      ],
+                      icon: 'adverse_effect.png'),
+                  Widgets.header('DOSE SCHEDULE', icon: 'dose.png'),
+                  Widgets.collapsible(
+                      'Renal',
+                      [
+                        Widgets.text(medicine.renal),
+                      ],
+                      icon: 'renal.png'),
+                  Widgets.collapsible(
+                      'Adult',
+                      [
+                        Widgets.text(medicine.adult),
+                      ],
+                      icon: 'adult.png'),
                   Widgets.collapsible('Child', [
                     Widgets.text(medicine.child),
                   ]),

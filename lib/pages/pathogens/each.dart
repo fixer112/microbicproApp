@@ -53,7 +53,8 @@ class _EachPathogenState extends State<EachPathogen> {
             : pathogen == null
                 ? [Widgets.centerText('Pathogen Not Found', context)]
                 : [
-                    Widgets.header('General Information'),
+                    Widgets.header('General Information',
+                        icon: 'pathogen_info.png'),
                     Widgets.collapsible('Overview', [
                       Widgets.text(pathogen.overview),
                     ]),
@@ -77,12 +78,25 @@ class _EachPathogenState extends State<EachPathogen> {
                       ),
                     ]),
                     Widgets.header('Anti-Microbial Spectrum'),
-                    Widgets.collapsible('Ideal Spectrum', [
-                      Widgets.text(pathogen.spectrum),
-                    ]),
+                    Widgets.collapsible(
+                        'Ideal Spectrum',
+                        [
+                          Widgets.text(pathogen.spectrum),
+                        ],
+                        icon: 'general_spectrum.png',
+                        width: 20,
+                        height: 20),
                     Card(
                       child: ListTile(
-                        title: Widgets.text('Antibiogram Data', size: 17),
+                        title: Row(
+                          children: [
+                            Widgets.text('Antibiogram Data', size: 17),
+                            SizedBox(
+                              width: 10,
+                            ),
+                            Widgets.iconImage('antibiogram_data.png'),
+                          ],
+                        ),
                         trailing: Icon(
                           Icons.arrow_forward_ios,
                           size: 20,

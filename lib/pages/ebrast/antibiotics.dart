@@ -90,13 +90,23 @@ class _AntiBioticsState extends State<AntiBiotics> {
                                     builder: (context) =>
                                         SingleDrug(medicine['id'])));
                           },
-                          leading: Icon(
+                          /*  leading:
+                              /* Icon(
                             FontAwesomeIcons.squareFull,
                             color: getColor(ebrastNumber),
                             size: 16,
+                          ) */
+                              Widgets.iconImage('medicines.png'), */
+                          title: Row(
+                            children: [
+                              Widgets.text(medicine['name'],
+                                  color: getColor(ebrastNumber)),
+                              SizedBox(
+                                width: 10,
+                              ),
+                              Widgets.iconImage('medicines.png'),
+                            ],
                           ),
-                          title: Widgets.text(medicine['name'],
-                              color: getColor(ebrastNumber)),
                           trailing: Widgets.text(
                               "$ebrastNumber${medicine['type'][0].toUpperCase()}",
                               weight: FontWeight.w600,

@@ -39,7 +39,16 @@ class Widgets {
     );
   }
 
-  static Widget collapsible(String title, List<Widget> widgets) {
+  static Widget iconImage(icon, {double width = 40, double height = 40}) {
+    return Image.asset(
+      'assets/icons/$icon',
+      width: width,
+      height: height,
+    );
+  }
+
+  static Widget collapsible(String title, List<Widget> widgets,
+      {String icon, double width = 45, double height = 45}) {
     return Card(
       child: Container(
         padding: EdgeInsets.all(10),
@@ -50,7 +59,13 @@ class Widgets {
             child: ExpandablePanel(
               header: Container(
                 padding: EdgeInsets.only(top: 8),
-                child: Widgets.text(title, size: 17, weight: FontWeight.w600),
+                child: Row(
+                  children: [
+                    Widgets.text(title, size: 17, weight: FontWeight.w600),
+                    if (icon != null)
+                      iconImage(icon, width: width, height: height),
+                  ],
+                ),
               ),
               expanded: ListView(
                 shrinkWrap: true,
@@ -87,10 +102,17 @@ class Widgets {
     );
   }
 
-  static Widget header(String title) {
+  static Widget header(String title,
+      {String icon, double width = 20, double height = 20}) {
     return Container(
       //width: MediaQuery.of(context).size.width,
-      child: Widgets.text(title, size: 20),
+      child: Row(
+        children: [
+          Widgets.text(title, size: 20),
+          if (icon != null)
+            Widgets.iconImage(icon, width: width, height: height),
+        ],
+      ),
       padding: EdgeInsets.all(10),
       margin: EdgeInsets.symmetric(vertical: 20),
       decoration: BoxDecoration(
