@@ -182,7 +182,7 @@ Future<Disease> getDisease(int id, BuildContext context) async {
     });
     var body = json.decode(response.body);
     print('Response status: ${response.statusCode}');
-    print('Response body: ${body}');
+    //print('Response body: ${body['drug_managements'][0]['medicine_name']}');
     //return;
     disease = Disease.fromMap(body);
 

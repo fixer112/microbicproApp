@@ -96,14 +96,14 @@ class _AntiBioticsState extends State<AntiBiotics> {
                             color: getColor(ebrastNumber),
                             size: 16,
                           ) */
-                              Widgets.iconImage('medicines.png'), */
+                              //Widgets.iconImage('medicines.png'), */
                           title: Row(
                             children: [
                               Widgets.text(medicine['name'],
                                   color: getColor(ebrastNumber)),
-                              SizedBox(
-                                width: 10,
-                              ),
+                              // SizedBox(
+                              //   width: 10,
+                              // ),
                               //Widgets.iconImage('medicines.png'),
                             ],
                           ),

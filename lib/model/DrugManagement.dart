@@ -11,6 +11,7 @@ class DrugManagement {
   final String cLass;
   final int alternative;
   final int medicineId;
+  final String medicineName;
 
   DrugManagement({
     this.id,
@@ -25,6 +26,7 @@ class DrugManagement {
     this.cLass,
     this.alternative,
     this.medicineId,
+    this.medicineName,
   });
 
   factory DrugManagement.fromMap(Map data) {
@@ -43,6 +45,9 @@ class DrugManagement {
       medicineId: int.parse(data['medicine_id'].toString()),
       id: int.parse(data['id'].toString()),
       category: data['category'] ?? '',
+      medicineName: data['medicine_name'] != null
+          ? data['medicine_name'].toString()
+          : null,
     );
   }
 
@@ -59,5 +64,6 @@ class DrugManagement {
         'disease_id': diseaseId,
         'medicine_id': medicineId,
         'alternative': alternative,
+        'medicine_name': medicineName,
       };
 }

@@ -173,28 +173,41 @@ class _DrugManagementState extends State<DrugManagement> {
                                                                     var drug =
                                                                         drugManagements[
                                                                             index];
-                                                                    Medicine medicine = medicines.firstWhere(
-                                                                        (element) =>
-                                                                            element.id ==
-                                                                            drug
-                                                                                .medicineId,
-                                                                        orElse: () =>
-                                                                            null);
-                                                                    if (medicine ==
+                                                                    Medicine
+                                                                        medicine;
+                                                                    if (drug.medicineName ==
                                                                         null) {
-                                                                      getMedicine(
-                                                                              drug.medicineId,
-                                                                              context)
-                                                                          .then((value) {
-                                                                        setState(
-                                                                            () {
-                                                                          medicine =
-                                                                              value;
+                                                                      medicine = medicines.firstWhere(
+                                                                          (element) =>
+                                                                              element.id ==
+                                                                              drug
+                                                                                  .medicineId,
+                                                                          orElse: () =>
+                                                                              null);
+                                                                      if (medicine ==
+                                                                          null) {
+                                                                        getMedicine(drug.medicineId,
+                                                                                context)
+                                                                            .then((value) {
+                                                                          setState(
+                                                                              () {
+                                                                            medicine =
+                                                                                value;
+                                                                          });
                                                                         });
-                                                                      });
+                                                                      }
                                                                     }
 
-                                                                    return medicine ==
+                                                                    var medicineName = drug.medicineName !=
+                                                                            null
+                                                                        ? drug
+                                                                            .medicineName
+                                                                        : medicine !=
+                                                                                null
+                                                                            ? medicine.name
+                                                                            : null;
+
+                                                                    return medicineName ==
                                                                             null
                                                                         ? Container(
                                                                             child:
@@ -203,13 +216,17 @@ class _DrugManagementState extends State<DrugManagement> {
                                                                             ),
                                                                           )
                                                                         : InkWell(
-                                                                            onTap: () =>
-                                                                                Get.to(SingleDrug(medicine.id)),
+                                                                            onTap:
+                                                                                () {
+                                                                              if (medicine != null) {
+                                                                                Get.to(SingleDrug(medicine.id));
+                                                                              }
+                                                                            },
                                                                             child:
                                                                                 Card(
                                                                               child: Container(
                                                                                 padding: EdgeInsets.all(15),
-                                                                                child: Widgets.text('${medicine.name} ${drug.strength} ${drug.interval} for ${drug.duration}'),
+                                                                                child: Widgets.text('$medicineName ${drug.strength} ${drug.interval} for ${drug.duration}'),
                                                                               ),
                                                                             ),
                                                                           );
