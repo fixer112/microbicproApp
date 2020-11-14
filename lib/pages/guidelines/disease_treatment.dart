@@ -15,6 +15,7 @@ class DiseaseTreatment extends StatefulWidget {
 
 class _DiseaseTreatmentState extends State<DiseaseTreatment> {
   bool loading = false;
+  List<Disease> searchData;
   @override
   void initState() {
     super.initState();
@@ -39,7 +40,7 @@ class _DiseaseTreatmentState extends State<DiseaseTreatment> {
     return loading
         ? Widgets.loader()
         : Consumer<MainModel>(builder: (context, main, child) {
-            var diseases = main.diseases;
+            var diseases = searchData != null ? searchData : main.diseases;
             diseases.sort((a, b) => a.name.compareTo(b.name));
             List<String> categories =
                 diseases.map((e) => e.category).toList().toSet().toList();
@@ -85,8 +86,19 @@ class _DiseaseTreatmentState extends State<DiseaseTreatment> {
                             ),
                           ]);
                     }),
-              search: false,
               refresh: () => fetch(),
+              search: true,
+              onSearch: (data) {
+                print(data);
+                setState(() {
+                  searchData = main.diseases
+                      .where((disease) => disease.name
+                          .toLowerCase()
+                          .startsWith(data.toLowerCase()))
+                      .toList();
+                  print(searchData.length);
+                });
+              },
             );
           });
   }

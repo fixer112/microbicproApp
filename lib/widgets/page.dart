@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
@@ -18,6 +20,7 @@ class Pager extends StatefulWidget {
   final bool willPop;
   final Function refresh;
   final int bottomBarIndex;
+  ValueChanged<String> onSearch;
 
   Pager(
     this.title,
@@ -27,6 +30,7 @@ class Pager extends StatefulWidget {
     this.willPop = true,
     this.refresh,
     this.bottomBarIndex = 0,
+    this.onSearch,
   });
 
   @override
@@ -38,8 +42,53 @@ class _PagerState extends State<Pager> {
     return Future.delayed(Duration(microseconds: 10), () => true);
   }
 
+  bool isSearching = false;
+  TextEditingController controller = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    controller.addListener(() {
+      //print(controller.text);
+      widget.onSearch(controller.text);
+    });
+  }
+
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
+    searchWidget() {
+      return Container(
+        height: 50.0,
+        margin: EdgeInsets.only(top: 10.0),
+        child: TextField(
+          style: TextStyle(color: Colors.white),
+          cursorColor: Colors.white,
+          controller: controller,
+          decoration: InputDecoration(
+            //fillColor: Colors.white,
+            //filled: true,
+            enabledBorder: UnderlineInputBorder(
+                borderSide: BorderSide(color: Colors.white, width: 5.0)),
+            focusedBorder: UnderlineInputBorder(
+                borderSide: BorderSide(color: Colors.white, width: 5.0)),
+            //labelText: 'Your Email or Phone',
+            labelText: 'Search',
+            labelStyle: TextStyle(color: Colors.white),
+
+            //contentPadding: EdgeInsets.all(10).copyWith(left: 30),
+            //hintStyle: TextStyle(color: Colors.black),
+          ),
+        ),
+      );
+    }
+
+    ;
     return WillPopScope(
         onWillPop: () async => widget.willPop,
         child: Scaffold(
@@ -50,20 +99,18 @@ class _PagerState extends State<Pager> {
                   Navigator.pop(context);
                 }), */
             actions: [
-              widget.search != false
+              widget.search
                   ? IconButton(
                       icon: Icon(Icons.search),
                       onPressed: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (BuildContext context) =>
-                                    SearchPage()));
+                        setState(() {
+                          isSearching = !isSearching;
+                        });
                       },
                     )
                   : Container(),
             ],
-            title: Text(widget.title),
+            title: isSearching ? searchWidget() : Text(widget.title),
             backgroundColor: primaryColor,
           ),
           body: RefreshIndicator(

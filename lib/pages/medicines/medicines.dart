@@ -18,6 +18,7 @@ class Medicines extends StatefulWidget {
 
 class _MedicinesState extends State<Medicines> {
   bool loading = false;
+  List<Medicine> searchData;
   @override
   void initState() {
     super.initState();
@@ -42,13 +43,13 @@ class _MedicinesState extends State<Medicines> {
     return loading
         ? Widgets.loader()
         : Consumer<MainModel>(builder: (context, main, child) {
-            var medicines = main.getMedicines;
+            var medicines = searchData != null ? searchData : main.getMedicines;
             if (widget.type != null) {
               medicines = medicines
                   .where((element) => element.type == widget.type)
                   .toList();
             }
-            var type = widget.type ?? '';
+            var type = widget.type != null ? widget.type : '';
             return Pager(
               '${type.toUpperCase()} Medicines',
               medicines.isEmpty
@@ -79,7 +80,8 @@ class _MedicinesState extends State<Medicines> {
                         Medicine medicine = medicines[index];
                         return Card(
                           child: ListTile(
-                            title: Widgets.text(medicine.name,
+                            title: Widgets.text(
+                                medicine.name != null ? medicine.name : '',
                                 weight: FontWeight.w400),
                             trailing: Icon(
                               Icons.arrow_forward_ios,
@@ -94,6 +96,18 @@ class _MedicinesState extends State<Medicines> {
                     ],
               refresh: () => fetch(),
               bottomBarIndex: 2,
+              search: true,
+              onSearch: (data) {
+                print(data);
+                setState(() {
+                  searchData = main.medicines
+                      .where((medicine) => medicine.name
+                          .toLowerCase()
+                          .startsWith(data.toLowerCase()))
+                      .toList();
+                  print(searchData.length);
+                });
+              },
             );
           });
   }

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:microbicpro/model/pathogen.dart';
 import 'package:microbicpro/pages/pathogens/each.dart';
@@ -15,6 +17,7 @@ class Pathogens extends StatefulWidget {
 
 class _PathogensState extends State<Pathogens> {
   bool loading = false;
+  List<Pathogen> searchData;
 
   @override
   void initState() {
@@ -41,12 +44,14 @@ class _PathogensState extends State<Pathogens> {
         ? Widgets.loader()
         : Consumer<MainModel>(builder: (context, main, child) {
             //print(main.pathogens[0].antibiogramDatas[0]);
+            var pathogens = searchData != null ? searchData : main.pathogens;
+
             return Pager(
               'Pathogens',
-              main.pathogens.isEmpty
+              pathogens.isEmpty
                   ? [Widgets.centerText('No Pathogen Available', context)]
-                  : List.generate(main.pathogens.length, (index) {
-                      Pathogen pathogen = main.pathogens[index];
+                  : List.generate(pathogens.length, (index) {
+                      Pathogen pathogen = pathogens[index];
                       return Card(
                         child: ListTile(
                           title: Widgets.text(pathogen.name,
@@ -67,6 +72,18 @@ class _PathogensState extends State<Pathogens> {
                     }),
               //willPop: false,
               refresh: () => fetch(),
+              search: true,
+              onSearch: (data) {
+                print(data);
+                setState(() {
+                  searchData = main.pathogens
+                      .where((pathogen) => pathogen.name
+                          .toLowerCase()
+                          .startsWith(data.toLowerCase()))
+                      .toList();
+                  //print(searchData.length);
+                });
+              },
               bottomBarIndex: 1,
             );
           });

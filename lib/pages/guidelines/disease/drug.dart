@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:microbicpro/model/disease.dart';
@@ -95,27 +97,29 @@ class _DrugManagementState extends State<DrugManagement> {
                               return Widgets.collapsible(
                                 types[index].toUpperCase(),
                                 List.generate(categories.length, (index) {
-                                  var drugManagements = disease.drugManagements
+                                  var catDrugs = drugManagements
                                       .where((e) =>
                                           e.category == categories[index])
                                       .toList();
-                                  var stages = drugManagements
+                                  //print(jsonEncode(drugManagements[3].stage));
+                                  var stages = catDrugs
                                       .map((e) => e.stage)
                                       .toList()
                                       .toSet()
                                       .toList();
+                                  //print(stages);
                                   return ListView(
                                     shrinkWrap: true,
                                     children: [
                                       Widgets.collapsible(
                                           categories[index].toUpperCase(),
                                           List.generate(stages.length, (index) {
-                                            var drugManagements = disease
-                                                .drugManagements
+                                            var stageDrugs = catDrugs
                                                 .where((e) =>
                                                     e.stage == stages[index])
                                                 .toList();
-                                            var classes = drugManagements
+                                            //print(drugManagements.length);
+                                            var classes = stageDrugs
                                                 .map((e) => e.cLass)
                                                 .toList()
                                                 .toSet()
@@ -124,19 +128,16 @@ class _DrugManagementState extends State<DrugManagement> {
                                                 stages[index].toUpperCase(),
                                                 List.generate(classes.length,
                                                     (index) {
-                                                  var drugManagements = disease
-                                                      .drugManagements
+                                                  var classDrugs = stageDrugs
                                                       .where((e) =>
                                                           e.cLass ==
                                                           classes[index])
                                                       .toList();
-                                                  var alternatives =
-                                                      drugManagements
-                                                          .map((e) =>
-                                                              e.alternative)
-                                                          .toList()
-                                                          .toSet()
-                                                          .toList();
+                                                  var alternatives = classDrugs
+                                                      .map((e) => e.alternative)
+                                                      .toList()
+                                                      .toSet()
+                                                      .toList();
                                                   return Column(
                                                     crossAxisAlignment:
                                                         CrossAxisAlignment
@@ -151,13 +152,13 @@ class _DrugManagementState extends State<DrugManagement> {
                                                                   alternatives
                                                                       .length,
                                                                   (index) {
-                                                        var drugManagements = disease
-                                                            .drugManagements
-                                                            .where((e) =>
-                                                                e.alternative ==
-                                                                alternatives[
-                                                                    index])
-                                                            .toList();
+                                                        var alternativeDrugs =
+                                                            classDrugs
+                                                                .where((e) =>
+                                                                    e.alternative ==
+                                                                    alternatives[
+                                                                        index])
+                                                                .toList();
 
                                                         return Widgets.collapsible(
                                                             "Alternative ${alternatives[index].toString()}",
@@ -167,11 +168,11 @@ class _DrugManagementState extends State<DrugManagement> {
                                                                       CrossAxisAlignment
                                                                           .stretch,
                                                                   children: List.generate(
-                                                                      drugManagements
+                                                                      alternativeDrugs
                                                                           .length,
                                                                       (index) {
                                                                     var drug =
-                                                                        drugManagements[
+                                                                        alternativeDrugs[
                                                                             index];
                                                                     Medicine
                                                                         medicine;
@@ -218,7 +219,7 @@ class _DrugManagementState extends State<DrugManagement> {
                                                                         : InkWell(
                                                                             onTap:
                                                                                 () {
-                                                                              if (medicine != null) {
+                                                                              if (drug.medicineName != null) {
                                                                                 Get.to(SingleDrug(medicine.id));
                                                                               }
                                                                             },

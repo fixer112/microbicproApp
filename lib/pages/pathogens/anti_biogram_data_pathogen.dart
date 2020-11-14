@@ -124,7 +124,7 @@ class _AntiBiogramDataState extends State<AntiBiogramDataPathogen> {
           ],
         ),
       ],
-      search: false,
+      //search: false,
     );
   }
 }
