@@ -44,7 +44,7 @@ class _EbrastState extends State<Ebrast> {
         ? Widgets.loader()
         : Consumer<MainModel>(builder: (context, main, child) {
             List<String> locationList =
-                main.ebrasts.map((e) => e.location).toList();
+                main.ebrasts.map((e) => e.location).toSet().toList();
             locationList.sort();
             List<DropdownMenuItem<String>> locations = List.generate(
               locationList.length,

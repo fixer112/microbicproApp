@@ -176,8 +176,8 @@ class _DrugManagementState extends State<DrugManagement> {
                                                                             index];
                                                                     Medicine
                                                                         medicine;
-                                                                    if (drug.medicineName ==
-                                                                        null) {
+                                                                    if (drug.id !=
+                                                                        0) {
                                                                       medicine = medicines.firstWhere(
                                                                           (element) =>
                                                                               element.id ==
@@ -219,7 +219,7 @@ class _DrugManagementState extends State<DrugManagement> {
                                                                         : InkWell(
                                                                             onTap:
                                                                                 () {
-                                                                              if (drug.medicineName != null) {
+                                                                              if (drug.id != 0) {
                                                                                 Get.to(SingleDrug(medicine.id));
                                                                               }
                                                                             },
