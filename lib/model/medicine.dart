@@ -72,11 +72,11 @@ class Medicine {
       renal: data['renal'] ?? '',
       type: data['type'] ?? '',
       reference: data['reference'] ?? '',
-      antibiogramDatas: data['pathogens'] != null
-          ? List<MedicineAntiBiogramData>.from(data['pathogens']
+      antibiogramDatas: data['pathogens'] == null
+          ? null
+          : List<MedicineAntiBiogramData>.from(data['pathogens']
               .map((i) => MedicineAntiBiogramData.fromMap(i))
-              .toList())
-          : [],
+              .toList()),
     );
     //medicines.antibiogramDatas.sort();
     return medicines;

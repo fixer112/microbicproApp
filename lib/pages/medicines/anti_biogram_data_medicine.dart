@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:microbicpro/model/MedicineAntiBiogramData.dart';
@@ -64,12 +66,14 @@ class _AntiBiogramDataState extends State<AntiBiogramDataMedicine> {
                 //print(medicine);
 
                 datas.forEach((antiBiogramData) {
-                  //print(antiBiogramDatas[inx].);
+                  //print(jsonEncode(antiBiogramDatas[0]));
 
                   children.add(Container(
                     child: InkWell(
-                      onTap: () =>
-                          Get.to(EachPathogen(antiBiogramData.pathogenId)),
+                      onTap: () {
+                        print(antiBiogramData.pathogenId);
+                        Get.to(EachPathogen(antiBiogramData.pathogenId));
+                      },
                       child: Card(
                         child: ListTile(
                             dense: true,

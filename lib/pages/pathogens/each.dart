@@ -23,6 +23,7 @@ class _EachPathogenState extends State<EachPathogen> {
   @override
   void initState() {
     super.initState();
+    print(widget.id);
     var main = Provider.of<MainModel>(context, listen: false);
     pathogen = main.getPathogens
         .firstWhere((pathogen) => pathogen.id == widget.id, orElse: () => null);

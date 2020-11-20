@@ -46,9 +46,13 @@ storagePermission() async {
   }
 }
 
+Future<Directory> directory() async {
+  return await getApplicationDocumentsDirectory(); //getExternalStorageDirectory();
+}
+
 Future<Null> saveJson(String content, {String fileName = 'user.json'}) async {
   await storagePermission();
-  Directory appDocDir = await getApplicationDocumentsDirectory();
+  Directory appDocDir = await directory(); //getApplicationDocumentsDirectory();
   String path = appDocDir.path;
   File file = new File(path + "/" + fileName);
   file.createSync();
@@ -57,7 +61,7 @@ Future<Null> saveJson(String content, {String fileName = 'user.json'}) async {
 
 Future getJson({String fileName = 'user.json'}) async {
   await storagePermission();
-  Directory appDocDir = await getApplicationDocumentsDirectory();
+  Directory appDocDir = await directory();
   String path = appDocDir.path;
   var jsonFile = new File(path + "/" + fileName);
   bool fileExists = jsonFile.existsSync();
@@ -66,7 +70,7 @@ Future getJson({String fileName = 'user.json'}) async {
 
 Future<Null> removeJson({String fileName = 'user.json'}) async {
   await storagePermission();
-  Directory appDocDir = await getApplicationDocumentsDirectory();
+  Directory appDocDir = await directory();
   String path = appDocDir.path;
   var jsonFile = new File(path + "/" + fileName);
   bool fileExists = jsonFile.existsSync();

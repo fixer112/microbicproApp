@@ -44,7 +44,7 @@ class MedicineAntiBiogramData {
           'isolate_number': isolateNumber,
           'year': year,
           'percentage': percentage,
-          'medicine_id': pathogenId,
+          'pathogen_id': pathogenId,
           'sample': sample,
           'reference_id': referenceID,
           'location': location,

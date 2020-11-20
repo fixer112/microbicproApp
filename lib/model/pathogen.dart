@@ -38,7 +38,7 @@ class Pathogen {
 
     return Pathogen(
       id: data['id'],
-      name: data['name'],
+      name: data['name'] ?? '',
       overview: data['overview'] ?? '',
       epidemiology: data['epidemiology'] ?? '',
       spectrum: data['spectrum'] ?? '',
