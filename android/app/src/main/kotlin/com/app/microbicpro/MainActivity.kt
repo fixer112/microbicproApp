@@ -1,4 +1,4 @@
-package com.altechtic.microbicpro
+package com.app.microbicpro
 
 import io.flutter.embedding.android.FlutterActivity
 
