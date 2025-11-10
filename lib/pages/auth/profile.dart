@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:microbicpro/api_functions.dart';
-import 'package:microbicpro/model/user.dart';
 import 'package:microbicpro/provider/main.dart';
 import 'package:microbicpro/widgets/page.dart';
 import 'package:microbicpro/widgets/widgets.dart';
@@ -13,7 +12,7 @@ import 'package:provider/provider.dart';
 import '../../functions.dart';
 
 class Profile extends StatefulWidget {
-  Profile({Key key}) : super(key: key);
+  const Profile({super.key});
 
   @override
   _ProfileState createState() => _ProfileState();
@@ -31,42 +30,45 @@ class _ProfileState extends State<Profile> {
       'Profile',
       [
         Consumer<MainModel>(builder: (context, main, child) {
-          User user = main.getUser;
-          location() async {
-            String _location;
+          final user = main.getUser;
+          if (user == null) {
+            return Widgets.centerText('No profile available', context);
+          }
+
+          Future<void> location() async {
+            String? selectedLocation;
             bool loading = false;
 
-            var locationList = user.settings['locations'];
-            locationList.sort();
-            List<DropdownMenuItem<String>> locations = List.generate(
-              locationList.length,
-              (index) => DropdownMenuItem(
-                child: Text(locationList[index].toUpperCase()),
-                value: locationList[index],
-              ),
-            );
-            if (!user.settings['hospitals'].contains(user.location)) {
-              Widget widget = StatefulBuilder(builder: (BuildContext context,
-                  StateSetter setState /*You can rename this!*/) {
-                return Padding(
-                  padding: EdgeInsets.all(15),
-                  child: Container(
-                    height: 150,
-                    child: Column(
-                      //crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        //Widgets.header('Change Location'),
-                        Card(
-                          //margin: EdgeInsets.symmetric(vertical: 30, horizontal: 20),
-                          child: Container(
-                            //padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-                            child: DropdownButton(
-                              value:
-                                  _location == null ? user.location : _location,
+            final locationsData =
+                List<String>.from(user.settings['locations'] ?? const []);
+            locationsData.sort();
+            final locations = locationsData
+                .map(
+                  (loc) => DropdownMenuItem<String>(
+                    value: loc,
+                    child: Text(loc.toUpperCase()),
+                  ),
+                )
+                .toList();
+
+            final hospitals =
+                List<String>.from(user.settings['hospitals'] ?? const []);
+            if (!hospitals.contains(user.location)) {
+              final sheet = StatefulBuilder(
+                builder: (context, setState) {
+                  return Padding(
+                    padding: const EdgeInsets.all(15),
+                    child: SizedBox(
+                      height: 200,
+                      child: Column(
+                        children: [
+                          Card(
+                            child: DropdownButton<String>(
+                              value: selectedLocation,
                               items: locations,
                               hint: Widgets.text('Select Location',
                                   weight: FontWeight.bold),
-                              icon: Icon(
+                              icon: const Icon(
                                 FontAwesomeIcons.chevronDown,
                                 size: 20,
                               ),
@@ -74,66 +76,62 @@ class _ProfileState extends State<Profile> {
                               isExpanded: true,
                               onChanged: (val) {
                                 setState(() {
-                                  _location = val;
-                                  print(_location);
+                                  selectedLocation = val;
                                 });
                               },
                             ),
                           ),
-                        ),
-                        SizedBox(
-                          height: 20,
-                        ),
-                        loading
-                            ? Widgets.loader()
-                            : Widgets.button('Change Location', () async {
-                                setState(() {
-                                  loading = true;
-                                });
-                                //Get.back();
-                                await changeLocation(_location, context);
-                                var data = await getJson();
-                                await login(jsonDecode(data), context,
-                                    refresh: true);
-                                print(user.location);
-                                setState(() {
-                                  loading = false;
-                                });
-                              }),
-                      ],
+                          const SizedBox(height: 20),
+                          loading
+                              ? Widgets.loader()
+                              : Widgets.button('Change Location', () async {
+                                  setState(() {
+                                    loading = true;
+                                  });
+                                  await changeLocation(
+                                      selectedLocation, context);
+                                  final data = await getJson();
+                                  if (data != null) {
+                                    await login(jsonDecode(data), context,
+                                        refresh: true);
+                                  }
+                                  setState(() {
+                                    loading = false;
+                                  });
+                                }),
+                        ],
+                      ),
                     ),
-                  ),
-                );
-              });
-              Get.bottomSheet(widget, backgroundColor: Colors.white);
+                  );
+                },
+              );
+              Get.bottomSheet(sheet, backgroundColor: Colors.white);
             }
           }
 
-          return Container(
-            child: Column(
-              children: [
-                InkWell(
-                  onTap: () => location(),
-                  child: Card(
-                    child: ListTile(
-                      title: Widgets.text(
-                          'Location (${user.location.toUpperCase()})'),
-                      trailing: Icon(FontAwesomeIcons.locationArrow),
-                    ),
+          return Column(
+            children: [
+              InkWell(
+                onTap: location,
+                child: Card(
+                  child: ListTile(
+                    title: Widgets.text(
+                        'Location (${user.location.toUpperCase()})'),
+                    trailing: const Icon(FontAwesomeIcons.locationArrow),
                   ),
                 ),
-                InkWell(
-                  onTap: () => logout(),
-                  child: Card(
-                    child: ListTile(
-                      title: Widgets.text('Logout', color: Colors.red),
-                      trailing:
-                          Icon(FontAwesomeIcons.powerOff, color: Colors.red),
-                    ),
+              ),
+              InkWell(
+                onTap: () => logout(),
+                child: Card(
+                  child: ListTile(
+                    title: Widgets.text('Logout', color: Colors.red),
+                    trailing: const Icon(FontAwesomeIcons.powerOff,
+                        color: Colors.red),
                   ),
                 ),
-              ],
-            ),
+              ),
+            ],
           );
         })
       ],

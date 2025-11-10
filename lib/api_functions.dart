@@ -2,11 +2,14 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
-import 'package:http/http.dart';
+import 'package:http/http.dart' as http;
 import 'package:microbicpro/functions.dart';
 import 'package:microbicpro/model/Ebrast.dart';
+import 'package:microbicpro/model/disease.dart';
 import 'package:microbicpro/model/medicine.dart';
+import 'package:microbicpro/model/pathogen.dart';
 import 'package:microbicpro/model/user.dart';
 import 'package:microbicpro/pages/auth/login.dart';
 import 'package:microbicpro/pages/home.dart';
@@ -14,379 +17,373 @@ import 'package:microbicpro/provider/main.dart';
 import 'package:microbicpro/values.dart';
 import 'package:microbicpro/widgets/widgets.dart';
 import 'package:provider/provider.dart';
-import 'package:http/http.dart' as http;
 
-import 'model/disease.dart';
-import 'model/pathogen.dart';
+const Map<String, String> _jsonHeaders = {'Accept': 'application/json'};
 
 Future<List<Pathogen>> getPathogens(BuildContext context) async {
-  List<Pathogen> pathogens;
+  final main = Provider.of<MainModel>(context, listen: false);
   try {
-    var main = Provider.of<MainModel>(context, listen: false);
-
-    var link = '$url/api/pathogens';
-    //link = location != null ? "$link/?location=$location" : link;
-    var response = await http.get(link, headers: {
-      'Accept': 'application/json',
-    });
-    var body = json.decode(response.body);
-    print('Response status: ${response.statusCode}');
-    print('Response body: ${body}');
-    pathogens =
-        List<Pathogen>.from(body.map((i) => Pathogen.fromMap(i)).toList());
-    pathogens.sort((a, b) => a.name.compareTo(b.name));
+    final response = await http.get(
+      Uri.parse('$url/api/pathogens'),
+      headers: _jsonHeaders,
+    );
+    final body = _decodeBody(response);
+    final pathogens = _asMapList(body).map(Pathogen.fromMap).toList()
+      ..sort((a, b) => a.name.compareTo(b.name));
     main.setPathogens(pathogens);
-    saveJson(jsonEncode(pathogens), fileName: 'pathogens.json');
+    await saveJson(jsonEncode(pathogens), fileName: 'pathogens.json');
+    return pathogens;
   } on SocketException {
-    Widgets.snackbar('Please Connect to the internet');
-  } catch (e) {
-    print(e);
-    Widgets.snackbar('An Error Occured');
+    Widgets.snackbar('Please connect to the internet');
+  } catch (e, stack) {
+    _logError('getPathogens', e, stack);
+    Widgets.snackbar('An error occurred');
   }
-  return pathogens;
+  return main.getPathogens;
 }
 
-Future<Pathogen> getPathogen(int id, BuildContext context) async {
-  Pathogen pathogen;
+Future<Pathogen?> getPathogen(int id, BuildContext context) async {
+  final main = Provider.of<MainModel>(context, listen: false);
   try {
-    var main = Provider.of<MainModel>(context, listen: false);
-
-    var link = '$url/api/pathogens/$id';
-    var response = await http.get(link, headers: {
-      'Accept': 'application/json',
-    });
-    var body = json.decode(response.body);
-    print('Response status: ${response.statusCode}');
-    print('Response body: ${body}');
-    //return;
-    pathogen = Pathogen.fromMap(body);
-
-    var oldPathogens = main.getPathogens;
-
-    var exist = oldPathogens.firstWhere((element) => element.id == id,
-        orElse: () => null);
-
-    if (exist != null) {
-      oldPathogens.removeWhere((element) => element.id == id);
-    }
-
-    oldPathogens.add(pathogen);
-    main.setPathogens(oldPathogens);
-    saveJson(jsonEncode(oldPathogens), fileName: 'pathogens.json');
+    final response = await http.get(
+      Uri.parse('$url/api/pathogens/$id'),
+      headers: _jsonHeaders,
+    );
+    final body = _decodeBody(response);
+    final pathogen = Pathogen.fromMap(_asMap(body));
+    final updated =
+        _upsert(main.getPathogens, (item) => item.id == id, pathogen);
+    main.setPathogens(updated);
+    await saveJson(jsonEncode(updated), fileName: 'pathogens.json');
+    return pathogen;
   } on SocketException {
-    Widgets.snackbar('Please Connect to the internet');
-  } catch (e) {
-    Widgets.snackbar('An Error Occured');
+    Widgets.snackbar('Please connect to the internet');
+  } catch (e, stack) {
+    _logError('getPathogen', e, stack);
+    Widgets.snackbar('An error occurred');
   }
-  return pathogen;
+  return null;
 }
 
 Future<List<Medicine>> getMedicines(BuildContext context) async {
-  List<Medicine> medicines;
+  final main = Provider.of<MainModel>(context, listen: false);
   try {
-    var main = Provider.of<MainModel>(context, listen: false);
-
-    var link = '$url/api/medicines';
-    //link = location != null ? "$link/?location=$location" : link;
-    var response = await http.get(link, headers: {
-      'Accept': 'application/json',
-    });
-    var body = json.decode(response.body);
-    print('Response status: ${response.statusCode}');
-    print('Response body: ${body}');
-    medicines =
-        List<Medicine>.from(body.map((i) => Medicine.fromMap(i)).toList());
-
-    medicines.sort((a, b) => a.name.compareTo(b.name));
+    final response = await http.get(
+      Uri.parse('$url/api/medicines'),
+      headers: _jsonHeaders,
+    );
+    final body = _decodeBody(response);
+    final medicines = _asMapList(body).map(Medicine.fromMap).toList()
+      ..sort((a, b) => a.name.compareTo(b.name));
     main.setMedicines(medicines);
-    saveJson(jsonEncode(medicines), fileName: 'medicines.json');
+    await saveJson(jsonEncode(medicines), fileName: 'medicines.json');
+    return medicines;
   } on SocketException {
-    Widgets.snackbar('Please Connect to the internet');
-  } catch (e) {
-    print(e);
-    Widgets.snackbar('An Error Occured');
+    Widgets.snackbar('Please connect to the internet');
+  } catch (e, stack) {
+    _logError('getMedicines', e, stack);
+    Widgets.snackbar('An error occurred');
   }
-  return medicines;
+  return main.getMedicines;
 }
 
-Future<Medicine> getMedicine(int id, BuildContext context) async {
-  Medicine medicine;
+Future<Medicine?> getMedicine(int id, BuildContext context) async {
+  final main = Provider.of<MainModel>(context, listen: false);
   try {
-    var main = Provider.of<MainModel>(context, listen: false);
-
-    var link = '$url/api/medicines/$id';
-    var response = await http.get(link, headers: {
-      'Accept': 'application/json',
-    });
-    var body = json.decode(response.body);
-    print('Response status: ${response.statusCode}');
-    print('Response body: ${body}');
-    //return;
-    medicine = Medicine.fromMap(body);
-
-    var oldMedicines = main.getMedicines;
-
-    var exist = oldMedicines.firstWhere((element) => element.id == id,
-        orElse: () => null);
-
-    if (exist != null) {
-      oldMedicines.removeWhere((element) => element.id == id);
-    }
-
-    oldMedicines.add(medicine);
-    main.setMedicines(oldMedicines);
-    saveJson(jsonEncode(oldMedicines), fileName: 'medicines.json');
+    final response = await http.get(
+      Uri.parse('$url/api/medicines/$id'),
+      headers: _jsonHeaders,
+    );
+    final body = _decodeBody(response);
+    final medicine = Medicine.fromMap(_asMap(body));
+    final updated =
+        _upsert(main.getMedicines, (item) => item.id == id, medicine);
+    main.setMedicines(updated);
+    await saveJson(jsonEncode(updated), fileName: 'medicines.json');
+    return medicine;
   } on SocketException {
-    Widgets.snackbar('Please Connect to the internet');
-  } catch (e) {
-    print(e);
-    Widgets.snackbar('An Error Occured');
+    Widgets.snackbar('Please connect to the internet');
+  } catch (e, stack) {
+    _logError('getMedicine', e, stack);
+    Widgets.snackbar('An error occurred');
   }
-  return medicine;
+  return null;
 }
 
 Future<List<Disease>> getDiseases(BuildContext context) async {
-  List<Disease> diseases;
-  //try {
-  var main = Provider.of<MainModel>(context, listen: false);
-
-  var link = '$url/api/diseases';
-  //link = location != null ? "$link/?location=$location" : link;
-  var response = await http.get(link, headers: {
-    'Accept': 'application/json',
-  });
-  var body = json.decode(response.body);
-  print('Response status: ${response.statusCode}');
-  print('Response body: ${body}');
-  diseases = List<Disease>.from(body.map((i) => Disease.fromMap(i)).toList());
-  diseases.sort((a, b) => a.name.compareTo(b.name));
-  main.setDiseases(diseases);
-  saveJson(jsonEncode(diseases), fileName: 'diseases.json');
-  /* } on SocketException {
-    Widgets.snackbar('Please Connect to the internet');
-  } catch (e) {
-    print(e);
-    Widgets.snackbar('An Error Occured');
-  } */
-  return diseases;
-}
-
-Future<Disease> getDisease(int id, BuildContext context) async {
-  Disease disease;
+  final main = Provider.of<MainModel>(context, listen: false);
   try {
-    var main = Provider.of<MainModel>(context, listen: false);
-
-    var link = '$url/api/diseases/$id';
-    var response = await http.get(link, headers: {
-      'Accept': 'application/json',
-    });
-    var body = json.decode(response.body);
-    print('Response status: ${response.statusCode}');
-    //print('Response body: ${body['drug_managements'][0]['medicine_name']}');
-    //return;
-    disease = Disease.fromMap(body);
-
-    var oldDiseases = main.getDiseases;
-
-    var exist = oldDiseases.firstWhere((element) => element.id == id,
-        orElse: () => null);
-
-    if (exist != null) {
-      oldDiseases.removeWhere((element) => element.id == id);
-    }
-
-    oldDiseases.add(disease);
-    main.setDiseases(oldDiseases);
-    saveJson(jsonEncode(oldDiseases), fileName: 'diseases.json');
+    final response = await http.get(
+      Uri.parse('$url/api/diseases'),
+      headers: _jsonHeaders,
+    );
+    final body = _decodeBody(response);
+    final diseases = _asMapList(body).map(Disease.fromMap).toList()
+      ..sort((a, b) => a.name.compareTo(b.name));
+    main.setDiseases(diseases);
+    await saveJson(jsonEncode(diseases), fileName: 'diseases.json');
+    return diseases;
   } on SocketException {
-    Widgets.snackbar('Please Connect to the internet');
-  } catch (e) {
-    print(e);
-    Widgets.snackbar('An Error Occured');
+    Widgets.snackbar('Please connect to the internet');
+  } catch (e, stack) {
+    _logError('getDiseases', e, stack);
+    Widgets.snackbar('An error occurred');
   }
-  return disease;
+  return main.getDiseases;
 }
 
-Future<List<Ebrast>> getEbrasts(BuildContext context, {String location}) async {
-  List<Ebrast> ebrasts;
+Future<Disease?> getDisease(int id, BuildContext context) async {
+  final main = Provider.of<MainModel>(context, listen: false);
   try {
-    var main = Provider.of<MainModel>(context, listen: false);
+    final response = await http.get(
+      Uri.parse('$url/api/diseases/$id'),
+      headers: _jsonHeaders,
+    );
+    final body = _decodeBody(response);
+    final disease = Disease.fromMap(_asMap(body));
+    final updated = _upsert(main.getDiseases, (item) => item.id == id, disease);
+    main.setDiseases(updated);
+    await saveJson(jsonEncode(updated), fileName: 'diseases.json');
+    return disease;
+  } on SocketException {
+    Widgets.snackbar('Please connect to the internet');
+  } catch (e, stack) {
+    _logError('getDisease', e, stack);
+    Widgets.snackbar('An error occurred');
+  }
+  return null;
+}
 
-    var link = '$url/api/ebrasts';
-    link = location != null ? "$link/?location=$location" : link;
-    var response = await http.get(link, headers: {
-      'Accept': 'application/json',
-    });
-    var body = json.decode(response.body);
-    print('Response status: ${response.statusCode}');
-    print('Response body: ${body}');
-    ebrasts = List<Ebrast>.from(body.map((i) => Ebrast.fromMap(i)).toList());
-    ebrasts.sort((a, b) => a.location.compareTo(b.location));
-    saveJson(jsonEncode(ebrasts), fileName: 'ebrasts.json');
+Future<List<Ebrast>> getEbrasts(BuildContext context,
+    {String? location}) async {
+  final main = Provider.of<MainModel>(context, listen: false);
+  try {
+    final uri = location == null
+        ? Uri.parse('$url/api/ebrasts')
+        : Uri.parse('$url/api/ebrasts/?location=$location');
+    final response = await http.get(uri, headers: _jsonHeaders);
+    final body = _decodeBody(response);
+    final ebrasts = _asMapList(body).map(Ebrast.fromMap).toList()
+      ..sort((a, b) => a.location.compareTo(b.location));
+    await saveJson(jsonEncode(ebrasts), fileName: 'ebrasts.json');
     main.setEbrasts(ebrasts);
+    return ebrasts;
   } on SocketException {
-    Widgets.snackbar('Please Connect to the internet');
-  } catch (e) {
-    print(e);
-    Widgets.snackbar('An Error Occured');
+    Widgets.snackbar('Please connect to the internet');
+  } catch (e, stack) {
+    _logError('getEbrasts', e, stack);
+    Widgets.snackbar('An error occurred');
   }
-  return ebrasts;
+  return main.getEbrasts;
 }
 
-Future<Ebrast> getEbrast(int id, BuildContext context) async {
-  Ebrast ebrast;
+Future<Ebrast?> getEbrast(int id, BuildContext context) async {
+  final main = Provider.of<MainModel>(context, listen: false);
   try {
-    var main = Provider.of<MainModel>(context, listen: false);
-
-    var link = '$url/api/ebrasts/$id';
-    var response = await http.get(link, headers: {
-      'Accept': 'application/json',
-    });
-    var body = json.decode(response.body);
-    print('Response status: ${response.statusCode}');
-    print('Response body: ${body}');
-    //return;
-    ebrast = Ebrast.fromMap(body);
-
-    var oldEbrasts = main.getEbrasts;
-
-    var exist = oldEbrasts.firstWhere((element) => element.id == id,
-        orElse: () => null);
-
-    if (exist != null) {
-      oldEbrasts.removeWhere((element) => element.id == id);
-    }
-    oldEbrasts.add(ebrast);
-    saveJson(jsonEncode(oldEbrasts), fileName: 'ebrasts.json');
-    main.setEbrasts(oldEbrasts);
+    final response = await http.get(
+      Uri.parse('$url/api/ebrasts/$id'),
+      headers: _jsonHeaders,
+    );
+    final body = _decodeBody(response);
+    final ebrast = Ebrast.fromMap(_asMap(body));
+    final updated = _upsert(main.getEbrasts, (item) => item.id == id, ebrast);
+    await saveJson(jsonEncode(updated), fileName: 'ebrasts.json');
+    main.setEbrasts(updated);
+    return ebrast;
   } on SocketException {
-    Widgets.snackbar('Please Connect to the internet');
-  } catch (e) {
-    print(e);
-    Widgets.snackbar('An Error Occured');
+    Widgets.snackbar('Please connect to the internet');
+  } catch (e, stack) {
+    _logError('getEbrast', e, stack);
+    Widgets.snackbar('An error occurred');
   }
-  return ebrast;
+  return null;
 }
 
-Future login(Map data, BuildContext context, {refresh: false}) async {
+Future<void> login(
+  Map<String, dynamic> data,
+  BuildContext context, {
+  bool refresh = false,
+}) async {
+  final main = Provider.of<MainModel>(context, listen: false);
   try {
-    var main = Provider.of<MainModel>(context, listen: false);
+    final response = await http.post(
+      Uri.parse('$url/api/login'),
+      body: data,
+      headers: _jsonHeaders,
+    );
 
-    var link = '$url/api/login';
-    var response = await http.post(link, body: data, headers: {
-      'Accept': 'application/json',
-    });
-    var body = json.decode(response.body);
-    print('Response status: ${response.statusCode}');
-    print('Response body: ${body}');
-
-    request(response, () async {
-      var user = User.fromMap(body);
+    await request(response, (body) async {
+      final user = User.fromMap(_asMap(body));
       main.setUser(user);
-
-      saveJson(jsonEncode(data));
-      saveJson(jsonEncode(user), fileName: 'users.json');
-
-      //await updateBox('credentials', Map<String, dynamic>.from(data));
-      //print(data);
-
-      if (!refresh) Get.off(Home());
+      await saveJson(jsonEncode(data));
+      await saveJson(jsonEncode(user), fileName: 'users.json');
+      if (!refresh) Get.off(() => Home());
     }, context);
   } on SocketException {
-    Widgets.snackbar('Please Connect to the internet');
-  } catch (e) {
-    print(e);
-    Widgets.snackbar('An Error Occured');
+    Widgets.snackbar('Please connect to the internet');
+  } catch (e, stack) {
+    _logError('login', e, stack);
+    Widgets.snackbar('An error occurred');
   }
-  //return ebrast;
 }
 
-Future register(Map data, BuildContext context) async {
+Future<void> register(Map<String, dynamic> data, BuildContext context) async {
   try {
-    var main = Provider.of<MainModel>(context, listen: false);
+    final response = await http.post(
+      Uri.parse('$url/api/register'),
+      body: data,
+      headers: _jsonHeaders,
+    );
 
-    var link = '$url/api/register';
-    var response = await http.post(link, body: data, headers: {
-      'Accept': 'application/json',
-    });
-    var body = json.decode(response.body);
-    print('Response status: ${response.statusCode}');
-    print('Response body: ${body}');
-
-    request(response, () async {
-      main.setUser(User.fromMap(body));
-      saveJson(json.encode(data));
+    await request(response, (body) async {
+      final main = Provider.of<MainModel>(context, listen: false);
+      main.setUser(User.fromMap(_asMap(body)));
+      await saveJson(jsonEncode(data));
       await login(data, context);
-
-      //Get.off(Home());
     }, context);
   } on SocketException {
-    Widgets.snackbar('Please Connect to the internet');
-  } catch (e) {
-    print(e);
-    Widgets.snackbar('An Error Occured');
+    Widgets.snackbar('Please connect to the internet');
+  } catch (e, stack) {
+    _logError('register', e, stack);
+    Widgets.snackbar('An error occurred');
   }
-  //return ebrast;
 }
 
-Future changeLocation(String location, BuildContext context) async {
+Future<void> changeLocation(String? location, BuildContext context) async {
+  if (location == null) {
+    return;
+  }
+  final main = Provider.of<MainModel>(context, listen: false);
+  final user = main.getUser;
+  if (user == null) {
+    Widgets.snackbar('Please log in again');
+    return;
+  }
   try {
-    var main = Provider.of<MainModel>(context, listen: false);
+    final uri = Uri.parse(
+        '$url/api/user/${user.id}/location?api_token=${user.apiToken}');
+    final response = await http.post(
+      uri,
+      body: {'location': location},
+      headers: _jsonHeaders,
+    );
 
-    var link =
-        '$url/api/user/${main.getUser.id}/location?api_token=${main.getUser.apiToken}';
-    var response = await http.post(link, body: {
-      'location': location
-    }, headers: {
-      'Accept': 'application/json',
-    });
-
-    print('Response status: ${response.statusCode}');
-
-    request(response, () async {
-      //var data = await getJson();
-      //await login(jsonDecode(data), context, refresh: true);
+    await request(response, (_) async {
       Widgets.snackbar('Location changed');
     }, context);
   } on SocketException {
-    Widgets.snackbar('Please Connect to the internet');
-  } catch (e) {
-    print(e);
-    Widgets.snackbar('An Error Occured');
+    Widgets.snackbar('Please connect to the internet');
+  } catch (e, stack) {
+    _logError('changeLocation', e, stack);
+    Widgets.snackbar('An error occurred');
   }
-  //return ebrast;
 }
 
-request(Response response, Function action, context) {
-  print(response.statusCode);
-  var body = json.decode(response.body);
-  print(body);
-  return processResponse(response.statusCode, body, action, context);
+Future<void> request(
+  http.Response response,
+  Future<void> Function(dynamic body) action,
+  BuildContext context,
+) async {
+  final body = _decodeBody(response);
+  await processResponse(response.statusCode, body, action, context);
 }
 
-processResponse(statusCode, body, Function action, context) {
+Future<void> processResponse(
+  int statusCode,
+  dynamic body,
+  Future<void> Function(dynamic body) action,
+  BuildContext context,
+) async {
   if (statusCode == 401) {
-    Widgets.snackbar('Please re login');
-    return Get.off(Login());
+    Widgets.snackbar('Please re-login');
+    Get.off(() => Login());
+    return;
   }
-  if (statusCode == 422) {
-    var errors = '';
-    body['errors'].forEach((error, data) => errors += '${data[0]}\n');
-    //return snackbar(errors, context, _scaffoldKey);
-    return Widgets.snackbar(errors);
+
+  if (statusCode == 422 && body is Map<String, dynamic>) {
+    final errors = StringBuffer();
+    final mapErrors = body['errors'];
+    if (mapErrors is Map) {
+      mapErrors.forEach((_, data) {
+        if (data is List && data.isNotEmpty) {
+          errors.writeln(data.first);
+        }
+      });
+    }
+    Widgets.snackbar(errors.isEmpty ? 'Validation error' : errors.toString());
+    return;
   }
 
   if (statusCode >= 200 && statusCode < 300) {
-    if (body.containsKey('error')) {
-      return Widgets.snackbar(body['error']);
+    if (body is Map<String, dynamic>) {
+      if (body.containsKey('error')) {
+        Widgets.snackbar(body['error'].toString());
+        return;
+      }
+      if (body.containsKey('success')) {
+        Widgets.snackbar(body['success'].toString());
+        return;
+      }
     }
-    if (body.containsKey('success')) {
-      return Widgets.snackbar(body['success']);
-    }
-    action();
+    await action(body);
   } else {
-    return Widgets.snackbar('An error occured, Please try later.');
-    /*  return snackbar(
-        'An error occured, Please try later.', context, _scaffoldKey); */
+    Widgets.snackbar('An error occurred, please try later.');
   }
+}
+
+dynamic _decodeBody(http.Response response) {
+  try {
+    final body = json.decode(response.body);
+    _logResponse(response, body);
+    return body;
+  } catch (e, stack) {
+    _logError('decodeBody', e, stack);
+    return null;
+  }
+}
+
+void _logResponse(http.Response response, dynamic body) {
+  if (kDebugMode) {
+    debugPrint('Response status: ${response.statusCode}');
+    debugPrint('Response body: $body');
+  }
+}
+
+void _logError(String label, Object error, StackTrace stackTrace) {
+  if (kDebugMode) {
+    debugPrint('$label error: $error');
+    debugPrint(stackTrace.toString());
+  }
+}
+
+Map<String, dynamic> _asMap(dynamic source) {
+  if (source is Map) {
+    return Map<String, dynamic>.from(source);
+  }
+  return <String, dynamic>{};
+}
+
+List<Map<String, dynamic>> _asMapList(dynamic source) {
+  if (source is Iterable) {
+    return source
+        .where((element) => element is Map)
+        .map((element) => Map<String, dynamic>.from(element as Map))
+        .toList();
+  }
+  return <Map<String, dynamic>>[];
+}
+
+List<T> _upsert<T>(
+  List<T> items,
+  bool Function(T element) predicate,
+  T newItem,
+) {
+  final updated = List<T>.from(items);
+  final index = updated.indexWhere(predicate);
+  if (index != -1) {
+    updated[index] = newItem;
+  } else {
+    updated.add(newItem);
+  }
+  return updated;
 }

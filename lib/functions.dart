@@ -13,7 +13,7 @@ Color getColor(double per) {
   } else if (per > 70) {
     return Colors.green;
   }
-  return Colors.yellow[600];
+  return Colors.yellow[600] ?? Colors.yellow;
 }
 
 String getText(double per) {
@@ -34,7 +34,7 @@ Color getTypeColor(String type) {
   }
 
   if (type == 'watch') {
-    return Colors.yellow[600];
+    return Colors.yellow[600] ?? Colors.yellow;
   }
 
   return Colors.blue;

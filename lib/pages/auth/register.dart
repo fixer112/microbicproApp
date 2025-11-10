@@ -82,6 +82,13 @@ class _RegisterState extends State<Register> {
 
   bool isLoading = false;
 
+  String? _requiredField(String? value) {
+    if (value == null || value.isEmpty) {
+      return "field required";
+    }
+    return null;
+  }
+
   @override
   void initState() {
     super.initState();
@@ -140,11 +147,11 @@ class _RegisterState extends State<Register> {
                       children: [
                         IconButton(
                             icon: Icon(
-                              FontAwesomeIcons.times,
+                              FontAwesomeIcons.xmark,
                               size: 15,
                             ),
                             onPressed: () {
-                              Get.off(Login());
+                              Get.off(() => Login());
                             }),
                       ],
                     ),
@@ -162,87 +169,55 @@ class _RegisterState extends State<Register> {
                       key: _formKey,
                       child: Column(children: [
                         Widgets.textFormField('First Name', firstName,
-                            validate: (text) {
-                          if (text == null || text.isEmpty) {
-                            return "field required";
-                          }
-                        }),
+                            validate: _requiredField),
                         Widgets.textFormField('Last Name', lastName,
-                            validate: (text) {
-                          if (text == null || text.isEmpty) {
-                            return "field required";
-                          }
-                        }),
-                        Widgets.textFormField('Email', email, validate: (text) {
-                          if (text == null || text.isEmpty) {
-                            return "field required";
-                          }
-                        }, type: TextInputType.emailAddress),
-                        Widgets.dropdownForm(
+                            validate: _requiredField),
+                        Widgets.textFormField('Email', email,
+                            validate: _requiredField,
+                            type: TextInputType.emailAddress),
+                        Widgets.dropdownForm<String>(
                           'Select Profession',
                           profession,
                           professionList,
                           action: (val) => setState(() {
                             profession = val;
                           }),
-                          validate: (val) {
-                            if (val == null || val.isEmpty) {
-                              return "field required";
-                            }
-                          },
+                          validate: _requiredField,
                         ),
-                        Widgets.dropdownForm(
+                        Widgets.dropdownForm<String>(
                           'Select Area of Practice',
                           areaOfPractice,
                           areaList,
                           action: (val) => setState(() {
                             areaOfPractice = val;
                           }),
-                          validate: (val) {
-                            if (val == null || val.isEmpty) {
-                              return "field required";
-                            }
-                          },
+                          validate: _requiredField,
                         ),
-                        Widgets.dropdownForm(
+                        Widgets.dropdownForm<String>(
                           'Select Years of Practice',
                           yearsOfPractice,
                           yearList,
                           action: (val) => setState(() {
                             yearsOfPractice = val;
                           }),
-                          validate: (val) {
-                            if (val == null || val.isEmpty) {
-                              return "field required";
-                            }
-                          },
+                          validate: _requiredField,
                         ),
-                        Widgets.dropdownForm(
+                        Widgets.dropdownForm<String>(
                           'Select Location',
                           location,
                           locationList,
                           action: (val) => setState(() {
                             location = val;
                           }),
-                          validate: (val) {
-                            if (val == null || val.isEmpty) {
-                              return "field required";
-                            }
-                          },
+                          validate: _requiredField,
                         ),
                         Widgets.textFormField('Password', password,
-                            validate: (text) {
-                          if (text == null || text.isEmpty) {
-                            return "field required";
-                          }
-                        }, type: TextInputType.visiblePassword),
+                            validate: _requiredField,
+                            type: TextInputType.visiblePassword),
                         Widgets.textFormField(
                             'Confirm Password', confirmPassword,
-                            validate: (text) {
-                          if (text == null || text.isEmpty) {
-                            return "field required";
-                          }
-                        }, type: TextInputType.visiblePassword),
+                            validate: _requiredField,
+                            type: TextInputType.visiblePassword),
                       ]),
                     ),
                     SizedBox(
@@ -252,14 +227,15 @@ class _RegisterState extends State<Register> {
                       child: !isLoading
                           ? Column(
                               children: [
-                                Container(
+                                SizedBox(
                                   width: 150,
-                                  child: FlatButton(
+                                  child: TextButton(
                                     onPressed: () async {
                                       setState(() {
                                         isLoading = true;
                                       });
-                                      if (_formKey.currentState.validate()) {
+                                      if (_formKey.currentState?.validate() ??
+                                          false) {
                                         var data = {
                                           'first_name': firstName.text,
                                           'last_name': lastName.text,
@@ -279,19 +255,21 @@ class _RegisterState extends State<Register> {
                                         isLoading = false;
                                       });
                                     },
+                                    style: TextButton.styleFrom(
+                                      backgroundColor: primaryColor,
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(25),
+                                      ),
+                                    ),
                                     child: Widgets.text('Create',
                                         color: secondaryColor, size: 16),
-                                    color: primaryColor,
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(25),
-                                    ),
                                   ),
                                 ),
                                 SizedBox(
                                   height: 10,
                                 ),
                                 InkWell(
-                                    onTap: () => Get.to(Terms()),
+                                    onTap: () => Get.to(() => Terms()),
                                     child: Widgets.text('Terms',
                                         color: primaryColor))
                               ],

@@ -1,4 +1,4 @@
-import 'package:microbicpro/model/medicine.dart';
+import 'model_utils.dart';
 
 class PathogenAntibiogramData {
   final int id;
@@ -8,32 +8,39 @@ class PathogenAntibiogramData {
   final int medicineId;
   final String medicineName;
   final String sample;
-  final int referenceID;
+  final int referenceId;
   final String location;
 
-  PathogenAntibiogramData({
-    this.isolateNumber,
-    this.medicineId,
-    this.percentage,
-    this.year,
-    this.id,
-    this.medicineName,
-    this.sample,
-    this.referenceID,
-    this.location,
+  const PathogenAntibiogramData({
+    required this.id,
+    required this.isolateNumber,
+    required this.year,
+    required this.percentage,
+    required this.medicineId,
+    required this.medicineName,
+    required this.sample,
+    required this.referenceId,
+    required this.location,
   });
 
-  factory PathogenAntibiogramData.fromMap(Map data) {
+  factory PathogenAntibiogramData.fromMap(Map<String, dynamic> data) {
+    final rawPivot = data['pivot'];
+    final pivot = rawPivot is Map
+        ? Map<String, dynamic>.from(
+            rawPivot,
+          )
+        : <String, dynamic>{};
+
     return PathogenAntibiogramData(
-      id: int.parse(data['pivot']['id'].toString()),
-      isolateNumber: data['pivot']['isolate_number'] ?? '',
-      year: data['pivot']['year'] ?? '',
-      percentage: data['pivot']['percentage'] ?? '',
-      medicineId: int.parse(data['pivot']['medicine_id'].toString()),
-      medicineName: data['name'] ?? '',
-      sample: data['pivot']['sample'] ?? '',
-      referenceID: int.parse(data['pivot']['reference_id'].toString()),
-      location: data['pivot']['location'] ?? '',
+      id: parseInt(pivot['id']),
+      isolateNumber: parseString(pivot['isolate_number']),
+      year: parseString(pivot['year']),
+      percentage: parseString(pivot['percentage']),
+      medicineId: parseInt(pivot['medicine_id']),
+      medicineName: parseString(data['name']),
+      sample: parseString(pivot['sample']),
+      referenceId: parseInt(pivot['reference_id']),
+      location: parseString(pivot['location']),
     );
   }
   Map<String, dynamic> toJson() => {
@@ -44,7 +51,7 @@ class PathogenAntibiogramData {
           'percentage': percentage,
           'medicine_id': medicineId,
           'sample': sample,
-          'reference_id': referenceID,
+          'reference_id': referenceId,
           'location': location,
         },
         'name': medicineName,

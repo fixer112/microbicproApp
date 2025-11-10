@@ -14,21 +14,22 @@ import '../../values.dart';
 
 class SingleDrug extends StatefulWidget {
   final int id;
+  const SingleDrug(this.id, {super.key});
 
   @override
-  _SingleDrugState createState() => _SingleDrugState();
-  SingleDrug(this.id);
+  State<SingleDrug> createState() => _SingleDrugState();
 }
 
 class _SingleDrugState extends State<SingleDrug> {
-  Medicine medicine;
+  Medicine? medicine;
   bool loading = false;
   @override
   void initState() {
     super.initState();
-    var main = Provider.of<MainModel>(context, listen: false);
-    medicine = main.medicines
-        .firstWhere((medicine) => medicine.id == widget.id, orElse: () => null);
+    final main = Provider.of<MainModel>(context, listen: false);
+    final matches =
+        main.medicines.where((medicine) => medicine.id == widget.id);
+    medicine = matches.isNotEmpty ? matches.first : null;
     if (medicine == null) {
       fetch();
       // Widgets.snackbar('Medicine not found');
@@ -36,7 +37,7 @@ class _SingleDrugState extends State<SingleDrug> {
     }
   }
 
-  fetch() async {
+  Future<void> fetch() async {
     setState(() {
       loading = true;
     });
@@ -48,11 +49,12 @@ class _SingleDrugState extends State<SingleDrug> {
 
   @override
   Widget build(BuildContext context) {
+    final current = medicine;
     return Pager(
-      medicine == null ? 'Medicine Not Found' : "Medicine - ${medicine.name}",
+      current == null ? 'Medicine Not Found' : "Medicine - ${current.name}",
       loading
           ? [Widgets.loader()]
-          : medicine == null
+          : current == null
               ? [Widgets.centerText('Medicine Not Found', context)]
               : [
                   Container(
@@ -60,14 +62,14 @@ class _SingleDrugState extends State<SingleDrug> {
                       child: Padding(
                         padding: const EdgeInsets.all(25.0),
                         child: Widgets.text(
-                            "W.H.O recommended ${medicine.type.toUpperCase()} antibiotic",
+                            "W.H.O recommended ${current.type.toUpperCase()} antibiotic",
                             color: Colors.white,
                             size: 15,
                             weight: FontWeight.bold),
                       ),
                     ),
                     decoration: BoxDecoration(
-                      color: getTypeColor(medicine.type),
+                      color: getTypeColor(current.type),
                       borderRadius: BorderRadius.all(Radius.circular(15)),
                     ),
                   ),
@@ -75,7 +77,7 @@ class _SingleDrugState extends State<SingleDrug> {
                   Widgets.collapsible(
                       'Ideal Spectrum',
                       [
-                        Widgets.text(medicine.spectrum),
+                        Widgets.text(current.spectrum),
                       ],
                       icon: 'general_spectrum.png',
                       width: 20,
@@ -83,10 +85,10 @@ class _SingleDrugState extends State<SingleDrug> {
                   Card(
                     child: ListTile(
                       onTap: () {
-                        Get.to(AntiBiogramDataMedicine(medicine));
+                        Get.to(() => AntiBiogramDataMedicine(current));
                       },
                       trailing: Icon(
-                        FontAwesomeIcons.chevronCircleRight,
+                        FontAwesomeIcons.circleChevronRight,
                         color: primaryColor,
                         size: 16,
                       ),
@@ -107,25 +109,25 @@ class _SingleDrugState extends State<SingleDrug> {
                   Widgets.collapsible(
                       'Drug class',
                       [
-                        Widgets.text(medicine.drugClass),
+                        Widgets.text(current.drugClass),
                       ],
                       icon: 'drug_class.png'),
                   Widgets.collapsible(
                       'Mechanism of action',
                       [
-                        Widgets.text(medicine.action),
+                        Widgets.text(current.action),
                       ],
                       icon: 'mechanism_of_action.png'),
                   Widgets.collapsible('Pharmacokinetics', [
-                    Widgets.text(medicine.pharmacokinetics),
+                    Widgets.text(current.pharmacokinetics),
                   ]),
                   Widgets.collapsible('Significant interactions', [
-                    Widgets.text(medicine.interactions),
+                    Widgets.text(current.interactions),
                   ]),
                   Widgets.collapsible(
                       'Pregnancy category',
                       [
-                        Widgets.text(medicine.pregnancyCategory),
+                        Widgets.text(current.pregnancyCategory),
                       ],
                       icon: 'pregnancy.png'),
                   /*  Widgets.collapsible('Contraindications', [
@@ -134,28 +136,28 @@ class _SingleDrugState extends State<SingleDrug> {
                   Widgets.collapsible(
                       'Adverse effects',
                       [
-                        Widgets.text(medicine.adverseEffects),
+                        Widgets.text(current.adverseEffects),
                       ],
                       icon: 'adverse_effect.png'),
                   Widgets.header('DOSE SCHEDULE', icon: 'dose.png'),
                   Widgets.collapsible(
                       'Renal',
                       [
-                        Widgets.text(medicine.renal),
+                        Widgets.text(current.renal),
                       ],
                       icon: 'renal.png'),
                   Widgets.collapsible(
                       'Adult',
                       [
-                        Widgets.text(medicine.adult),
+                        Widgets.text(current.adult),
                       ],
                       icon: 'adult.png'),
                   Widgets.collapsible('Child', [
-                    Widgets.text(medicine.child),
+                    Widgets.text(current.child),
                   ]),
                 ],
       search: false,
-      refresh: () => fetch(),
+      refresh: fetch,
     );
   }
 

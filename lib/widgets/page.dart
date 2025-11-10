@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
@@ -8,219 +6,193 @@ import 'package:microbicpro/pages/ebrast/ebrast.dart';
 import 'package:microbicpro/pages/guidelines/guidelines.dart';
 import 'package:microbicpro/pages/medicines/medicines.dart';
 import 'package:microbicpro/pages/pathogens/pathogens.dart';
-import 'package:microbicpro/pages/search_page.dart';
 import 'package:microbicpro/widgets/widgets.dart';
 
 import '../values.dart';
 
 class Pager extends StatefulWidget {
-  final String title;
-  final List<Widget> widgets;
-  final bool search;
-  final bool willPop;
-  final Function refresh;
-  final int bottomBarIndex;
-  ValueChanged<String> onSearch;
-
-  Pager(
+  const Pager(
     this.title,
     this.widgets, {
-    Key key,
+    super.key,
     this.search = false,
     this.willPop = true,
     this.refresh,
     this.bottomBarIndex = 0,
     this.onSearch,
-  });
+  }) : assert(
+          !search || onSearch != null,
+          'Provide an onSearch callback when search is enabled.',
+        );
+
+  final String title;
+  final List<Widget> widgets;
+  final bool search;
+  final bool willPop;
+  final Future<void> Function()? refresh;
+  final int bottomBarIndex;
+  final ValueChanged<String>? onSearch;
 
   @override
-  _PagerState createState() => _PagerState();
+  State<Pager> createState() => _PagerState();
 }
 
 class _PagerState extends State<Pager> {
-  Future<bool> fetch() {
-    return Future.delayed(Duration(microseconds: 10), () => true);
-  }
-
-  bool isSearching = false;
-  TextEditingController controller = TextEditingController();
+  final TextEditingController _controller = TextEditingController();
+  bool _isSearching = false;
 
   @override
   void initState() {
     super.initState();
-    controller.addListener(() {
-      //print(controller.text);
-      widget.onSearch(controller.text);
-    });
+    if (widget.onSearch != null) {
+      _controller.addListener(() => widget.onSearch!(_controller.text));
+    }
   }
 
   @override
   void dispose() {
-    controller.dispose();
+    _controller.dispose();
     super.dispose();
+  }
+
+  Future<void> _handleRefresh() async {
+    if (widget.refresh != null) {
+      await widget.refresh!();
+    }
+    // Give the indicator a moment to settle even if no refresh was provided.
+    await Future<void>.delayed(const Duration(milliseconds: 50));
+  }
+
+  Widget _buildSearchField() {
+    return TextField(
+      controller: _controller,
+      style: const TextStyle(color: Colors.white),
+      cursorColor: Colors.white,
+      decoration: const InputDecoration(
+        labelText: 'Search',
+        labelStyle: TextStyle(color: Colors.white),
+        enabledBorder: UnderlineInputBorder(
+          borderSide: BorderSide(color: Colors.white, width: 2),
+        ),
+        focusedBorder: UnderlineInputBorder(
+          borderSide: BorderSide(color: Colors.white, width: 2),
+        ),
+      ),
+    );
+  }
+
+  void _navigate(int index) {
+    final destinations = <Widget Function()>[
+      () => Guidelines(),
+      () => Pathogens(),
+      () => Medicines(),
+      () => Ebrast(),
+      () => Profile(),
+    ];
+    if (index >= 0 && index < destinations.length) {
+      Get.to(destinations[index]);
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    searchWidget() {
-      return Container(
-        height: 50.0,
-        margin: EdgeInsets.only(top: 10.0),
-        child: TextField(
-          style: TextStyle(color: Colors.white),
-          cursorColor: Colors.white,
-          controller: controller,
-          decoration: InputDecoration(
-            //fillColor: Colors.white,
-            //filled: true,
-            enabledBorder: UnderlineInputBorder(
-                borderSide: BorderSide(color: Colors.white, width: 5.0)),
-            focusedBorder: UnderlineInputBorder(
-                borderSide: BorderSide(color: Colors.white, width: 5.0)),
-            //labelText: 'Your Email or Phone',
-            labelText: 'Search',
-            labelStyle: TextStyle(color: Colors.white),
-
-            //contentPadding: EdgeInsets.all(10).copyWith(left: 30),
-            //hintStyle: TextStyle(color: Colors.black),
+    return PopScope(
+      canPop: widget.willPop,
+      child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: primaryColor,
+          title: _isSearching ? _buildSearchField() : Text(widget.title),
+          actions: [
+            if (widget.search)
+              IconButton(
+                icon: Icon(_isSearching ? Icons.close : Icons.search),
+                onPressed: () {
+                  setState(() {
+                    _isSearching = !_isSearching;
+                    if (!_isSearching) {
+                      _controller.clear();
+                    }
+                  });
+                },
+              ),
+          ],
+        ),
+        body: RefreshIndicator(
+          onRefresh: _handleRefresh,
+          child: ListView(
+            shrinkWrap: true,
+            padding: const EdgeInsets.all(10),
+            children: widget.widgets,
           ),
         ),
-      );
-    }
-
-    ;
-    return WillPopScope(
-        onWillPop: () async => widget.willPop,
-        child: Scaffold(
-          appBar: AppBar(
-            /* leading: IconButton(
-                icon: Icon(Icons.arrow_back),
-                onPressed: () {
-                  Navigator.pop(context);
-                }), */
-            actions: [
-              widget.search
-                  ? IconButton(
-                      icon: Icon(Icons.search),
-                      onPressed: () {
-                        setState(() {
-                          isSearching = !isSearching;
-                        });
-                      },
-                    )
-                  : Container(),
-            ],
-            title: isSearching ? searchWidget() : Text(widget.title),
-            backgroundColor: primaryColor,
-          ),
-          body: RefreshIndicator(
-            onRefresh: () async {
-              if (widget.refresh != null) {
-                widget.refresh();
-              }
-              return fetch();
-            },
-            child: ListView(
-              shrinkWrap: true,
-              padding: EdgeInsets.all(10),
-              children: widget.widgets,
+        bottomNavigationBar: BottomNavigationBar(
+          currentIndex: widget.bottomBarIndex,
+          backgroundColor: Colors.white,
+          onTap: _navigate,
+          items: [
+            BottomNavigationBarItem(
+              icon: Widgets.gradienticon(
+                FontAwesomeIcons.squareCheck,
+                20,
+                const LinearGradient(
+                  colors: [Colors.orange, Colors.pink],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ),
+              ),
+              label: 'Guidelines',
             ),
-          ),
-          bottomNavigationBar: BottomNavigationBar(
-            currentIndex: widget.bottomBarIndex,
-            backgroundColor: Colors.white,
-            items: [
-              BottomNavigationBarItem(
-                icon: Widgets.gradienticon(
-                    FontAwesomeIcons.checkSquare,
-                    20,
-                    LinearGradient(
-                      colors: <Color>[
-                        Colors.orange,
-                        Colors.pink,
-                      ],
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                    )),
-                title: Widgets.text('Guidelines', color: Colors.black),
+            BottomNavigationBarItem(
+              icon: Widgets.gradienticon(
+                FontAwesomeIcons.disease,
+                20,
+                const LinearGradient(
+                  colors: [Colors.green, Colors.blue],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ),
               ),
-              BottomNavigationBarItem(
-                icon: Widgets.gradienticon(
-                    FontAwesomeIcons.disease,
-                    20,
-                    LinearGradient(
-                      colors: <Color>[
-                        Colors.green,
-                        Colors.blue,
-                      ],
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                    )),
-                title: Widgets.text('Pathogens', color: Colors.black),
+              label: 'Pathogens',
+            ),
+            BottomNavigationBarItem(
+              icon: Widgets.gradienticon(
+                FontAwesomeIcons.bookMedical,
+                20,
+                const LinearGradient(
+                  colors: [Colors.indigo, Colors.purple],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ),
               ),
-              BottomNavigationBarItem(
-                icon: Widgets.gradienticon(
-                    FontAwesomeIcons.bookMedical,
-                    20,
-                    LinearGradient(
-                      colors: <Color>[
-                        Colors.indigo,
-                        Colors.purple,
-                      ],
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                    )),
-                title: Widgets.text('Medicines', color: Colors.black),
+              label: 'Medicines',
+            ),
+            BottomNavigationBarItem(
+              icon: Widgets.gradienticon(
+                FontAwesomeIcons.circleQuestion,
+                20,
+                const LinearGradient(
+                  colors: [Colors.red, Colors.brown],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ),
               ),
-              BottomNavigationBarItem(
-                icon: Widgets.gradienticon(
-                    FontAwesomeIcons.questionCircle,
-                    20,
-                    LinearGradient(
-                      colors: <Color>[
-                        Colors.red,
-                        Colors.brown,
-                      ],
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                    )),
-                title: Widgets.text('Ebrast', color: Colors.black),
+              label: 'Ebrast',
+            ),
+            BottomNavigationBarItem(
+              icon: Widgets.gradienticon(
+                FontAwesomeIcons.user,
+                20,
+                const LinearGradient(
+                  colors: [Colors.red, Colors.brown],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ),
               ),
-              BottomNavigationBarItem(
-                icon: Widgets.gradienticon(
-                    FontAwesomeIcons.user,
-                    20,
-                    LinearGradient(
-                      colors: <Color>[
-                        Colors.red,
-                        Colors.brown,
-                      ],
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                    )),
-                title: Widgets.text('Profile', color: Colors.black),
-              ),
-            ],
-            onTap: (index) {
-              return Get.to([
-                Guidelines(),
-                Pathogens(),
-                Medicines(),
-                Ebrast(),
-                Profile(),
-              ][index]);
-              /* Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => [
-                            Guidelines(),
-                            Pathogens(),
-                            Medicines(),
-                            Ebrast()
-
-                          ][index])) ;*/
-            },
-          ),
-        ));
+              label: 'Profile',
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }

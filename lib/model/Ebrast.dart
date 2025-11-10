@@ -1,25 +1,27 @@
+import 'model_utils.dart';
+
 class Ebrast {
   final int id;
   final String sample;
   final String diseases;
-  final List medicines;
+  final List<Map<String, dynamic>> medicines;
   final String location;
 
-  Ebrast({
-    this.id,
-    this.sample,
-    this.diseases,
-    this.medicines,
-    this.location,
+  const Ebrast({
+    required this.id,
+    required this.sample,
+    required this.diseases,
+    required this.medicines,
+    required this.location,
   });
 
-  factory Ebrast.fromMap(Map data) {
+  factory Ebrast.fromMap(Map<String, dynamic> data) {
     return Ebrast(
-      id: data['id'],
-      diseases: data['diseases'] ?? '',
-      medicines: data['medicines'] ?? [],
-      location: data['location'] ?? '',
-      sample: data['sample'] ?? '',
+      id: parseInt(data['id']),
+      diseases: parseString(data['diseases']),
+      medicines: mapList(data['medicines']),
+      location: parseString(data['location']),
+      sample: parseString(data['sample']),
     );
   }
 

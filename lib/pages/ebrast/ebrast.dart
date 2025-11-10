@@ -9,12 +9,14 @@ import 'package:microbicpro/widgets/widgets.dart';
 import 'package:provider/provider.dart';
 
 class Ebrast extends StatefulWidget {
+  const Ebrast({super.key});
+
   @override
-  _EbrastState createState() => _EbrastState();
+  State<Ebrast> createState() => _EbrastState();
 }
 
 class _EbrastState extends State<Ebrast> {
-  String _location;
+  String? _location;
   bool loading = false;
   @override
   void initState() {
@@ -26,7 +28,7 @@ class _EbrastState extends State<Ebrast> {
     }
   }
 
-  fetch() async {
+  Future<void> fetch() async {
     setState(() {
       loading = true;
     });
@@ -78,7 +80,7 @@ class _EbrastState extends State<Ebrast> {
                   margin: EdgeInsets.symmetric(vertical: 30, horizontal: 20),
                   child: Container(
                     padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-                    child: DropdownButton(
+                    child: DropdownButton<String>(
                       value: _location,
                       items: locations,
                       hint: Widgets.text('Select Location',
@@ -94,7 +96,9 @@ class _EbrastState extends State<Ebrast> {
                           _location = val;
                           print(val);
                         });
-                        Get.to(EbrastLocation(val));
+                        if (val != null) {
+                          Get.to(() => EbrastLocation(val));
+                        }
                         return;
                       },
                     ),
@@ -102,7 +106,7 @@ class _EbrastState extends State<Ebrast> {
                 ),
               ],
               bottomBarIndex: 3,
-              refresh: () => fetch(),
+              refresh: fetch,
             );
           });
   }

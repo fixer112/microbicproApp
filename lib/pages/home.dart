@@ -103,7 +103,7 @@ class _HomeState extends State<Home> {
                       child: Column(
                         children: [
                           Widgets.gradienticon(
-                              FontAwesomeIcons.checkSquare,
+                              FontAwesomeIcons.squareCheck,
                               50,
                               LinearGradient(
                                 colors: <Color>[
@@ -182,7 +182,7 @@ class _HomeState extends State<Home> {
                       child: Column(
                         children: [
                           Widgets.gradienticon(
-                              FontAwesomeIcons.questionCircle,
+                              FontAwesomeIcons.circleQuestion,
                               50,
                               LinearGradient(
                                 colors: <Color>[

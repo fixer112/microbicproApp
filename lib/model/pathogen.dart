@@ -1,8 +1,7 @@
 import 'dart:convert';
 
-import 'package:microbicpro/functions.dart';
-
 import 'PathogenAntibiogramData.dart';
+import 'model_utils.dart';
 
 class Pathogen {
   final int id;
@@ -11,46 +10,37 @@ class Pathogen {
   final String epidemiology;
   final String spectrum;
   //final String location;
-  final List precautions;
-  List<PathogenAntibiogramData> antibiogramDatas;
-  List diseases;
+  final List<Map<String, dynamic>> precautions;
+  final List<PathogenAntibiogramData> antibiogramDatas;
+  final List<Map<String, dynamic>> diseases;
   final String reference;
 
-  Pathogen({
-    this.name,
-    this.overview,
-    this.epidemiology,
-    this.spectrum,
-    //this.location,
-    this.antibiogramDatas,
-    this.id,
-    this.diseases,
-    this.precautions,
-    this.reference,
+  const Pathogen({
+    required this.id,
+    required this.name,
+    required this.overview,
+    required this.epidemiology,
+    required this.spectrum,
+    required this.antibiogramDatas,
+    required this.diseases,
+    required this.precautions,
+    required this.reference,
   });
 
-  factory Pathogen.fromMap(Map data) {
-    //print(data['medicines']);
-    if (isJson(data['medicines']))
-      data['medicines'] = jsonDecode(data['medicines']);
-
-    //data['medicines'] = jsonDecode(data['medicines']);
-
+  factory Pathogen.fromMap(Map<String, dynamic> data) {
     return Pathogen(
-      id: data['id'],
-      name: data['name'] ?? '',
-      overview: data['overview'] ?? '',
-      epidemiology: data['epidemiology'] ?? '',
-      spectrum: data['spectrum'] ?? '',
-      //location: data['location'],
-      diseases: data['diseases'] ?? [],
-      precautions: data['precausions'] ?? [],
-      reference: data['reference'] ?? '',
-      antibiogramDatas: data['medicines'] == null
-          ? null
-          : List<PathogenAntibiogramData>.from(data['medicines']
-              .map((i) => PathogenAntibiogramData.fromMap(i))
-              .toList()),
+      id: parseInt(data['id']),
+      name: parseString(data['name']),
+      overview: parseString(data['overview']),
+      epidemiology: parseString(data['epidemiology']),
+      spectrum: parseString(data['spectrum']),
+      diseases: mapList(data['diseases']),
+      precautions: mapList(data['precausions']),
+      reference: parseString(data['reference']),
+      antibiogramDatas: buildModelList(
+        data['medicines'],
+        PathogenAntibiogramData.fromMap,
+      ),
     );
   }
 

@@ -4,9 +4,13 @@ import 'package:microbicpro/widgets/widgets.dart';
 
 class AntiBiogramData extends StatefulWidget {
   final String title;
-  final dynamic content;
+  final List<dynamic> content;
 
-  const AntiBiogramData({Key key, this.title, this.content}) : super(key: key);
+  const AntiBiogramData({
+    super.key,
+    required this.title,
+    required this.content,
+  });
 
   @override
   _AntiBiogramDataState createState() => _AntiBiogramDataState();
@@ -68,6 +72,6 @@ class _AntiBiogramDataState extends State<AntiBiogramData> {
     } else if (per > 70) {
       return Colors.green;
     }
-    return Colors.yellow[600];
+    return Colors.yellow[600] ?? Colors.yellow;
   }
 }

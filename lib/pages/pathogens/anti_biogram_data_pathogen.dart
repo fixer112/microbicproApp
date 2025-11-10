@@ -13,7 +13,7 @@ import 'package:provider/provider.dart';
 class AntiBiogramDataPathogen extends StatefulWidget {
   final Pathogen pathogen;
 
-  const AntiBiogramDataPathogen(this.pathogen);
+  const AntiBiogramDataPathogen(this.pathogen, {super.key});
 
   @override
   _AntiBiogramDataState createState() => _AntiBiogramDataState();
@@ -24,9 +24,12 @@ class _AntiBiogramDataState extends State<AntiBiogramDataPathogen> {
   Widget build(BuildContext context) {
     var main = Provider.of<MainModel>(context, listen: false);
     Pathogen pathogen = widget.pathogen;
-    List<PathogenAntibiogramData> antiBiogramDatas = pathogen.antibiogramDatas
-        .where((element) => element.location == main.getUser.location)
-        .toList();
+    final location = main.getUser?.location;
+    List<PathogenAntibiogramData> antiBiogramDatas = location == null
+        ? pathogen.antibiogramDatas
+        : pathogen.antibiogramDatas
+            .where((element) => element.location == location)
+            .toList();
     //var main = Provider.of<MainModel>(context, listen: false);
     var samples = antiBiogramDatas
         .map((e) {
@@ -70,7 +73,7 @@ class _AntiBiogramDataState extends State<AntiBiogramDataPathogen> {
                   children.add(Container(
                     child: InkWell(
                       onTap: () =>
-                          Get.to(SingleDrug(antiBiogramData.medicineId)),
+                          Get.to(() => SingleDrug(antiBiogramData.medicineId)),
                       child: Card(
                         child: ListTile(
                             dense: true,
@@ -96,7 +99,7 @@ class _AntiBiogramDataState extends State<AntiBiogramDataPathogen> {
                                 SizedBox(
                                   height: 10,
                                 ),
-                                Widgets.text('[${antiBiogramData.referenceID}]',
+                                Widgets.text('[${antiBiogramData.referenceId}]',
                                     color: Colors.blue),
                               ],
                             )),

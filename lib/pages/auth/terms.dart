@@ -6,7 +6,7 @@ import 'package:microbicpro/widgets/widgets.dart';
 import 'login.dart';
 
 class Terms extends StatefulWidget {
-  Terms({Key key}) : super(key: key);
+  Terms({Key? key}) : super(key: key);
 
   @override
   _TermsState createState() => _TermsState();
@@ -31,8 +31,12 @@ class _TermsState extends State<Terms> {
             ),
           ),
         ),
-        Widgets.button('I Agree', () => Get.off(Register())),
-        Widgets.button('I Disagree', () => Get.off(Login())),
+        Widgets.button('I Agree', () async {
+          Get.off(() => Register());
+        }),
+        Widgets.button('I Disagree', () async {
+          Get.off(() => Login());
+        }),
       ]),
     );
   }

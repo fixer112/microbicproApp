@@ -5,7 +5,7 @@ import 'package:microbicpro/widgets/widgets.dart';
 import 'package:provider/provider.dart';
 
 class Principles extends StatefulWidget {
-  Principles({Key key}) : super(key: key);
+  const Principles({super.key});
 
   @override
   _PrinciplesState createState() => _PrinciplesState();
@@ -19,12 +19,15 @@ class _PrinciplesState extends State<Principles> {
 
   @override
   Widget build(BuildContext context) {
-    var main = Provider.of<MainModel>(context, listen: false);
+    final main = Provider.of<MainModel>(context, listen: false);
+    final user = main.getUser;
+    final content =
+        user?.settings['principle']?.toString() ?? 'No data available';
     return Pager(
       'Principles of Antimicrobial Stewardship',
       [
         Container(
-          child: Widgets.text(main.getUser.settings['principle'], size: 17),
+          child: Widgets.text(content, size: 17),
         ),
       ],
       //refresh: ()=> login(data, context),

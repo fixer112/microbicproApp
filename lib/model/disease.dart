@@ -1,7 +1,7 @@
 import 'dart:convert';
 
-import 'package:microbicpro/functions.dart';
-import 'package:microbicpro/model/DrugManagement.dart';
+import 'DrugManagement.dart';
+import 'model_utils.dart';
 
 class Disease {
   final int id;
@@ -11,37 +11,33 @@ class Disease {
   final String features;
   final String treatmentObjectives;
   final String location;
-  List<DrugManagement> drugManagements;
+  final List<DrugManagement> drugManagements;
 
-  Disease({
-    this.category,
-    this.features,
-    this.treatmentObjectives,
-    this.name,
-    this.overview,
-    this.id,
-    this.location,
-    this.drugManagements,
+  const Disease({
+    required this.id,
+    required this.name,
+    required this.overview,
+    required this.category,
+    required this.features,
+    required this.treatmentObjectives,
+    required this.location,
+    required this.drugManagements,
   });
 
-  factory Disease.fromMap(Map data) {
-    if (isJson(data['drug_managements']))
-      data['drug_managements'] = jsonDecode(data['drug_managements']);
-    var disease = Disease(
-      id: data['id'],
-      name: data['name'],
-      overview: data['overview'] ?? '',
-      location: data['location'] ?? '',
-      category: data['category'] ?? '',
-      treatmentObjectives: data['treatment_objectives'] ?? '',
-      features: data['features'] ?? '',
-      drugManagements: data['drug_managements'] != null
-          ? List<DrugManagement>.from(data['drug_managements']
-              .map((i) => DrugManagement.fromMap(i))).toList()
-          : [],
+  factory Disease.fromMap(Map<String, dynamic> data) {
+    return Disease(
+      id: parseInt(data['id']),
+      name: parseString(data['name']),
+      overview: parseString(data['overview']),
+      location: parseString(data['location']),
+      category: parseString(data['category']),
+      treatmentObjectives: parseString(data['treatment_objectives']),
+      features: parseString(data['features']),
+      drugManagements: buildModelList(
+        data['drug_managements'],
+        DrugManagement.fromMap,
+      ),
     );
-    //disease.drugManagements.sort((a, b) => a. .compareTo(b.name));
-    return disease;
   }
 
   Map<String, dynamic> toJson() => {

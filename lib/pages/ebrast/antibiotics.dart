@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:microbicpro/api_functions.dart';
 import 'package:microbicpro/functions.dart';
 import 'package:microbicpro/model/Ebrast.dart';
@@ -11,20 +10,20 @@ import 'package:provider/provider.dart';
 
 class AntiBiotics extends StatefulWidget {
   final int id;
-  AntiBiotics(this.id);
+  const AntiBiotics(this.id, {super.key});
   @override
   _AntiBioticsState createState() => _AntiBioticsState();
 }
 
 class _AntiBioticsState extends State<AntiBiotics> {
-  Ebrast ebrast;
+  Ebrast? ebrast;
   bool loading = false;
   @override
   void initState() {
     super.initState();
-    var main = Provider.of<MainModel>(context, listen: false);
-    ebrast = main.getEbrasts
-        .firstWhere((ebrast) => ebrast.id == widget.id, orElse: () => null);
+    final main = Provider.of<MainModel>(context, listen: false);
+    final matches = main.getEbrasts.where((ebrast) => ebrast.id == widget.id);
+    ebrast = matches.isNotEmpty ? matches.first : null;
     if (ebrast == null) {
       fetch();
       // Widgets.snackbar('Ebrast not found');
@@ -32,7 +31,7 @@ class _AntiBioticsState extends State<AntiBiotics> {
     }
   }
 
-  fetch() async {
+  Future<void> fetch() async {
     setState(() {
       loading = true;
     });
@@ -44,16 +43,22 @@ class _AntiBioticsState extends State<AntiBiotics> {
 
   @override
   Widget build(BuildContext context) {
-    //print(ebrast.medicines[0]['pivot']);
-    ebrast.medicines.sort((b, a) =>
-        a['pivot']['ebrast_number'].compareTo(b['pivot']['ebrast_number']));
+    final current = ebrast;
+    final medicines = current == null
+        ? <Map<String, dynamic>>[]
+        : List<Map<String, dynamic>>.from(current.medicines);
+    medicines.sort(
+      (b, a) => a['pivot']['ebrast_number']
+          .toString()
+          .compareTo(b['pivot']['ebrast_number'].toString()),
+    );
     return Pager(
-      ebrast == null
+      current == null
           ? 'Ebrast Not Found'
-          : 'Ebrast: ${ebrast.location} (${ebrast.sample})',
+          : 'Ebrast: ${current.location} (${current.sample})',
       loading
           ? [Widgets.loader()]
-          : ebrast == null
+          : current == null
               ? [Widgets.centerText('Ebrast Not Found', context)]
               : [
                   Container(
@@ -65,7 +70,7 @@ class _AntiBioticsState extends State<AntiBiotics> {
                     padding: EdgeInsets.all(20),
                     margin: EdgeInsets.symmetric(vertical: 30),
                     child: Widgets.text(
-                        'ASSOCIATED DISEASES\n${ebrast.diseases}',
+                        'ASSOCIATED DISEASES\n${current.diseases}',
                         size: 16,
                         color: Color(0xff0c5460)),
                   ),
@@ -77,10 +82,11 @@ class _AntiBioticsState extends State<AntiBiotics> {
                     height: 25,
                   ),
                   Column(
-                    children: List.generate(ebrast.medicines.length, (index) {
-                      var medicine = ebrast.medicines[index];
-                      double ebrastNumber =
-                          double.parse(medicine['pivot']['ebrast_number']);
+                    children: List.generate(medicines.length, (index) {
+                      final medicine = medicines[index];
+                      final numberString =
+                          medicine['pivot']['ebrast_number'].toString();
+                      final ebrastNumber = double.tryParse(numberString) ?? 0;
                       return Card(
                         child: ListTile(
                           onTap: () {
@@ -116,7 +122,7 @@ class _AntiBioticsState extends State<AntiBiotics> {
                     }),
                   ),
                 ],
-      refresh: () => fetch(),
+      refresh: fetch,
     );
   }
 }

@@ -1,10 +1,6 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:microbicpro/model/MedicineAntiBiogramData.dart';
 import 'package:microbicpro/model/medicine.dart';
-import 'package:microbicpro/pages/ebrast/single_drug.dart';
 import 'package:microbicpro/pages/pathogens/each.dart';
 import 'package:microbicpro/provider/main.dart';
 import 'package:microbicpro/values.dart';
@@ -15,7 +11,7 @@ import 'package:provider/provider.dart';
 class AntiBiogramDataMedicine extends StatefulWidget {
   final Medicine medicine;
 
-  const AntiBiogramDataMedicine(this.medicine);
+  const AntiBiogramDataMedicine(this.medicine, {super.key});
 
   @override
   _AntiBiogramDataState createState() => _AntiBiogramDataState();
@@ -24,12 +20,15 @@ class AntiBiogramDataMedicine extends StatefulWidget {
 class _AntiBiogramDataState extends State<AntiBiogramDataMedicine> {
   @override
   Widget build(BuildContext context) {
-    var main = Provider.of<MainModel>(context, listen: false);
-    Medicine medicine = widget.medicine;
+    final main = Provider.of<MainModel>(context, listen: false);
+    final medicine = widget.medicine;
+    final location = main.getUser?.location;
 
-    List<MedicineAntiBiogramData> antiBiogramDatas = medicine.antibiogramDatas
-        .where((element) => element.location == main.getUser.location)
-        .toList();
+    final antiBiogramDatas = location == null
+        ? medicine.antibiogramDatas
+        : medicine.antibiogramDatas
+            .where((element) => element.location == location)
+            .toList();
     var samples = antiBiogramDatas
         .map((e) {
           return e.sample;
@@ -71,8 +70,11 @@ class _AntiBiogramDataState extends State<AntiBiogramDataMedicine> {
                   children.add(Container(
                     child: InkWell(
                       onTap: () {
-                        print(antiBiogramData.pathogenId);
-                        Get.to(EachPathogen(antiBiogramData.pathogenId));
+                        final pathogenId = antiBiogramData.pathogenId;
+                        if (pathogenId == null) {
+                          return;
+                        }
+                        Get.to(() => EachPathogen(pathogenId));
                       },
                       child: Card(
                         child: ListTile(
@@ -97,7 +99,7 @@ class _AntiBiogramDataState extends State<AntiBiogramDataMedicine> {
                                 SizedBox(
                                   height: 10,
                                 ),
-                                Widgets.text('[${antiBiogramData.referenceID}]',
+                                Widgets.text('[${antiBiogramData.referenceId}]',
                                     color: Colors.blue),
                               ],
                             )),
@@ -135,6 +137,6 @@ class _AntiBiogramDataState extends State<AntiBiogramDataMedicine> {
     } else if (per > 70) {
       return Colors.green;
     }
-    return Colors.yellow[600];
+    return Colors.yellow[600] ?? Colors.yellow;
   }
 }

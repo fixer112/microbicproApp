@@ -6,7 +6,7 @@ import 'package:microbicpro/model/pathogen.dart';
 import 'package:microbicpro/model/user.dart';
 
 class MainModel extends ChangeNotifier {
-  User user;
+  User? user;
   List<Pathogen> pathogens = [];
   List<Medicine> medicines = [];
   List<Disease> diseases = [];
@@ -45,5 +45,5 @@ class MainModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  User get getUser => user;
+  User? get getUser => user;
 }

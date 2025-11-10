@@ -10,20 +10,20 @@ import '../../../api_functions.dart';
 
 class SingleDisease extends StatefulWidget {
   final int id;
+  const SingleDisease(this.id, {super.key});
   @override
-  _SingleDiseaseState createState() => _SingleDiseaseState();
-  SingleDisease(this.id);
+  State<SingleDisease> createState() => _SingleDiseaseState();
 }
 
 class _SingleDiseaseState extends State<SingleDisease> {
-  Disease disease;
+  Disease? disease;
   bool loading = false;
   @override
   void initState() {
     super.initState();
-    var main = Provider.of<MainModel>(context, listen: false);
-    disease = main.diseases
-        .firstWhere((disease) => disease.id == widget.id, orElse: () => null);
+    final main = Provider.of<MainModel>(context, listen: false);
+    final matches = main.diseases.where((disease) => disease.id == widget.id);
+    disease = matches.isNotEmpty ? matches.first : null;
     if (disease == null) {
       fetch();
       // Widgets.snackbar('Pathogen not found');
@@ -31,7 +31,7 @@ class _SingleDiseaseState extends State<SingleDisease> {
     }
   }
 
-  fetch() async {
+  Future<void> fetch() async {
     setState(() {
       loading = true;
     });
@@ -43,19 +43,20 @@ class _SingleDiseaseState extends State<SingleDisease> {
 
   @override
   Widget build(BuildContext context) {
+    final current = disease;
     return Pager(
-        disease == null ? 'Disease Not Found' : "Disease - ${disease.name}",
+        current == null ? 'Disease Not Found' : "Disease - ${current.name}",
         loading
             ? [Widgets.loader()]
-            : disease == null
+            : current == null
                 ? [Widgets.centerText('Disease Not Found', context)]
                 : [
                     Widgets.collapsible(
-                        'Overview', [Widgets.text(disease.overview)]),
+                        'Overview', [Widgets.text(current.overview)]),
                     Widgets.collapsible(
-                        'Clinical Features', [Widgets.text(disease.features)]),
+                        'Clinical Features', [Widgets.text(current.features)]),
                     Widgets.collapsible('Treatment Objectives',
-                        [Widgets.text(disease.treatmentObjectives)]),
+                        [Widgets.text(current.treatmentObjectives)]),
                     Card(
                       child: ListTile(
                         title: Widgets.text('Drug Management',
@@ -69,11 +70,11 @@ class _SingleDiseaseState extends State<SingleDisease> {
                               context,
                               MaterialPageRoute(
                                   builder: (BuildContext context) =>
-                                      DrugManagement(disease.id)));
+                                      DrugManagement(current.id)));
                         },
                       ),
                     ),
                   ],
-        refresh: () => fetch());
+        refresh: fetch);
   }
 }

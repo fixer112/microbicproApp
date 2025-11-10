@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:microbicpro/model/pathogen.dart';
 import 'package:microbicpro/pages/pathogens/each.dart';
@@ -11,13 +9,14 @@ import 'package:provider/provider.dart';
 import '../../api_functions.dart';
 
 class Pathogens extends StatefulWidget {
+  const Pathogens({super.key});
   @override
-  _PathogensState createState() => _PathogensState();
+  State<Pathogens> createState() => _PathogensState();
 }
 
 class _PathogensState extends State<Pathogens> {
   bool loading = false;
-  List<Pathogen> searchData;
+  List<Pathogen>? searchData;
 
   @override
   void initState() {
@@ -28,7 +27,7 @@ class _PathogensState extends State<Pathogens> {
     }
   }
 
-  fetch() async {
+  Future<void> fetch() async {
     setState(() {
       loading = true;
     });
@@ -44,14 +43,14 @@ class _PathogensState extends State<Pathogens> {
         ? Widgets.loader()
         : Consumer<MainModel>(builder: (context, main, child) {
             //print(main.pathogens[0].antibiogramDatas[0]);
-            var pathogens = searchData != null ? searchData : main.pathogens;
+            var pathogens = searchData ?? main.pathogens;
 
             return Pager(
               'Pathogens',
               pathogens.isEmpty
                   ? [Widgets.centerText('No Pathogen Available', context)]
                   : List.generate(pathogens.length, (index) {
-                      Pathogen pathogen = pathogens[index];
+                      final pathogen = pathogens[index];
                       return Card(
                         child: ListTile(
                           title: Widgets.text(pathogen.name,
@@ -71,17 +70,15 @@ class _PathogensState extends State<Pathogens> {
                       );
                     }),
               //willPop: false,
-              refresh: () => fetch(),
+              refresh: fetch,
               search: true,
               onSearch: (data) {
-                print(data);
                 setState(() {
                   searchData = main.pathogens
                       .where((pathogen) => pathogen.name
                           .toLowerCase()
                           .startsWith(data.toLowerCase()))
                       .toList();
-                  //print(searchData.length);
                 });
               },
               bottomBarIndex: 1,

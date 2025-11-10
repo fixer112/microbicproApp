@@ -5,26 +5,36 @@ import 'package:get/get.dart';
 import '../values.dart';
 
 class Widgets {
-  static button(String text, Function callback,
-      {Color color, Color tcolor = Colors.white, double size = 15.0}) {
-    return FlatButton(
-      onPressed: callback,
-      color: color == null ? primaryColor : color,
-
+  static Widget button(
+    String text,
+    Future<void> Function()? callback, {
+    Color? color,
+    Color tcolor = Colors.white,
+    double size = 15.0,
+  }) {
+    return TextButton(
+      onPressed: callback == null
+          ? null
+          : () async {
+              await callback();
+            },
+      style: TextButton.styleFrom(
+        backgroundColor: color ?? primaryColor,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
+        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+      ),
       child: Widgets.text(text, size: size, color: tcolor),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
-      //splashColor: primaryColor,
     );
   }
 
   static Text text(
     String text, {
-    Color color,
-    double size,
-    FontWeight weight,
-    TextAlign align,
-    String family,
-    FontStyle style,
+    Color? color,
+    double? size,
+    FontWeight? weight,
+    TextAlign? align,
+    String? family,
+    FontStyle? style,
   }) {
     return Text(
       text,
@@ -39,7 +49,8 @@ class Widgets {
     );
   }
 
-  static Widget iconImage(icon, {double width = 40, double height = 40}) {
+  static Widget iconImage(String icon,
+      {double width = 40, double height = 40}) {
     return Image.asset(
       'assets/icons/$icon',
       width: width,
@@ -47,8 +58,13 @@ class Widgets {
     );
   }
 
-  static Widget collapsible(String title, List<Widget> widgets,
-      {String icon, double width = 45, double height = 45}) {
+  static Widget collapsible(
+    String title,
+    List<Widget> widgets, {
+    String? icon,
+    double width = 45,
+    double height = 45,
+  }) {
     return Card(
       child: Container(
         padding: EdgeInsets.all(10),
@@ -57,6 +73,7 @@ class Widgets {
             scrollOnExpand: true,
             scrollOnCollapse: false,
             child: ExpandablePanel(
+              collapsed: const SizedBox.shrink(),
               header: Container(
                 padding: EdgeInsets.only(top: 8),
                 child: Row(
@@ -102,8 +119,12 @@ class Widgets {
     );
   }
 
-  static Widget header(String title,
-      {String icon, double width = 20, double height = 20}) {
+  static Widget header(
+    String title, {
+    String? icon,
+    double width = 20,
+    double height = 20,
+  }) {
     return Container(
       //width: MediaQuery.of(context).size.width,
       child: Row(
@@ -121,7 +142,7 @@ class Widgets {
     );
   }
 
-  static container(String placeholder) {
+  static Widget container(String placeholder) {
     return Card(
       margin: EdgeInsets.symmetric(vertical: 15),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
@@ -143,7 +164,7 @@ class Widgets {
     );
   }
 
-  static gradienticon(IconData icon, double size, Gradient gradient) {
+  static Widget gradienticon(IconData icon, double size, Gradient gradient) {
     return ShaderMask(
       child: SizedBox(
         width: size * 1.2,
@@ -179,7 +200,7 @@ class Widgets {
     );
   }
 
-  static snackbar(message, {title = 'Error'}) {
+  static void snackbar(String message, {String title = 'Error'}) {
     Get.snackbar(
       title,
       message,
@@ -192,9 +213,12 @@ class Widgets {
     );
   }
 
-  static textField(
-      TextEditingController controller, TextInputType type, String hintText,
-      {suffixWidget}) {
+  static Widget textField(
+    TextEditingController controller,
+    TextInputType type,
+    String hintText, {
+    Widget? suffixWidget,
+  }) {
     return Container(
       height: 50.0,
       margin: EdgeInsets.only(top: 10.0),
@@ -216,8 +240,12 @@ class Widgets {
     );
   }
 
-  static textFormField(String hint, TextEditingController controller,
-      {validate(String text), type = TextInputType.text}) {
+  static Widget textFormField(
+    String hint,
+    TextEditingController controller, {
+    String? Function(String?)? validate,
+    TextInputType type = TextInputType.text,
+  }) {
     return Container(
       //height: 50.0,
       margin: EdgeInsets.only(top: 10.0),
@@ -244,8 +272,12 @@ class Widgets {
     );
   }
 
-  static Widget dropdown(
-      hint, value, List<DropdownMenuItem> items, action(val)) {
+  static Widget dropdown<T>(
+    String hint,
+    T? value,
+    List<DropdownMenuItem<T>> items,
+    ValueChanged<T?>? action,
+  ) {
     return Container(
       margin: EdgeInsets.only(top: 10.0),
       decoration: BoxDecoration(
@@ -253,7 +285,7 @@ class Widgets {
           borderRadius: BorderRadius.all(Radius.circular(25))),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 10),
-        child: DropdownButton(
+        child: DropdownButton<T>(
           value: value,
           items: items,
           hint: Widgets.text(hint, weight: FontWeight.bold),
@@ -269,11 +301,16 @@ class Widgets {
     );
   }
 
-  static Widget dropdownForm(hint, value, List<DropdownMenuItem> items,
-      {action(val), validate(val)}) {
+  static Widget dropdownForm<T>(
+    String hint,
+    T? value,
+    List<DropdownMenuItem<T>> items, {
+    ValueChanged<T?>? action,
+    String? Function(T?)? validate,
+  }) {
     return Container(
       margin: EdgeInsets.only(top: 10.0),
-      child: DropdownButtonFormField(
+      child: DropdownButtonFormField<T>(
         decoration: InputDecoration(
           //suffixIcon: suffixWidget,
           fillColor: Colors.white,
@@ -287,7 +324,7 @@ class Widgets {
           contentPadding: EdgeInsets.all(10).copyWith(left: 30),
           hintStyle: TextStyle(color: Colors.black),
         ),
-        value: value,
+        initialValue: value,
         items: items,
         hint: Widgets.text(hint, weight: FontWeight.bold),
         icon: Icon(

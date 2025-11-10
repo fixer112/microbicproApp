@@ -1,10 +1,7 @@
 import 'dart:convert';
 
-import 'package:microbicpro/functions.dart';
-import 'package:microbicpro/provider/main.dart';
-import 'package:provider/provider.dart';
-
 import 'MedicineAntiBiogramData.dart';
+import 'model_utils.dart';
 
 class Medicine {
   final int id;
@@ -25,61 +22,53 @@ class Medicine {
   final String spectrum;
   //final String location;
   final String reference;
-  List<MedicineAntiBiogramData> antibiogramDatas;
+  final List<MedicineAntiBiogramData> antibiogramDatas;
 
-  Medicine({
-    this.id,
-    this.name,
-    this.overview,
-    this.avgCost,
-    this.spectrum,
-    //this.location,
-    this.action,
-    this.adult,
-    this.adverseEffects,
-    this.brand,
-    this.antibiogramDatas,
-    this.child,
-    this.drugClass,
-    this.interactions,
-    this.pharmacokinetics,
-    this.pregnancyCategory,
-    this.renal,
-    this.type,
-    this.reference,
-  });
+  const Medicine({
+    required this.id,
+    required this.name,
+    required this.overview,
+    required this.avgCost,
+    required this.spectrum,
+    required this.action,
+    required this.adult,
+    required this.adverseEffects,
+    required this.brand,
+    required this.child,
+    required this.drugClass,
+    required this.interactions,
+    required this.pharmacokinetics,
+    required this.pregnancyCategory,
+    required this.renal,
+    required this.type,
+    required this.reference,
+    List<MedicineAntiBiogramData>? antibiogramDatas,
+  }) : antibiogramDatas = antibiogramDatas ?? const [];
 
-  factory Medicine.fromMap(Map data) {
-    //print(data['pathogens']);
-    if (isJson(data['pathogens']))
-      data['pathogens'] = jsonDecode(data['pathogens']);
-    var medicines = Medicine(
-      id: data['id'],
-      name: data['name'],
-      overview: data['overview'] ?? '',
-      avgCost: data['avg_cost'] ?? '',
-      spectrum: data['spectrum'] ?? '',
-      //location: data['location'],
-      action: data['action'] ?? '',
-      adult: data['adult'] ?? '',
-      adverseEffects: data['adverse_effects'] ?? '',
-      brand: data['brand'] ?? '',
-      child: data['child'] ?? '',
-      drugClass: data['drug_class'] ?? '',
-      interactions: data['interactions'] ?? '',
-      pharmacokinetics: data['pharmacokinetics'] ?? '',
-      pregnancyCategory: data['pregnancy_category'] ?? '',
-      renal: data['renal'] ?? '',
-      type: data['type'] ?? '',
-      reference: data['reference'] ?? '',
-      antibiogramDatas: data['pathogens'] == null
-          ? null
-          : List<MedicineAntiBiogramData>.from(data['pathogens']
-              .map((i) => MedicineAntiBiogramData.fromMap(i))
-              .toList()),
+  factory Medicine.fromMap(Map<String, dynamic> data) {
+    return Medicine(
+      id: parseInt(data['id']),
+      name: parseString(data['name']),
+      overview: parseString(data['overview']),
+      avgCost: parseString(data['avg_cost']),
+      spectrum: parseString(data['spectrum']),
+      action: parseString(data['action']),
+      adult: parseString(data['adult']),
+      adverseEffects: parseString(data['adverse_effects']),
+      brand: parseString(data['brand']),
+      child: parseString(data['child']),
+      drugClass: parseString(data['drug_class']),
+      interactions: parseString(data['interactions']),
+      pharmacokinetics: parseString(data['pharmacokinetics']),
+      pregnancyCategory: parseString(data['pregnancy_category']),
+      renal: parseString(data['renal']),
+      type: parseString(data['type']),
+      reference: parseString(data['reference']),
+      antibiogramDatas: buildModelList(
+        data['pathogens'],
+        MedicineAntiBiogramData.fromMap,
+      ),
     );
-    //medicines.antibiogramDatas.sort();
-    return medicines;
   }
 
   Map<String, dynamic> toJson() => {

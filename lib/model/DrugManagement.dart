@@ -1,3 +1,5 @@
+import 'model_utils.dart';
+
 class DrugManagement {
   final int id;
   final int diseaseId;
@@ -9,45 +11,42 @@ class DrugManagement {
   final String duration;
   final String root;
   final String cLass;
-  final int alternative;
+  final int? alternative;
   final int medicineId;
   final String medicineName;
 
-  DrugManagement({
-    this.id,
-    this.diseaseId,
-    this.type,
-    this.category,
-    this.stage,
-    this.strength,
-    this.interval,
-    this.duration,
-    this.root,
-    this.cLass,
+  const DrugManagement({
+    required this.id,
+    required this.diseaseId,
+    required this.type,
+    required this.category,
+    required this.stage,
+    required this.strength,
+    required this.interval,
+    required this.duration,
+    required this.root,
+    required this.cLass,
+    required this.medicineId,
+    required this.medicineName,
     this.alternative,
-    this.medicineId,
-    this.medicineName,
   });
 
-  factory DrugManagement.fromMap(Map data) {
+  factory DrugManagement.fromMap(Map<String, dynamic> data) {
     return DrugManagement(
-      diseaseId: int.parse(data['disease_id'].toString()),
-      type: data['type'] ?? '',
-      stage: data['stage'] ?? '',
-      strength: data['strength'] ?? '',
-      interval: data['interval'] ?? '',
-      duration: data['duration'] ?? '',
-      root: data['root'] ?? '',
-      cLass: data['class'] ?? '',
-      alternative: data['alternative'] != null
-          ? int.parse(data['alternative'].toString())
-          : '',
-      medicineId: int.parse(data['medicine_id'].toString()),
-      id: int.parse(data['id'].toString()),
-      category: data['category'] ?? '',
-      medicineName: data['medicine_name'] != null
-          ? data['medicine_name'].toString()
-          : null,
+      diseaseId: parseInt(data['disease_id']),
+      type: parseString(data['type']),
+      stage: parseString(data['stage']),
+      strength: parseString(data['strength']),
+      interval: parseString(data['interval']),
+      duration: parseString(data['duration']),
+      root: parseString(data['root']),
+      cLass: parseString(data['class']),
+      alternative:
+          data['alternative'] == null ? null : parseInt(data['alternative']),
+      medicineId: parseInt(data['medicine_id']),
+      id: parseInt(data['id']),
+      category: parseString(data['category']),
+      medicineName: parseString(data['medicine_name']),
     );
   }
 

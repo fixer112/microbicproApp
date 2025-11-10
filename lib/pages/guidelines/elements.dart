@@ -5,7 +5,7 @@ import 'package:microbicpro/widgets/widgets.dart';
 import 'package:provider/provider.dart';
 
 class Elements extends StatefulWidget {
-  Elements({Key key}) : super(key: key);
+  const Elements({super.key});
 
   @override
   _ElementsState createState() => _ElementsState();
@@ -19,12 +19,15 @@ class _ElementsState extends State<Elements> {
 
   @override
   Widget build(BuildContext context) {
-    var main = Provider.of<MainModel>(context, listen: false);
+    final main = Provider.of<MainModel>(context, listen: false);
+    final user = main.getUser;
+    final content =
+        user?.settings['element']?.toString() ?? 'No data available';
     return Pager(
       'Elements of AMS Interventions',
       [
         Container(
-          child: Widgets.text(main.getUser.settings['element'], size: 17),
+          child: Widgets.text(content, size: 17),
         ),
       ],
       //refresh: ()=> login(data, context),

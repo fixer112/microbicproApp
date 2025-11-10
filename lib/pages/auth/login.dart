@@ -5,7 +5,6 @@ import 'package:get/get.dart';
 import 'package:microbicpro/api_functions.dart';
 import 'package:microbicpro/functions.dart';
 import 'package:microbicpro/model/user.dart';
-import 'package:microbicpro/pages/auth/register.dart';
 import 'package:microbicpro/pages/auth/terms.dart';
 import 'package:microbicpro/pages/home.dart';
 import 'package:microbicpro/provider/main.dart';
@@ -16,13 +15,13 @@ import 'package:url_launcher/url_launcher.dart';
 
 class Login extends StatefulWidget {
   @override
-  _LoginState createState() => _LoginState();
+  State<Login> createState() => _LoginState();
 }
 
 class _LoginState extends State<Login> {
-  var email = TextEditingController();
-  var password = TextEditingController();
-  final _formKey = GlobalKey<FormState>();
+  final TextEditingController email = TextEditingController();
+  final TextEditingController password = TextEditingController();
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   bool loading = true;
   bool isLoading = false;
@@ -35,7 +34,14 @@ class _LoginState extends State<Login> {
     loadUser();
   }
 
-  loadUser() async {
+  @override
+  void dispose() {
+    email.dispose();
+    password.dispose();
+    super.dispose();
+  }
+
+  Future<void> loadUser() async {
     setState(() {
       loading = true;
     });
@@ -43,13 +49,13 @@ class _LoginState extends State<Login> {
     var main = Provider.of<MainModel>(context, listen: false);
 
     try {
-      var data = await getJson(fileName: 'users.json');
+      dynamic data = await getJson(fileName: 'users.json');
       //print(data);
       if (data != null) {
         data = jsonDecode(data);
         User user = User.fromMap(data);
         main.setUser(user);
-        if (main.getUser != null) Get.off(Home());
+        Get.off(() => Home());
       }
       setState(() {
         loading = false;
@@ -99,6 +105,7 @@ class _LoginState extends State<Login> {
                                   if (text == null || text.isEmpty) {
                                     return "username can't be empty";
                                   }
+                                  return null;
                                 }),
                                 Widgets.textFormField('password', password,
                                     type: TextInputType.visiblePassword,
@@ -106,6 +113,7 @@ class _LoginState extends State<Login> {
                                   if (text == null || text.isEmpty) {
                                     return "password can't be empty";
                                   }
+                                  return null;
                                 }),
                               ],
                             ),
@@ -115,14 +123,15 @@ class _LoginState extends State<Login> {
                           ),
                           Center(
                             child: !isLoading
-                                ? Container(
+                                ? SizedBox(
                                     width: 150,
-                                    child: FlatButton(
+                                    child: TextButton(
                                       onPressed: () async {
                                         setState(() {
                                           isLoading = true;
                                         });
-                                        if (_formKey.currentState.validate()) {
+                                        if (_formKey.currentState?.validate() ??
+                                            false) {
                                           var data = {
                                             'email': email.text,
                                             'password': password.text,
@@ -133,12 +142,15 @@ class _LoginState extends State<Login> {
                                           isLoading = false;
                                         });
                                       },
+                                      style: TextButton.styleFrom(
+                                        backgroundColor: primaryColor,
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(25),
+                                        ),
+                                      ),
                                       child: Widgets.text('Login',
                                           color: secondaryColor, size: 16),
-                                      color: primaryColor,
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(25),
-                                      ),
                                     ),
                                   )
                                 : SizedBox(
@@ -161,7 +173,7 @@ class _LoginState extends State<Login> {
                               InkWell(
                                 child: Widgets.text('Sign up',
                                     color: primaryColor),
-                                onTap: () => Get.to(Terms()),
+                                onTap: () => Get.to(() => Terms()),
                               ),
                             ],
                           ),
@@ -176,9 +188,11 @@ class _LoginState extends State<Login> {
                                 child: Widgets.text('Change Password',
                                     color: primaryColor),
                                 onTap: () async {
-                                  var link = "$url/password/reset";
-                                  if (await canLaunch(link)) {
-                                    await launch(link);
+                                  final Uri link =
+                                      Uri.parse("$url/password/reset");
+                                  if (await canLaunchUrl(link)) {
+                                    await launchUrl(link,
+                                        mode: LaunchMode.externalApplication);
                                   } else {
                                     Widgets.snackbar('Error loading link');
                                   }

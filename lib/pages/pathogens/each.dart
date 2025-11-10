@@ -9,32 +9,29 @@ import 'package:microbicpro/widgets/page.dart';
 import 'package:microbicpro/widgets/widgets.dart';
 import 'package:provider/provider.dart';
 
-// ignore: must_be_immutable
 class EachPathogen extends StatefulWidget {
   final int id;
-  EachPathogen(this.id);
+  const EachPathogen(this.id, {super.key});
   @override
-  _EachPathogenState createState() => _EachPathogenState();
+  State<EachPathogen> createState() => _EachPathogenState();
 }
 
 class _EachPathogenState extends State<EachPathogen> {
-  Pathogen pathogen;
+  Pathogen? pathogen;
   bool loading = false;
   @override
   void initState() {
     super.initState();
-    print(widget.id);
     var main = Provider.of<MainModel>(context, listen: false);
-    pathogen = main.getPathogens
-        .firstWhere((pathogen) => pathogen.id == widget.id, orElse: () => null);
+    final matches =
+        main.getPathogens.where((pathogen) => pathogen.id == widget.id);
+    pathogen = matches.isNotEmpty ? matches.first : null;
     if (pathogen == null) {
       fetch();
-      // Widgets.snackbar('Pathogen not found');
-      // Get.to(Pathogens());
     }
   }
 
-  fetch() async {
+  Future<void> fetch() async {
     setState(() {
       loading = true;
     });
@@ -46,29 +43,30 @@ class _EachPathogenState extends State<EachPathogen> {
 
   @override
   Widget build(BuildContext context) {
+    final current = pathogen;
     //print(pathogen.precautions);
     return Pager(
-        pathogen == null ? 'Pathogen Not Found' : "Pathogen - ${pathogen.name}",
+        current == null ? 'Pathogen Not Found' : "Pathogen - ${current.name}",
         loading
             ? [Widgets.loader()]
-            : pathogen == null
+            : current == null
                 ? [Widgets.centerText('Pathogen Not Found', context)]
                 : [
                     Widgets.header('General Information',
                         icon: 'pathogen_info.png'),
                     Widgets.collapsible('Overview', [
-                      Widgets.text(pathogen.overview),
+                      Widgets.text(current.overview),
                     ]),
                     Widgets.collapsible('Epidemiology', [
-                      Widgets.text(pathogen.epidemiology),
+                      Widgets.text(current.epidemiology),
                     ]),
                     Widgets.collapsible('Diseases', [
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
-                        children: pathogen.diseases
+                        children: current.diseases
                             .map((disease) => InkWell(
-                                  onTap: () =>
-                                      Get.to(SingleDisease(disease['id'])),
+                                  onTap: () => Get.to(
+                                      () => SingleDisease(disease['id'])),
                                   child: Card(
                                     child: ListTile(
                                       title: Text(disease['name']),
@@ -82,7 +80,7 @@ class _EachPathogenState extends State<EachPathogen> {
                     Widgets.collapsible(
                         'Ideal Spectrum',
                         [
-                          Widgets.text(pathogen.spectrum),
+                          Widgets.text(current.spectrum),
                         ],
                         icon: 'general_spectrum.png',
                         width: 20,
@@ -91,10 +89,6 @@ class _EachPathogenState extends State<EachPathogen> {
                       child: ListTile(
                         title: Row(
                           children: [
-                            //Widgets.iconImage('antibiogram_data.png'),
-                            // SizedBox(
-                            //   width: 10,
-                            // ),
                             Widgets.text('Antibiogram Data', size: 17),
                           ],
                         ),
@@ -107,7 +101,7 @@ class _EachPathogenState extends State<EachPathogen> {
                               context,
                               MaterialPageRoute(
                                   builder: (BuildContext context) =>
-                                      AntiBiogramDataPathogen(pathogen)));
+                                      AntiBiogramDataPathogen(current)));
                         },
                       ),
                     ),
@@ -115,16 +109,16 @@ class _EachPathogenState extends State<EachPathogen> {
                     Widgets.collapsible('Precautions', [
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
-                        children: pathogen.precautions
+                        children: current.precautions
                             .map((precausion) => InkWell(
-                                  onTap: () =>
-                                      Get.to(SingleDisease(precausion['id'])),
+                                  onTap: () => Get.to(
+                                      () => SingleDisease(precausion['id'])),
                                   child: Text("- ${precausion['description']}"),
                                 ))
                             .toList(),
                       ),
                     ]),
                   ],
-        refresh: () => fetch());
+        refresh: fetch);
   }
 }
